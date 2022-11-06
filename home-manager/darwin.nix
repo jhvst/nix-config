@@ -18,6 +18,7 @@
     systemPackages = with pkgs; [
       git
       (pkgs.callPackage <nixpkgs/pkgs/os-specific/darwin/iproute2mac> { })
+      (pkgs.callPackage <nixpkgs/pkgs/os-specific/darwin/mas> { })
     ];
     variables = {
       EDITOR = "nvim";
@@ -26,11 +27,6 @@
 
   homebrew = {
     enable = true;
-    onActivation = {
-      cleanup = "zap";
-      autoUpdate = true;
-      upgrade = true;
-    };
     taps = [
       "homebrew/cask"
     ];
@@ -39,30 +35,30 @@
     ];
     casks = [
       "balenaetcher"
-      "handbrake"
-      "remarkable"
-      "vlc"
       "calibre"
-      "kid3"
-      "signal"
-      "wireshark"
       "charles"
-      "microsoft-teams"
-      "slack"
-      "x2goclient"
       "datagrip"
-      "obs"
-      "sourcetree"
-      "zoom"
       "discord"
-      "plex"
-      "steam"
       "dyalog"
-      "qbserve"
-      "sublime-text"
       "firefox"
+      "handbrake"
+      "kid3"
+      "microsoft-teams"
+      "obs"
+      "plex"
+      "qbserve"
       "rar"
+      "remarkable"
+      "signal"
+      "slack"
+      "sourcetree"
+      "steam"
+      "sublime-text"
       "visual-studio-code"
+      "vlc"
+      "wireshark"
+      "x2goclient"
+      "zoom"
     ];
     masApps = { };
   };
@@ -84,21 +80,22 @@
   home-manager.users.juuso = { pkgs, ... }: {
 
     home.packages = with pkgs; [
-      tree
       file
+      tree
 
+      go
       python3
       rustup
-      go
 
       aria2
       butane
       cloudflared
+      exiftool
       ffmpeg
       gh
       imagemagick
+      neofetch
       nmap
-      exiftool
       pngquant
       podman
       ripgrep-all
@@ -109,7 +106,6 @@
       wireguard-tools
       yle-dl
       yt-dlp
-      neofetch
     ];
     programs.tmux = {
       enable = true;
