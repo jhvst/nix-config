@@ -113,20 +113,17 @@
     ];
     programs.tmux = {
       enable = true;
-      plugins = with pkgs.tmuxPlugins; [ cpu tilish ];
+      baseIndex = 1;
+      plugins = with pkgs.tmuxPlugins; [ tilish ];
       extraConfig = ''
-        set -g status-right '#{cpu_bg_color} CPU: #{cpu_icon} #{cpu_percentage} | %a %h-%d %H:%M '
         set -g mouse on
 
-        # remap prefix from 'C-b' to 'C-a'
-        unbind C-b
-        set-option -g prefix C-a
-        bind-key C-a send-prefix
-
-        # split panes using | and -
         bind | split-window -h
         unbind %
+
+        set -g focus-events on
       '';
+      shortcut = "a";
     };
 
     programs.neovim = {
