@@ -161,6 +161,8 @@
         autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
         autocmd VimEnter * NERDTree | wincmd p
 
+        autocmd BufEnter * highlight! link SignColumn LineNr
+
         augroup autoformat_settings
           autocmd FileType nix AutoFormatBuffer nixpkgs-fmt
         augroup END
@@ -182,6 +184,7 @@
         nerdtree-git-plugin
         editorconfig-vim
         vim-codefmt
+        vim-gitgutter
       ];
       viAlias = true;
       vimAlias = true;
