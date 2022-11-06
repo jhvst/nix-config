@@ -138,8 +138,9 @@
             filetypes = [ "go" ];
           };
           nix = {
-            command = "rnix-lsp";
+            command = "nil";
             filetypes = [ "nix" ];
+            rootPatterns = [ "flake.nix" ];
           };
         };
       };
@@ -168,12 +169,13 @@
         require'nvim-treesitter.configs'.setup {
           highlight = {
             enable = true,
+            disable = { "rust" },
             additional_vim_regex_highlighting = false,
           }
         }
         EOF
       '';
-      extraPackages = with pkgs; [ rnix-lsp gopls nixpkgs-fmt ];
+      extraPackages = with pkgs; [ nil gopls nixpkgs-fmt ];
       plugins = with pkgs.vimPlugins; [
         nerdtree
         vim-devicons
