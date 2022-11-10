@@ -171,6 +171,7 @@
 
         augroup autoformat_settings
           autocmd FileType nix AutoFormatBuffer nixpkgs-fmt
+          autocmd FileType rust AutoFormatBuffer rustfmt
         augroup END
 
         lua << EOF
@@ -183,14 +184,17 @@
             additional_vim_regex_highlighting = false,
           }
         }
+        require('crates').setup()
         EOF
       '';
-      extraPackages = with pkgs; [ nil gopls nixpkgs-fmt ];
+      extraPackages = with pkgs; [ nil gopls nixpkgs-fmt rustfmt ];
       plugins = with pkgs.vimPlugins; [
         nerdtree
         vim-devicons
         (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
         nerdtree-git-plugin
+        coc-rust-analyzer
+        crates-nvim
         editorconfig-vim
         gitsigns-nvim
         limelight-vim # :LimeLight (also, consider :setlocal spell spelllang=en_us
