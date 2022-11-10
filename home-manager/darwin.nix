@@ -241,5 +241,7 @@
     };
   };
 
+  system.keyboard.enableKeyMapping = true;
+  system.keyboard.remapCapsLockToEscape = true;
   system.stateVersion = 4;
 }
