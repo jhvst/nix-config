@@ -155,16 +155,16 @@
         };
       };
       extraConfig = ''
-        set number
         set cursorline
-
+        set laststatus=2
         set nobackup
         set noswapfile
+        set relativenumber
 
-        nnoremap <leader>n :NERDTreeFocus<CR>
+        nnoremap <C-f> :NERDTreeFind<CR>
         nnoremap <C-n> :NERDTree<CR>
         nnoremap <C-t> :NERDTreeToggle<CR>
-        nnoremap <C-f> :NERDTreeFind<CR>
+        nnoremap <leader>n :NERDTreeFocus<CR>
 
         autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
         autocmd VimEnter * NERDTree | wincmd p
@@ -176,12 +176,15 @@
 
         lua << EOF
         require('gitsigns').setup()
+        require("indent_blankline").setup {
+          show_current_context = true,
+          show_current_context_start = true,
+        }
         vim.cmd('colorscheme base16-ia-dark')
         require'nvim-treesitter.configs'.setup {
           highlight = {
             enable = true,
             disable = { "rust" },
-            additional_vim_regex_highlighting = false,
           }
         }
         require('crates').setup()
@@ -189,18 +192,19 @@
       '';
       extraPackages = with pkgs; [ nil gopls nixpkgs-fmt rustfmt ];
       plugins = with pkgs.vimPlugins; [
-        nerdtree
-        vim-devicons
         (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
-        nerdtree-git-plugin
         coc-rust-analyzer
         crates-nvim
         editorconfig-vim
         gitsigns-nvim
+        indent-blankline-nvim
         limelight-vim # :LimeLight (also, consider :setlocal spell spelllang=en_us
         markdown-preview-nvim # :MarkdownPreview
+        nerdtree
+        nerdtree-git-plugin
         nvim-base16
         vim-codefmt
+        vim-devicons
       ];
       viAlias = true;
       vimAlias = true;
