@@ -176,6 +176,7 @@
         augroup END
 
         lua << EOF
+        vim.cmd('colorscheme base16-ia-dark')
         require'nvim-treesitter.configs'.setup {
           highlight = {
             enable = true,
@@ -192,6 +193,7 @@
         (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
         nerdtree-git-plugin
         editorconfig-vim
+        nvim-base16
         vim-codefmt
         vim-gitgutter
       ];
@@ -220,39 +222,6 @@
     programs.alacritty = {
       enable = true;
       settings = {
-        # Oxide colors
-        colors = {
-          primary = {
-            background = "#212121";
-            foreground = "#c0c5ce";
-            bright_foreground = "#f3f4f5";
-          };
-          cursor = {
-            text = "#212121";
-            cursor = "#c0c5ce";
-          };
-          normal = {
-            black = "#212121";
-            red = "#e57373";
-            green = "#a6bc69";
-            yellow = "#fac863";
-            blue = "#6699cc";
-            magenta = "#c594c5";
-            cyan = "#5fb3b3";
-            white = "#c0c5ce";
-          };
-          bright = {
-            black = "#5c5c5c";
-            red = "#e57373";
-            green = "#a6bc69";
-            yellow = "#fac863";
-            blue = "#6699cc";
-            magenta = "#c594c5";
-            cyan = "#5fb3b3";
-            white = "#f3f4f5";
-          };
-          indexed_colors = [ ];
-        };
         font = {
           normal = {
             family = "iMWritingMonoS Nerd Font";
