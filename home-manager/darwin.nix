@@ -169,13 +169,12 @@
         autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
         autocmd VimEnter * NERDTree | wincmd p
 
-        autocmd BufEnter * highlight! link SignColumn LineNr
-
         augroup autoformat_settings
           autocmd FileType nix AutoFormatBuffer nixpkgs-fmt
         augroup END
 
         lua << EOF
+        require('gitsigns').setup()
         vim.cmd('colorscheme base16-ia-dark')
         require'nvim-treesitter.configs'.setup {
           highlight = {
@@ -193,9 +192,9 @@
         (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
         nerdtree-git-plugin
         editorconfig-vim
+        gitsigns-nvim
         nvim-base16
         vim-codefmt
-        vim-gitgutter
       ];
       viAlias = true;
       vimAlias = true;
