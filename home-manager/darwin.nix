@@ -110,8 +110,13 @@
     programs.tmux = {
       enable = true;
       baseIndex = 1;
-      plugins = with pkgs.tmuxPlugins; [ tilish ];
+      plugins = with pkgs.tmuxPlugins; [
+        tilish # Option+Enter
+        tmux-fzf # Ctrl+a+Shift+f
+        extrakto # Ctrl+a+Tab
+      ];
       extraConfig = ''
+        set -g @tilish-dmenu 'on'
         set -g mouse on
 
         bind | split-window -h
@@ -121,6 +126,8 @@
       '';
       shortcut = "a";
     };
+
+    programs.fzf.enable = true;
 
     programs.neovim = {
       enable = true;
