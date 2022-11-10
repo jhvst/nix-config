@@ -129,6 +129,13 @@
 
     programs.fzf.enable = true;
 
+    programs.nushell = {
+      enable = true;
+      envFile.text = ''
+        let-env PATH = ($env.PATH | append '/run/current-system/sw/bin')
+      '';
+    };
+
     programs.neovim = {
       enable = true;
       coc.enable = true;
