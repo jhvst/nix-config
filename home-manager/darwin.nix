@@ -193,6 +193,8 @@
         nerdtree-git-plugin
         editorconfig-vim
         gitsigns-nvim
+        limelight-vim # :LimeLight (also, consider :setlocal spell spelllang=en_us
+        markdown-preview-nvim # :MarkdownPreview
         nvim-base16
         vim-codefmt
       ];
