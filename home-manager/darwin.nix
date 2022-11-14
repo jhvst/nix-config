@@ -16,17 +16,24 @@
 
   environment = {
     systemPackages = with pkgs; [
+      # bind
+      file
       git
-      (pkgs.callPackage <nixpkgs/pkgs/os-specific/darwin/iproute2mac> { })
-      (pkgs.callPackage <nixpkgs/pkgs/os-specific/darwin/mas> { })
+      nmap
+      socat
+      tree
+      watch
+      unar
     ];
-    variables = {
-      EDITOR = "nvim";
-    };
   };
 
   homebrew = {
     enable = true;
+    onActivation = {
+      cleanup = "zap";
+      autoUpdate = true;
+      upgrade = true;
+    };
     taps = [
       "homebrew/cask"
     ];
@@ -38,24 +45,21 @@
       "calibre"
       "charles"
       "datagrip"
-      "discord"
       "dyalog"
       "firefox"
-      "handbrake"
+      "homebrew/cask/dash"
       "kid3"
+      "kindle"
       "microsoft-teams"
+      "numi"
       "obs"
-      "plex"
       "qbserve"
-      "rar"
       "remarkable"
       "signal"
       "slack"
       "sourcetree"
       "steam"
-      "sublime-text"
-      "visual-studio-code"
-      "vlc"
+      "utm"
       "wireshark"
       "x2goclient"
       "zoom"
@@ -81,8 +85,8 @@
   home-manager.users.juuso = { pkgs, ... }: {
 
     home.packages = with pkgs; [
-      file
-      tree
+      (pkgs.callPackage <nixpkgs/pkgs/os-specific/darwin/iproute2mac> { })
+      (pkgs.callPackage <nixpkgs/pkgs/os-specific/darwin/mas> { })
 
       go
       python3
@@ -92,17 +96,15 @@
       butane
       cloudflared
       exiftool
-      ffmpeg
+      ffmpeg_5
       gh
       imagemagick
+      mpv
       neofetch
-      nmap
       pngquant
       podman
       ripgrep-all
-      socat
       sox
-      watch
       wireguard-go
       wireguard-tools
       yle-dl
@@ -135,8 +137,13 @@
       configFile.text = ''
         def nuopen [arg, --raw (-r)] { if $raw { open -r $arg } else { open $arg } }
         alias open = ^open
+
+        let-env config = {
+          show_banner: false
+        }
       '';
       envFile.text = ''
+        let-env EDITOR = "nvim"
         let-env NIX_PATH = "${lib.concatStringsSep ":" [
           "darwin-config=${lib.concatStringsSep ":" [
             "${homeDirectory}/.nixpkgs/darwin-configuration.nix"
@@ -264,9 +271,7 @@
       enable = true;
       settings = {
         font = {
-          normal = {
-            family = "iMWritingMonoS Nerd Font";
-          };
+          normal.family = "iMWritingMonoS Nerd Font";
           size = 14;
         };
       };
