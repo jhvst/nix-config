@@ -21,20 +21,22 @@ let
             src = super.fetchFromGitHub {
               owner = "Mesa3D";
               repo = "mesa";
-              rev = "1d41dd42dfbc9bfb056d68ba8c1c4205bdb9dc75";
+              rev = "71c4543af1ad7b2b51f18140373b8756c1631d07";
               # If you don't know the hash, the first time, set:
               # sha256 = "0000000000000000000000000000000000000000000000000000";
               # then nix will fail the build with such an error message:
               # hash mismatch in fixed-output derivation '/nix/store/m1ga09c0z1a6n7rj8ky3s31dpgalsn0n-source':
               # wanted: sha256:0000000000000000000000000000000000000000000000000000
               # got:    sha256:173gxk0ymiw94glyjzjizp8bv8g72gwkjhacigd1an09jshdrjb4
-              sha256 = "5MpsYpchxaT3jXiqZhjLVQJQVYXm8mNAlUiQU3EZu0I=";
+              sha256 = "w4J59afHu8OSy1DqDtTEEsm1ELfZk8LDdNPsSpyjN8U=";
             };
             patches = [
               ./patches/opencl.patch
               ./patches/disk_cache-include-dri-driver-path-in-cache-key.patch
             ];
             buildInputs = old.buildInputs ++ [ super.glslang ];
+            # see: https://github.com/Mesa3D/mesa/commit/8cc766d8f7eac26b7c029a2fac1bdfdba4776c29
+            mesonFlags = lib.remove (lib.findFirst (x: (lib.hasPrefix "-Dxvmc" x)) "" old.mesonFlags) old.mesonFlags;
           });
         })
       ];
