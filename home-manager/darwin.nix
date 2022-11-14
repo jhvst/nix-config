@@ -194,6 +194,7 @@
         autocmd VimEnter * NERDTree | wincmd p
 
         augroup autoformat_settings
+          autocmd FileType html,css,sass,scss,less,json AutoFormatBuffer js-beautify
           autocmd FileType nix AutoFormatBuffer nixpkgs-fmt
           autocmd FileType rust AutoFormatBuffer rustfmt
         augroup END
@@ -214,9 +215,16 @@
         require('crates').setup()
         EOF
       '';
-      extraPackages = with pkgs; [ nil gopls nixpkgs-fmt rustfmt ];
+      extraPackages = with pkgs; [
+        gopls
+        nil
+        nixpkgs-fmt
+        nodePackages.js-beautify
+        rustfmt
+      ];
       plugins = with pkgs.vimPlugins; [
         (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
+        coc-html
         coc-rust-analyzer
         crates-nvim
         editorconfig-vim
