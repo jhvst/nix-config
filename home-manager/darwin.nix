@@ -19,11 +19,12 @@
       # bind
       file
       git
+      lsof
       nmap
       socat
       tree
-      watch
       unar
+      watch
     ];
   };
 
@@ -162,6 +163,7 @@
           "/nix/var/nix/profiles/default/bin"
           "/opt/homebrew/bin"
           "/usr/bin"
+          "/sbin"
           "/bin"
         ]}'
       '';
