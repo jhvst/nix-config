@@ -14,4 +14,8 @@ self: super: {
       keyutils
     ];
   };
+  # TODO: the following is simpler, and should work as well
+  # steam = super.steam.overrideAttrs (old: {
+  #   extraPkgs = old.extraPkgs ++ [ super.libkrb5 super.keyutils ];
+  # });
 }
