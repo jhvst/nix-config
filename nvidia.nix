@@ -131,7 +131,16 @@ let
       services.dbus.enable = true;
 
       ## Window manager
+      environment.variables = {
+        WLR_NO_HARDWARE_CURSORS = "1";
+      };
+      environment.sessionVariables = {
+        WLR_NO_HARDWARE_CURSORS = "1";
+      };
       programs.sway.enable = true;
+      programs.sway.extraOptions = [
+        "--unsupported-gpu"
+      ];
       services.getty.autologinUser = "core";
 
       ## Firmware blobs
