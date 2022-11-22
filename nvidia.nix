@@ -58,6 +58,7 @@ let
 
       ## Gaming start
       nixpkgs.config.allowUnfree = true;
+      programs.steam.enable = true;
       # enable the RealtimeKit system service, which hands out realtime
       # scheduling priority to user processes on demand. For example, the
       # PulseAudio server uses this to acquire realtime priority.
@@ -67,8 +68,6 @@ let
         kexec-tools
         lm_sensors
         nfs-utils
-
-        wayvnc
 
         # a Steam dependancy
         libblockdev
@@ -91,6 +90,7 @@ let
         # pkgs.helvum
         # pkgs.lutris
         # https://github.com/Plagman/gamescope
+        # gamescope
       ];
 
       services.xserver.videoDrivers = [ "nvidia" "modesetting" ];
