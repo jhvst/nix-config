@@ -93,9 +93,16 @@ let
         # gamescope
       ];
 
-      services.xserver.videoDrivers = [ "nvidia" "modesetting" ];
-      hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
-      hardware.nvidia.modesetting.enable = true;
+      # https://github.com/colemickens/nixcfg/blob/dea191cc9930ec06812d4c4d8ef0469688ddcb7e/mixins/gfx-nvidia.nix
+      hardware.nvidia = {
+        enable = true;
+        package = config.boot.kernelPackages.nvidiaPackages.stable;
+
+        open = true;
+        modesetting.enable = true;
+        nvidiaSettings = false;
+        powerManagement.enable = false;
+      };
 
       hardware.opengl.enable = true;
       hardware.opengl.driSupport = true;
@@ -131,11 +138,13 @@ let
       services.dbus.enable = true;
 
       ## Window manager
-      environment.variables = {
-        WLR_NO_HARDWARE_CURSORS = "1";
-      };
+      ## https://github.com/colemickens/nixcfg/blob/dea191cc9930ec06812d4c4d8ef0469688ddcb7e/mixins/gfx-nvidia.nix
       environment.sessionVariables = {
+        WLR_DRM_NO_ATOMIC = "1";
         WLR_NO_HARDWARE_CURSORS = "1";
+        LIBVA_DRIVER_NAME = "nvidia";
+        MOZ_DISABLE_RDD_SANDBOX = "1";
+        EGL_PLATFORM = "wayland";
       };
       programs.sway.enable = true;
       programs.sway.extraOptions = [
