@@ -26,6 +26,8 @@ let
         "${ponkila}/system/ramdisk.nix"
       ];
 
+      boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_latest);
+
       networking.hostName = "nvidia";
       time.timeZone = "Europe/Helsinki";
 
