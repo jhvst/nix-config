@@ -11,7 +11,6 @@ let
   url = "https://github.com/nix-community/nixpkgs-wayland/archive/${rev}.tar.gz";
   waylandOverlay = (import "${builtins.fetchTarball url}/overlay.nix");
   ponkila = builtins.fetchTarball "https://github.com/jhvst/nix-config/archive/refs/heads/main.zip";
-  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/master.tar.gz";
   nixosWNetBoot = import <nixpkgs/nixos> {
 
     configuration = { config, pkgs, lib, ... }: with lib; {
@@ -19,7 +18,6 @@ let
       nixpkgs.overlays = [ waylandOverlay ];
 
       imports = [
-        (import "${home-manager}/nixos")
         "${ponkila}/home-manager/core.nix"
 
         "${ponkila}/system/netboot.nix"
