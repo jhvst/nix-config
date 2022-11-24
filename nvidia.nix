@@ -94,15 +94,9 @@ let
       ];
 
       # https://github.com/colemickens/nixcfg/blob/dea191cc9930ec06812d4c4d8ef0469688ddcb7e/mixins/gfx-nvidia.nix
-      hardware.nvidia = {
-        enable = true;
-        package = config.boot.kernelPackages.nvidiaPackages.stable;
-
-        open = true;
-        modesetting.enable = true;
-        nvidiaSettings = false;
-        powerManagement.enable = false;
-      };
+      services.xserver.videoDrivers = [ "nvidia" "modesetting" ];
+      hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
+      hardware.nvidia.modesetting.enable = true;
 
       hardware.opengl.enable = true;
       hardware.opengl.driSupport = true;
