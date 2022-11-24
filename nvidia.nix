@@ -44,6 +44,13 @@ let
         "tsx=on"
         "tsx_async_abort=off"
       ];
+      boot.kernelPatches = [{
+        name = "CONFIG_TMPFS_INODE64";
+        patch = null;
+        extraConfig = ''
+          TMPFS_INODE64 y
+        '';
+      }];
 
       ## Allow passwordless sudo from nixos user
       security.sudo = {
