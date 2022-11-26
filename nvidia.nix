@@ -7,10 +7,7 @@
 }:
 
 let
-  rev = "master"; # 'rev' could be a git rev, to pin the overlay.
-  url = "https://github.com/nix-community/nixpkgs-wayland/archive/${rev}.tar.gz";
-  waylandOverlay = (import "${builtins.fetchTarball url}/overlay.nix");
-  ponkila = builtins.fetchTarball "https://github.com/jhvst/nix-config/archive/refs/heads/main.zip";
+  juuso = builtins.fetchTarball "https://github.com/jhvst/nix-config/archive/refs/heads/main.zip";
   nixosWNetBoot = import <nixpkgs/nixos> {
 
     configuration = { config, pkgs, lib, ... }: with lib; {
@@ -18,10 +15,12 @@ let
       nixpkgs.overlays = [ waylandOverlay ];
 
       imports = [
-        "${ponkila}/home-manager/core.nix"
+        "${juuso}/home-manager/core.nix"
 
-        "${ponkila}/system/netboot.nix"
-        "${ponkila}/system/ramdisk.nix"
+        "${juuso}/overlays/wayland.nix"
+
+        "${juuso}/system/netboot.nix"
+        "${juuso}/system/ramdisk.nix"
       ];
 
       boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_latest);
@@ -93,11 +92,11 @@ let
         # Upscaler
         # pkgs.vkBasalt
         # Mixer and audio control
-        # pkgs.easyeffects
-        # pkgs.helvum
+        easyeffects
+        helvum
         # pkgs.lutris
         # https://github.com/Plagman/gamescope
-        # gamescope
+        gamescope
       ];
 
       # https://github.com/colemickens/nixcfg/blob/dea191cc9930ec06812d4c4d8ef0469688ddcb7e/mixins/gfx-nvidia.nix
@@ -174,7 +173,7 @@ let
 
   mkNetboot = nixpkgs.pkgs.symlinkJoin {
     name = "netboot";
-    paths = with nixosWNetBoot.config.system.build; [ netbootRamdisk kernel netbootIpxeScript kexecTree ];
+    paths = with nixosWNetBoot.config.system.build; [ netbootRamdisk kernel netbootIpxeScript ];
     preferLocalBuild = true;
   };
 
