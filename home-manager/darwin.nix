@@ -40,6 +40,7 @@
     ];
     brews = [
       "pam-reattach"
+      "reattach-to-user-namespace"
     ];
     casks = [
       "balenaetcher"
@@ -162,6 +163,7 @@
           "/run/current-system/sw/bin"
           "/nix/var/nix/profiles/default/bin"
           "/opt/homebrew/bin"
+          "${homeDirectory}/Github/kr/bin"
           "/usr/bin"
           "/sbin"
           "/bin"
