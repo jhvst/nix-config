@@ -12,8 +12,6 @@ let
 
     configuration = { config, pkgs, lib, ... }: with lib; {
 
-      nixpkgs.overlays = [ waylandOverlay ];
-
       imports = [
         "${juuso}/home-manager/core.nix"
 
@@ -43,13 +41,6 @@ let
         "tsx=on"
         "tsx_async_abort=off"
       ];
-      boot.kernelPatches = [{
-        name = "CONFIG_TMPFS_INODE64";
-        patch = null;
-        extraConfig = ''
-          TMPFS_INODE64 y
-        '';
-      }];
 
       ## Allow passwordless sudo from nixos user
       security.sudo = {
