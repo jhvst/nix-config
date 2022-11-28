@@ -65,6 +65,7 @@
       "wireshark"
       "x2goclient"
       "zoom"
+      "element"
     ];
     masApps = { };
   };
