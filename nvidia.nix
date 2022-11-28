@@ -7,6 +7,7 @@
 }:
 
 let
+  u-root = nixpkgs.callPackage (import pkgs/u-root) { };
   juuso = builtins.fetchTarball "https://github.com/jhvst/nix-config/archive/refs/heads/main.zip";
   nixosWNetBoot = import <nixpkgs/nixos> {
 
@@ -22,6 +23,10 @@ let
       ];
 
       boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_latest);
+      boot.initrd.extraUtilsCommands = ''
+        mkdir -p $out/bin/bb
+        cp -v ${u-root}/bin/* $out/bin/bb
+      '';
 
       networking.hostName = "nvidia";
       time.timeZone = "Europe/Helsinki";
