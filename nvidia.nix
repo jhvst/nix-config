@@ -7,7 +7,6 @@
 }:
 
 let
-  u-root = nixpkgs.callPackage (import pkgs/u-root) { };
   juuso = builtins.fetchTarball "https://github.com/jhvst/nix-config/archive/refs/heads/main.zip";
   nixosWNetBoot = import <nixpkgs/nixos> {
 
@@ -23,16 +22,89 @@ let
       ];
 
       boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_latest);
-      boot.initrd.extraUtilsCommands = ''
-        mkdir -p $out/bin/bb
-        cp -v ${u-root}/bin/* $out/bin/bb
-      '';
+
+      boot.kernelPatches = [{
+        name = "kernel network config";
+        patch = null;
+        extraConfig = ''
+          TLS y
+          IP_PNP y
+          IP_PNP_DHCP y
+          IP_PNP_BOOTP y
+          IP_PNP_RARP y
+          DNS_RESOLVER y
+          NET_SELFTESTS y
+          BLK_DEV_LOOP y
+          MII y
+          MACSEC y
+          MDIO y
+          AMD_XGBE y
+          AQTION y
+          BNX2 y
+          BNX2X y
+          E1000 y
+          E1000E y
+          IGB y
+          IXGB y
+          ICE y
+          8139CP y
+          8139TOO y
+          PHYLIB y
+          FIXED_PHY y
+          MDIO_DEVICE y
+          MDIO_BUS y
+          FWNODE_MDIO y
+          ACPI_MDIO y
+          MDIO_DEVRES y
+          KEYBOARD_ATKBD y
+          SERIO y
+          SERIO_I8042 y
+          SERIO_PCIPS2 y
+          SERIO_LIBPS2 y
+          VIRTIO_CONSOLE y
+          I2C y
+          ACPI_I2C_OPREGION y
+          I2C_ALGOBIT y
+          PPS y
+          PTP_1588_CLOCK y
+          PTP_1588_CLOCK_OPTIONAL y
+          HID y
+          HID_GENERIC y
+          USB_HID y
+          USB_COMMON y
+          USB y
+          USB_XHCI_HCD y
+          USB_EHCI_HCD y
+          USB_EHCI_PCI y
+          USB_OHCI_HCD y
+          USB_UHCI_HCD y
+          TYPEC y
+          RTC_I2C_AND_SPI y
+          VIRTIO y
+          VIRTIO_INPUT y
+          OVERLAY_FS y
+          SQUASHFS y
+          CRYPTO_AEAD y
+          CRYPTO_GF128MUL y
+          CRYPTO_NULL y
+          CRYPTO_GCM y
+          CRYPTO_CTR y
+          CRYPTO_CRC32C y
+          CRYPTO_GHASH y
+          CRYPTO_AES y
+          CRYPTO_LIB_AES y
+          LIBCRC32C y
+        '';
+      }];
 
       networking.hostName = "nvidia";
       time.timeZone = "Europe/Helsinki";
 
       ## Performance tweaks
       boot.kernelParams = [
+        "boot.shell_on_fail"
+        "ip=dhcp"
+
         "mitigations=off"
         "l1tf=off"
         "mds=off"
