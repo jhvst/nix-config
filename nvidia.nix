@@ -8,14 +8,18 @@
 
 let
   juuso = builtins.fetchTarball "https://github.com/jhvst/nix-config/archive/refs/heads/main.zip";
+  wayland = builtins.fetchTarball "https://github.com/nix-community/nixpkgs-wayland/archive/master.tar.gz";
   nixosWNetBoot = import <nixpkgs/nixos> {
 
     configuration = { config, pkgs, lib, ... }: with lib; {
 
+      nixpkgs.overlays = [
+        (import "${juuso}/overlays/mesa.nix")
+        (import "${wayland}/overlay.nix")
+      ];
+
       imports = [
         "${juuso}/home-manager/core.nix"
-
-        "${juuso}/overlays/wayland.nix"
 
         "${juuso}/system/netboot.nix"
         "${juuso}/system/ramdisk.nix"
@@ -164,7 +168,8 @@ let
         helvum
         # pkgs.lutris
         # https://github.com/Plagman/gamescope
-        gamescope
+        # Note: currently borked with wayland overlay
+        # gamescope
       ];
 
       # https://github.com/colemickens/nixcfg/blob/dea191cc9930ec06812d4c4d8ef0469688ddcb7e/mixins/gfx-nvidia.nix
