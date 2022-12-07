@@ -1,5 +1,20 @@
 { config, lib, pkgs, ... }:
 
+let
+  bqnlsp = pkgs.callPackage (import ~/Github/nix-config/pkgs/bqn-lsp/default.nix) { };
+
+  nvim-bqn = pkgs.vimUtils.buildVimPluginFrom2Nix
+    {
+      pname = "nvim-bqn";
+      version = "unstable";
+      src = builtins.fetchGit {
+        url = "https://git.sr.ht/~detegr/nvim-bqn";
+        rev = "bbe1a8d93f490d79e55dd0ddf22dc1c43e710eb3";
+      };
+      meta.homepage = "https://git.sr.ht/~detegr/nvim-bqn/";
+    };
+
+in
 {
 
   imports = [
@@ -94,6 +109,8 @@
       go
       python3
       rustup
+      cbqn
+      bqnlsp
 
       aria2
       butane
@@ -188,6 +205,10 @@
             filetypes = [ "nix" ];
             rootPatterns = [ "flake.nix" ];
           };
+          bqn = {
+            command = "/Users/juuso/.nix-profile/bin/bqnlsp";
+            filetypes = [ "bqn" ];
+          };
         };
       };
       extraConfig = ''
@@ -204,6 +225,8 @@
 
         autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
         autocmd VimEnter * NERDTree | wincmd p
+
+        au BufNewFile,BufRead ~/Github/advent2022 :setl ft=bqn
 
         augroup autoformat_settings
           autocmd FileType html,css,sass,scss,less,json AutoFormatBuffer js-beautify
@@ -233,6 +256,7 @@
         nixpkgs-fmt
         nodePackages.js-beautify
         rustfmt
+        cbqn
       ];
       plugins = with pkgs.vimPlugins; [
         (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
@@ -249,6 +273,7 @@
         nvim-base16
         vim-codefmt
         vim-devicons
+        nvim-bqn
       ];
       viAlias = true;
       vimAlias = true;
