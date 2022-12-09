@@ -2,17 +2,17 @@
 
 let
   bqnlsp = pkgs.callPackage (import ~/Github/nix-config/pkgs/bqn-lsp/default.nix) { };
+  bqn-vim = pkgs.callPackage (import ~/Github/nix-config/pkgs/bqn-vim/default.nix) { };
 
-  nvim-bqn = pkgs.vimUtils.buildVimPluginFrom2Nix
-    {
-      pname = "nvim-bqn";
-      version = "unstable";
-      src = builtins.fetchGit {
-        url = "https://git.sr.ht/~detegr/nvim-bqn";
-        rev = "bbe1a8d93f490d79e55dd0ddf22dc1c43e710eb3";
-      };
-      meta.homepage = "https://git.sr.ht/~detegr/nvim-bqn/";
+  nvim-bqn = pkgs.vimUtils.buildVimPluginFrom2Nix {
+    pname = "nvim-bqn";
+    version = "unstable";
+    src = builtins.fetchGit {
+      url = "https://git.sr.ht/~detegr/nvim-bqn";
+      rev = "bbe1a8d93f490d79e55dd0ddf22dc1c43e710eb3";
     };
+    meta.homepage = "https://git.sr.ht/~detegr/nvim-bqn/";
+  };
 
 in
 {
@@ -274,6 +274,7 @@ in
         vim-codefmt
         vim-devicons
         nvim-bqn
+        bqn-vim
       ];
       viAlias = true;
       vimAlias = true;
