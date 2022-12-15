@@ -24,6 +24,11 @@ let
         "${juuso}/system/ramdisk.nix"
       ];
 
+      environment.variables = {
+        # https://news.ycombinator.com/item?id=33996897
+        RADV_VIDEO_DECODE = 1;
+      };
+
       networking.hostName = "nvidia";
       time.timeZone = "Europe/Helsinki";
 
