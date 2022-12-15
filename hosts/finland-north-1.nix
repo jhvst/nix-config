@@ -321,7 +321,7 @@ let
 
   mkNetboot = nixpkgs.pkgs.symlinkJoin {
     name = "netboot";
-    paths = with nixosWNetBoot.config.system.build; [ kexecTree ];
+    paths = with nixosWNetBoot.config.system.build; [ netbootRamdisk kernel netbootIpxeScript kexecTree ];
     preferLocalBuild = true;
   };
 
