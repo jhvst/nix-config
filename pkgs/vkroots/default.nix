@@ -3,9 +3,9 @@
 , meson
 , pkg-config
 , ninja
+, vulkan-headers
 , ...
 }:
-
 
 stdenv.mkDerivation rec {
   pname = "vkroots";
@@ -19,5 +19,7 @@ stdenv.mkDerivation rec {
   meta.homepage = "https://github.com/Joshua-Ashton/vkroots";
 
   nativeBuildInputs = [ meson pkg-config ninja ];
+
+  buildInputs = [ vulkan-headers ];
 
 }
