@@ -18,8 +18,12 @@ stdenv.mkDerivation rec {
   };
   meta.homepage = "https://github.com/Joshua-Ashton/vkroots";
 
-  nativeBuildInputs = [ meson pkg-config ninja ];
+  postPatch = ''
+    substituteInPlace ./vkroots.h \
+      --replace vulkan/vk_layer.h ${vulkan-headers}/include/vulkan/vk_layer.h \
+      --replace vulkan/vulkan.h ${vulkan-headers}/include/vulkan/vulkan.h
+  '';
 
-  buildInputs = [ vulkan-headers ];
+  nativeBuildInputs = [ meson pkg-config ninja ];
 
 }
