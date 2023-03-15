@@ -3,6 +3,7 @@
 let
   bqnlsp = pkgs.callPackage (import ~/Github/nix-config/pkgs/bqn-lsp/default.nix) { };
   bqn-vim = pkgs.callPackage (import ~/Github/nix-config/pkgs/bqn-vim/default.nix) { };
+  savilerow = pkgs.callPackage (import ~/Github/nix-config/pkgs/savilerow/default.nix) { };
 
   nvim-bqn = pkgs.vimUtils.buildVimPluginFrom2Nix {
     pname = "nvim-bqn";
@@ -111,6 +112,7 @@ in
       rustup
       cbqn
       bqnlsp
+      savilerow
 
       aria2
       butane
