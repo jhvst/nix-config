@@ -32,13 +32,15 @@
         in import ./pkgs { inherit pkgs; }
       );
 
-      # Your custom packages and modifications, exported as overlays
-      overlays = import ./overlays { inherit inputs; };
+      # Devshell for bootstrapping
+      # Acessible through 'nix develop' or 'nix-shell' (legacy)
+      devShells = forAllSystems (system:
+        let pkgs = nixpkgs.legacyPackages.${system};
+        in import ./shell.nix { inherit pkgs; }
+      );
 
-      ### --- configure nixpkgs
-      config = {
-        allowUnfree = true;
-      };
+      # Your custom packages and modifications, exported as overlays
+      overlay = import ./overlays { inherit inputs; };
 
       darwinConfigurations."sandbox" = darwin.lib.darwinSystem {
         # you can have multiple darwinConfigurations per flake, one per hostname

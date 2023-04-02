@@ -1,37 +1,6 @@
-{ inputs, outputs, config, lib, pkgs, ... }:
-
-let
-  nvim-bqn = pkgs.vimUtils.buildVimPluginFrom2Nix {
-    pname = "nvim-bqn";
-    version = "unstable";
-    src = builtins.fetchGit {
-      url = "https://git.sr.ht/~detegr/nvim-bqn";
-      rev = "bbe1a8d93f490d79e55dd0ddf22dc1c43e710eb3";
-    };
-    meta.homepage = "https://git.sr.ht/~detegr/nvim-bqn/";
-  };
-
-in
-{
+{ inputs, outputs, config, lib, pkgs, ... }: {
 
   nixpkgs = {
-    # You can add overlays here
-    overlays = [
-      # Add overlays your own flake exports (from overlays and pkgs dir):
-      outputs.overlays.additions
-      outputs.overlays.modifications
-
-      # You can also add overlays exported from other flakes:
-      # neovim-nightly-overlay.overlays.default
-
-      # Or define it inline, for example:
-      # (final: prev: {
-      #   hi = final.hello.overrideAttrs (oldAttrs: {
-      #     patches = [ ./change-hello-to-hi.patch ];
-      #   });
-      # })
-    ];
-    # Configure your nixpkgs instance
     config = {
       # Disable if you don't want unfree packages
       allowUnfree = true;
@@ -77,6 +46,8 @@ in
       tree
       unar
       watch
+
+      discord
     ];
   };
 
@@ -156,7 +127,6 @@ in
       subnetcalc
 
       mpv
-      discord
       gimp
     ];
     programs.tmux = {
@@ -315,9 +285,10 @@ in
         nvim-base16
         vim-codefmt
         vim-devicons
-        nvim-bqn
-        bqn-vim
         idris-vim
+      ] ++ [
+        outputs.packages.aarch64-darwin.nvim-bqn
+        outputs.packages.aarch64-darwin.bqn-vim
       ];
       viAlias = true;
       vimAlias = true;
