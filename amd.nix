@@ -29,7 +29,7 @@ let
         RADV_VIDEO_DECODE = 1;
       };
 
-      networking.hostName = "nvidia";
+      networking.hostName = "amd";
       time.timeZone = "Europe/Helsinki";
 
       boot.kernelParams = [
