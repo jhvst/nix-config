@@ -4,24 +4,32 @@
 {
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    # nix will normally use the nixpkgs defined in home-managers inputs, we only want one copy of nixpkgs though
+    darwin.inputs.nixpkgs.follows = "nixpkgs";
     darwin.url = "github:lnl7/nix-darwin";
-    darwin.inputs.nixpkgs.follows = "nixpkgs"; # ...
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager.url = "github:nix-community/home-manager";
+    nixos-generators.inputs.nixpkgs.follows = "nixpkgs";
+    nixos-generators.url = "github:nix-community/nixos-generators";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    sops-nix.url = "github:Mic92/sops-nix";
   };
 
   # add the inputs declared above to the argument attribute set
-  outputs = { self, nixpkgs, home-manager, darwin }@inputs:
+  outputs =
+    { self
+    , darwin
+    , home-manager
+    , nixos-generators
+    , nixpkgs
+    , sops-nix
+    }@inputs:
     let
       inherit (self) outputs;
       forAllSystems = nixpkgs.lib.genAttrs [
-        "aarch64-linux"
-        "i686-linux"
-        "x86_64-linux"
         "aarch64-darwin"
+        "aarch64-linux"
         "x86_64-darwin"
+        "x86_64-linux"
       ];
     in
     rec {
@@ -49,8 +57,9 @@
         specialArgs = { inherit inputs outputs; };
         system = "aarch64-darwin"; # "x86_64-darwin" if you're using a pre M1 mac
         modules = [
-          home-manager.darwinModules.home-manager
           ./hosts/sandbox/default.nix
+          home-manager.darwinModules.home-manager
+          sops-nix.nixosModules.sops
         ];
       };
     };
