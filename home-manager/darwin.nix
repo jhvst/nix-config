@@ -24,6 +24,10 @@ in
 
   services.nix-daemon.enable = true;
   nix.package = pkgs.nix;
+  nix.settings.experimental-features = "nix-command flakes";
+  nix.extraOptions = ''
+    builders = ssh://muro x86_64-linux
+  '';
 
   fonts.fontDir.enable = true;
   fonts.fonts = with pkgs; [
@@ -59,19 +63,15 @@ in
       "reattach-to-user-namespace"
     ];
     casks = [
+      "handbrake"
       "balenaetcher"
-      "calibre"
-      "charles"
       "datagrip"
-      "dyalog"
       "firefox"
       "homebrew/cask/dash"
-      "kid3"
       "kindle"
       "microsoft-teams"
       "numi"
       "obs"
-      "qbserve"
       "remarkable"
       "signal"
       "slack"
@@ -82,6 +82,8 @@ in
       "x2goclient"
       "zoom"
       "element"
+      "secretive"
+      "rescuetime"
     ];
     masApps = { };
   };
@@ -103,34 +105,27 @@ in
 
   home-manager.users.juuso = { pkgs, ... }: {
 
+    home.stateVersion = "22.11";
+
     home.packages = with pkgs; [
-      (pkgs.callPackage <nixpkgs/pkgs/os-specific/darwin/iproute2mac> { })
-      (pkgs.callPackage <nixpkgs/pkgs/os-specific/darwin/mas> { })
-
-      go
-      python3
-      rustup
-      cbqn
-      bqnlsp
-      savilerow
-
-      aria2
+      direnv
       butane
       cloudflared
       exiftool
       ffmpeg_5
       gh
       imagemagick
-      mpv
-      neofetch
       pngquant
-      podman
       ripgrep-all
-      sox
       wireguard-go
       wireguard-tools
       yle-dl
       yt-dlp
+      subnetcalc
+
+      mpv
+      discord
+      gimp
     ];
     programs.tmux = {
       enable = true;
@@ -156,15 +151,8 @@ in
 
     programs.nushell = with config.home-manager.users.juuso.home; {
       enable = true;
-      configFile.text = ''
-        def nuopen [arg, --raw (-r)] { if $raw { open -r $arg } else { open $arg } }
-        alias open = ^open
-
-        let-env config = {
-          show_banner: false
-        }
-      '';
       envFile.text = ''
+        let-env NIXPKGS_ALLOW_UNFREE = 1
         let-env EDITOR = "nvim"
         let-env NIX_PATH = "${lib.concatStringsSep ":" [
           "darwin-config=${lib.concatStringsSep ":" [
@@ -183,7 +171,6 @@ in
           "/run/current-system/sw/bin"
           "/nix/var/nix/profiles/default/bin"
           "/opt/homebrew/bin"
-          "${homeDirectory}/Github/kr/bin"
           "/usr/bin"
           "/sbin"
           "/bin"
@@ -196,6 +183,11 @@ in
       coc.enable = true;
       coc.settings = {
         "languageserver" = {
+          tsserver = {
+            command = "typescript-language-server";
+            args = [ "--stdio" "--tsserver-path=${pkgs.nodePackages.typescript}" ];
+            filetypes = [ "js" ];
+          };
           go = {
             command = "gopls";
             rootPatterns = [ "go.mod" ];
@@ -211,6 +203,14 @@ in
             command = "/Users/juuso/.nix-profile/bin/bqnlsp";
             filetypes = [ "bqn" ];
           };
+          grammarly = {
+            command = "grammarly-languageserver";
+            args = [ "--stdio" ];
+            initializationOptions = {
+              clientId = "client_BaDkMgx4X19X9UxxYRCXZo";
+            };
+            filetypes = [ "markdown" ];
+          };
         };
       };
       extraConfig = ''
@@ -219,6 +219,7 @@ in
         set nobackup
         set noswapfile
         set relativenumber
+        set wrap linebreak
 
         nnoremap <C-f> :NERDTreeFind<CR>
         nnoremap <C-n> :NERDTree<CR>
@@ -228,10 +229,14 @@ in
         autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
         autocmd VimEnter * NERDTree | wincmd p
 
-        au BufNewFile,BufRead ~/Github/advent2022 :setl ft=bqn
+        au BufRead,BufNewFile *.bqn setf bqn
+        au BufRead,BufNewFile * if getline(1) =~ '^#!.*bqn$' | setf bqn | endif
+
+        au BufRead,BufNewFile *.md setf markdown
+        au BufRead,BufNewFile *.js setf js
 
         augroup autoformat_settings
-          autocmd FileType html,css,sass,scss,less,json AutoFormatBuffer js-beautify
+          autocmd FileType html,css,sass,scss,less,json,js AutoFormatBuffer js-beautify
           autocmd FileType nix AutoFormatBuffer nixpkgs-fmt
           autocmd FileType rust AutoFormatBuffer rustfmt
         augroup END
@@ -257,8 +262,11 @@ in
         nil
         nixpkgs-fmt
         nodePackages.js-beautify
+        nodePackages.grammarly-languageserver
         rustfmt
         cbqn
+        nodePackages.typescript-language-server
+        nodePackages.typescript
       ];
       plugins = with pkgs.vimPlugins; [
         (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
@@ -277,13 +285,12 @@ in
         vim-devicons
         nvim-bqn
         bqn-vim
+        idris-vim
       ];
       viAlias = true;
       vimAlias = true;
       withNodeJs = true;
     };
-
-    home.stateVersion = "22.11";
 
     editorconfig.enable = true;
     editorconfig.settings = {
@@ -313,5 +320,4 @@ in
 
   system.keyboard.enableKeyMapping = true;
   system.keyboard.remapCapsLockToEscape = true;
-  system.stateVersion = 4;
 }
