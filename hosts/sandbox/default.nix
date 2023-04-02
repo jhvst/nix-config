@@ -37,17 +37,9 @@
 
   environment = {
     systemPackages = with pkgs; [
-      # bind
-      file
-      git
-      lsof
-      nmap
-      socat
-      tree
-      unar
-      watch
-
       discord
+      mpv
+      gimp
     ];
   };
 
@@ -66,16 +58,19 @@
       "reattach-to-user-namespace"
     ];
     casks = [
-      "handbrake"
       "balenaetcher"
       "datagrip"
+      "element"
       "firefox"
+      "handbrake"
       "homebrew/cask/dash"
       "kindle"
       "microsoft-teams"
       "numi"
       "obs"
       "remarkable"
+      "rescuetime"
+      "secretive"
       "signal"
       "slack"
       "sourcetree"
@@ -84,9 +79,6 @@
       "wireshark"
       "x2goclient"
       "zoom"
-      "element"
-      "secretive"
-      "rescuetime"
     ];
     masApps = { };
   };
@@ -108,34 +100,40 @@
 
   home-manager.users.juuso = { pkgs, ... }: {
 
-    home.stateVersion = "22.11";
+    home.stateVersion = "23.05";
 
     home.packages = with pkgs; [
-      direnv
+      bind # nslookup
       butane
       cloudflared
       exiftool
       ffmpeg_5
+      file
       gh
+      git
       imagemagick
+      lsof
+      nmap
       pngquant
       ripgrep-all
+      socat
+      subnetcalc
+      tree
+      unar
+      watch
       wireguard-go
       wireguard-tools
       yle-dl
       yt-dlp
-      subnetcalc
-
-      mpv
-      gimp
     ];
+
     programs.tmux = {
       enable = true;
       baseIndex = 1;
       plugins = with pkgs.tmuxPlugins; [
+        extrakto # Ctrl+a+Tab
         tilish # Option+Enter
         tmux-fzf # Ctrl+a+Shift+f
-        extrakto # Ctrl+a+Tab
       ];
       extraConfig = ''
         set -g @tilish-dmenu 'on'
@@ -154,7 +152,6 @@
     programs.nushell = with config.home-manager.users.juuso.home; {
       enable = true;
       envFile.text = ''
-        let-env NIXPKGS_ALLOW_UNFREE = 1
         let-env EDITOR = "nvim"
         let-env NIX_PATH = "${lib.concatStringsSep ":" [
           "darwin-config=${lib.concatStringsSep ":" [
@@ -260,15 +257,15 @@
         EOF
       '';
       extraPackages = with pkgs; [
+        cbqn
         gopls
         nil
         nixpkgs-fmt
-        nodePackages.js-beautify
         nodePackages.grammarly-languageserver
-        rustfmt
-        cbqn
-        nodePackages.typescript-language-server
+        nodePackages.js-beautify
         nodePackages.typescript
+        nodePackages.typescript-language-server
+        rustfmt
       ];
       plugins = with pkgs.vimPlugins; [
         (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
@@ -277,6 +274,7 @@
         crates-nvim
         editorconfig-vim
         gitsigns-nvim
+        idris-vim
         indent-blankline-nvim
         limelight-vim # :LimeLight (also, consider :setlocal spell spelllang=en_us
         markdown-preview-nvim # :MarkdownPreview
@@ -285,10 +283,9 @@
         nvim-base16
         vim-codefmt
         vim-devicons
-        idris-vim
       ] ++ [
-        outputs.packages.aarch64-darwin.nvim-bqn
         outputs.packages.aarch64-darwin.bqn-vim
+        outputs.packages.aarch64-darwin.nvim-bqn
       ];
       viAlias = true;
       vimAlias = true;
@@ -323,4 +320,5 @@
 
   system.keyboard.enableKeyMapping = true;
   system.keyboard.remapCapsLockToEscape = true;
+  system.stateVersion = 4;
 }
