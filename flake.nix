@@ -23,6 +23,7 @@
     , nixpkgs
     , sops-nix
     }@inputs:
+
     let
       inherit (self) outputs;
       forAllSystems = nixpkgs.lib.genAttrs [
@@ -31,8 +32,16 @@
         "x86_64-darwin"
         "x86_64-linux"
       ];
+
+      # custom formats for nixos-generators
+      customFormats = {
+        "kexecTree" = {
+          formatAttr = "kexecTree";
+          imports = [ ./system/netboot.nix ];
+        };
+      };
     in
-    rec {
+    {
 
       # Your custom packages
       # Acessible through 'nix build', 'nix shell', etc
@@ -40,6 +49,15 @@
         let pkgs = nixpkgs.legacyPackages.${system};
         in import ./pkgs { inherit pkgs; }
       );
+
+      # nixos-generators
+      "amd" = nixos-generators.nixosGenerate {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs outputs; };
+        modules = [ ./hosts/amd ];
+        customFormats = customFormats;
+        format = "kexecTree";
+      };
 
       # Devshell for bootstrapping
       # Acessible through 'nix develop' or 'nix-shell' (legacy)
@@ -49,7 +67,7 @@
       );
 
       # Your custom packages and modifications, exported as overlays
-      overlay = import ./overlays { inherit inputs; };
+      overlays = import ./overlays { inherit inputs; };
 
       darwinConfigurations."sandbox" = darwin.lib.darwinSystem {
         # you can have multiple darwinConfigurations per flake, one per hostname

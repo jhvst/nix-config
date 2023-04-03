@@ -1,10 +1,11 @@
-{ config
+{ inputs
+, config
 , pkgs
 , lib
 , ...
 }:
 {
-  imports = [ <home-manager/nixos> ];
+  imports = [ inputs.home-manager.nixosModules.home-manager ];
 
   users.users.core = {
     isNormalUser = true;
@@ -17,6 +18,7 @@
   };
   users.groups.core = { };
   environment.shells = [ pkgs.fish ];
+  programs.fish.enable = true;
 
   home-manager.users.core = { pkgs, ... }: {
 
@@ -39,6 +41,4 @@
 
     home.stateVersion = "23.05";
   };
-  home-manager.useUserPackages = true;
-  home-manager.useGlobalPkgs = true;
 }
