@@ -22,13 +22,22 @@
       # Deduplicate and optimize nix store
       auto-optimise-store = true;
     };
+
+    buildMachines = [{
+      hostName = "muro";
+      systems = [ "i686-linux" "x86_64-linux" ];
+    }];
+    distributedBuilds = true;
+    # optional, useful when the builder has a faster internet connection than yours
+    extraOptions = ''
+      builders-use-substitutes = true
+    '';
+
+    package = pkgs.nix;
+
   };
 
   services.nix-daemon.enable = true;
-  nix.package = pkgs.nix;
-  nix.extraOptions = ''
-    builders = ssh://muro x86_64-linux
-  '';
 
   fonts.fontDir.enable = true;
   fonts.fonts = with pkgs; [
