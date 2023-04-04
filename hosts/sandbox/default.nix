@@ -49,8 +49,11 @@
   environment = {
     systemPackages = with pkgs; [
       discord
-      mpv
       gimp
+      jetbrains.datagrip
+      mpv
+      utm
+      zoom-us
     ];
   };
 
@@ -64,32 +67,20 @@
     taps = [
       "homebrew/cask"
     ];
-    brews = [
-      "pam-reattach"
-      "reattach-to-user-namespace"
-    ];
+    brews = [ ];
     casks = [
       "balenaetcher"
-      "datagrip"
       "element"
       "firefox"
       "handbrake"
       "homebrew/cask/dash"
-      "kindle"
-      "microsoft-teams"
       "numi"
-      "obs"
       "remarkable"
       "rescuetime"
       "secretive"
       "signal"
       "slack"
       "sourcetree"
-      "steam"
-      "utm"
-      "wireshark"
-      "x2goclient"
-      "zoom"
     ];
     masApps = { };
   };
@@ -125,7 +116,9 @@
       imagemagick
       lsof
       nmap
+      pam-reattach
       pngquant
+      reattach-to-user-namespace
       ripgrep-all
       socat
       subnetcalc
