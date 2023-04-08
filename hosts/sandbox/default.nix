@@ -98,6 +98,7 @@
     home.stateVersion = "23.05";
 
     home.packages = with pkgs; [
+      age
       bind # nslookup
       butane
       cloudflared
@@ -106,16 +107,21 @@
       file
       gh
       git
+      gnupg
       imagemagick
       lsof
       nmap
       pam-reattach
+      passage
       pngquant
       reattach-to-user-namespace
       ripgrep-all
       socat
+      sops
       subnetcalc
       tree
+      trezor_agent
+      trezord
       unar
       watch
       wireguard-go
@@ -180,11 +186,6 @@
       coc.enable = true;
       coc.settings = {
         "languageserver" = {
-          tsserver = {
-            command = "typescript-language-server";
-            args = [ "--stdio" "--tsserver-path=${pkgs.nodePackages.typescript}" ];
-            filetypes = [ "js" ];
-          };
           go = {
             command = "gopls";
             rootPatterns = [ "go.mod" ];
@@ -236,6 +237,7 @@
           autocmd FileType html,css,sass,scss,less,json,js AutoFormatBuffer js-beautify
           autocmd FileType nix AutoFormatBuffer nixpkgs-fmt
           autocmd FileType rust AutoFormatBuffer rustfmt
+          autocmd Filetype yaml AutoFormatBuffer yamlfmt
         augroup END
 
         lua << EOF
@@ -255,20 +257,20 @@
         EOF
       '';
       extraPackages = with pkgs; [
-        cbqn
         gopls
         nil
         nixpkgs-fmt
         nodePackages.grammarly-languageserver
         nodePackages.js-beautify
-        nodePackages.typescript
-        nodePackages.typescript-language-server
         rustfmt
+        yamlfmt
       ];
       plugins = with pkgs.vimPlugins; [
         (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
         coc-html
         coc-rust-analyzer
+        coc-tsserver
+        coc-yaml
         crates-nvim
         editorconfig-vim
         gitsigns-nvim
