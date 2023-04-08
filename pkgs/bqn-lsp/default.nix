@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [
     pkg-config
+    libffi
+    libiconv
   ];
 
   postPatch = ''
@@ -25,12 +27,6 @@ rustPlatform.buildRustPackage {
     substituteInPlace lsp/build.rs --replace ,-rpath=$ORIGIN ""
     substituteInPlace lsp/src/bqn.rs --replace \"BQN\" \"BQN-docs\"
   '';
-
-
-  buildInputs = [
-    libffi
-    libiconv
-  ];
 
   cargoSha256 = "sha256-ltGdLdTg1OsnULluU7v5MQfCWT5g/tyMZkPxWLzwlF8=";
 
