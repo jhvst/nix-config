@@ -90,15 +90,8 @@
   users.users.juuso = {
     name = "juuso";
     home = "/Users/juuso";
-    shell = pkgs.nushell;
+    shell = pkgs.fish;
   };
-  environment.shells = [ pkgs.nushell ];
-
-  # nushell: ductape for whomever decision it was to search for Application Support instead of home config
-  environment.extraInit = ''
-    ln -s $HOME/.config/nushell/env.nu "$HOME/Library/Application Support/nushell/env.nu"
-    ln -s $HOME/.config/nushell/config.nu "$HOME/Library/Application Support/nushell/config.nu"
-  '';
 
   home-manager.users.juuso = { pkgs, ... }: {
 
@@ -131,6 +124,35 @@
       yt-dlp
     ];
 
+    programs.fish = with config.home-manager.users.juuso.home;  {
+      enable = true;
+      loginShellInit = ''
+        set -x EDITOR nvim
+        set -x GNUPGHOME ${homeDirectory}/.gnupg/trezor
+        set -x NIX_PATH "${lib.concatStringsSep ":" [
+          "darwin-config=${lib.concatStringsSep ":" [
+            "${homeDirectory}/.nixpkgs/darwin-configuration.nix"
+            "${homeDirectory}/.nix-defexpr/channels"
+          ]}"
+          "nixpkgs=${lib.concatStringsSep ":" [
+            "/nix/var/nix/profiles/per-user/root/channels/nixpkgs"
+            "/nix/var/nix/profiles/per-user/root/channels"
+          ]}"
+        ]}"
+        set -x PATH '${lib.concatStringsSep ":" [
+          "${homeDirectory}/.nix-profile/bin"
+          "/run/wrappers/bin"
+          "/etc/profiles/per-user/${username}/bin"
+          "/run/current-system/sw/bin"
+          "/nix/var/nix/profiles/default/bin"
+          "/opt/homebrew/bin"
+          "/usr/bin"
+          "/sbin"
+          "/bin"
+        ]}'
+      '';
+    };
+
     programs.tmux = {
       enable = true;
       baseIndex = 1;
@@ -152,34 +174,6 @@
     };
 
     programs.fzf.enable = true;
-
-    programs.nushell = with config.home-manager.users.juuso.home; {
-      enable = true;
-      envFile.text = ''
-        let-env EDITOR = "nvim"
-        let-env NIX_PATH = "${lib.concatStringsSep ":" [
-          "darwin-config=${lib.concatStringsSep ":" [
-            "${homeDirectory}/.nixpkgs/darwin-configuration.nix"
-            "${homeDirectory}/.nix-defexpr/channels"
-          ]}"
-          "nixpkgs=${lib.concatStringsSep ":" [
-            "/nix/var/nix/profiles/per-user/root/channels/nixpkgs"
-            "/nix/var/nix/profiles/per-user/root/channels"
-          ]}"
-        ]}"
-        let-env PATH = '${lib.concatStringsSep ":" [
-          "${homeDirectory}/.nix-profile/bin"
-          "/run/wrappers/bin"
-          "/etc/profiles/per-user/${username}/bin"
-          "/run/current-system/sw/bin"
-          "/nix/var/nix/profiles/default/bin"
-          "/opt/homebrew/bin"
-          "/usr/bin"
-          "/sbin"
-          "/bin"
-        ]}'
-      '';
-    };
 
     programs.neovim = {
       enable = true;
