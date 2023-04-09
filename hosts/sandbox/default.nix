@@ -282,6 +282,7 @@
         nvim-base16
         vim-codefmt
         vim-devicons
+        vim-fugitive
       ] ++ [
         outputs.packages.aarch64-darwin.bqn-vim
         outputs.packages.aarch64-darwin.nvim-bqn
