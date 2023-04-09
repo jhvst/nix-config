@@ -318,10 +318,13 @@
 
     programs.git = {
       enable = true;
-      signing.key = "70970884671A2E01";
+      signing.key = "8F84B8738E67A3453F05D29BC2DC6A67CB7F891F";
       signing.signByDefault = true;
       userEmail = "juuso@ponkila.com";
       userName = "Juuso Haavisto";
+      ignores = [
+        ".DS_Store"
+      ];
     };
   };
 
