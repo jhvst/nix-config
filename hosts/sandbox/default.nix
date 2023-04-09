@@ -319,6 +319,7 @@
     programs.git = {
       enable = true;
       signing.key = "010FA73B4806737536C3377970970884671A2E01";
+      signing.signByDefault = true;
     };
   };
 
