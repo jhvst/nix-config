@@ -105,7 +105,6 @@
       exiftool
       ffmpeg_5
       file
-      gh
       gnupg
       imagemagick
       lsof
