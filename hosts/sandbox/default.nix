@@ -321,6 +321,7 @@
       enable = true;
       signing.key = "70970884671A2E01";
       signing.signByDefault = true;
+      userEmail = "juuso@ponkila.com";
     };
   };
 
