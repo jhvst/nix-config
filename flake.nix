@@ -77,6 +77,11 @@
         modules = [
           ./hosts/sandbox/default.nix
           home-manager.darwinModules.home-manager
+          {
+            home-manager.sharedModules = [
+              sops-nix.homeManagerModules.sops
+            ];
+          }
         ];
       };
     };

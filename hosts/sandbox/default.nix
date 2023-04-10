@@ -96,10 +96,6 @@
     shell = pkgs.fish;
   };
 
-  home-manager.sharedModules = [
-    <sops-nix/modules/home-manager/sops.nix>
-  ];
-
   home-manager.users.juuso = { pkgs, ... }: {
 
     home.stateVersion = "23.05";
