@@ -55,6 +55,9 @@
       utm
       zoom-us
     ];
+    etc."wireguard/ponkila.conf" = {
+      source = "${config.home-manager.users.juuso.home.homeDirectory}/.config/wireguard/ponkila.conf";
+    };
   };
 
   homebrew = {
@@ -93,9 +96,23 @@
     shell = pkgs.fish;
   };
 
+  home-manager.sharedModules = [
+    <sops-nix/modules/home-manager/sops.nix>
+  ];
+
   home-manager.users.juuso = { pkgs, ... }: {
 
     home.stateVersion = "23.05";
+
+    sops = {
+      defaultSopsFile = ./secrets/default.yaml;
+      gnupg = with config.home-manager.users.juuso.home; {
+        home = "${homeDirectory}/.gnupg/trezor";
+      };
+      secrets."wireguard/ponkila" = with config.home-manager.users.juuso.home; {
+        path = "${homeDirectory}/.config/wireguard/ponkila.conf";
+      };
+    };
 
     home.packages = with pkgs; [
       age

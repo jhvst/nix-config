@@ -77,7 +77,6 @@
         modules = [
           ./hosts/sandbox/default.nix
           home-manager.darwinModules.home-manager
-          sops-nix.nixosModules.sops
         ];
       };
     };
