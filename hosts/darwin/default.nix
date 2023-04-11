@@ -49,8 +49,6 @@
   environment = {
     systemPackages = with pkgs; [
       discord
-      gimp
-      jetbrains.datagrip
       mpv
       utm
       zoom-us
@@ -59,6 +57,8 @@
       source = "${config.home-manager.users.juuso.home.homeDirectory}/.config/wireguard/ponkila.conf";
     };
   };
+
+  networking.hostName = "darwin";
 
   homebrew = {
     enable = true;
@@ -234,6 +234,7 @@
         nnoremap <C-n> :NERDTree<CR>
         nnoremap <C-t> :NERDTreeToggle<CR>
         nnoremap <leader>n :NERDTreeFocus<CR>
+        let NERDTreeShowHidden=1
 
         autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
         autocmd VimEnter * NERDTree | wincmd p
@@ -242,7 +243,6 @@
         au BufRead,BufNewFile * if getline(1) =~ '^#!.*bqn$' | setf bqn | endif
 
         au BufRead,BufNewFile *.md setf markdown
-        au BufRead,BufNewFile *.js setf js
 
         augroup autoformat_settings
           autocmd FileType html,css,sass,scss,less,json,js AutoFormatBuffer js-beautify

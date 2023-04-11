@@ -69,13 +69,13 @@
       # Your custom packages and modifications, exported as overlays
       overlays = import ./overlays { inherit inputs; };
 
-      darwinConfigurations."sandbox" = darwin.lib.darwinSystem {
+      darwinConfigurations."darwin" = darwin.lib.darwinSystem {
         # you can have multiple darwinConfigurations per flake, one per hostname
 
         specialArgs = { inherit inputs outputs; };
         system = "aarch64-darwin"; # "x86_64-darwin" if you're using a pre M1 mac
         modules = [
-          ./hosts/sandbox/default.nix
+          ./hosts/darwin/default.nix
           home-manager.darwinModules.home-manager
           {
             home-manager.sharedModules = [
