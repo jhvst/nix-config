@@ -206,7 +206,7 @@
             rootPatterns = [ "flake.nix" ];
           };
           bqn = {
-            command = "/Users/juuso/.nix-profile/bin/bqnlsp";
+            command = "bqnlsp";
             filetypes = [ "bqn" ];
           };
           grammarly = {
@@ -272,6 +272,8 @@
         nodePackages.js-beautify
         rustfmt
         yamlfmt
+      ] ++ [
+        outputs.packages.aarch64-darwin.bqnlsp
       ];
       plugins = with pkgs.vimPlugins; [
         (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
