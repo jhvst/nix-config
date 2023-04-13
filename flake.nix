@@ -12,6 +12,7 @@
     nixos-generators.url = "github:nix-community/nixos-generators";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     sops-nix.url = "github:Mic92/sops-nix";
+    wayland.url = "github:nix-community/nixpkgs-wayland";
   };
 
   # add the inputs declared above to the argument attribute set
@@ -22,6 +23,7 @@
     , nixos-generators
     , nixpkgs
     , sops-nix
+    , wayland
     }@inputs:
 
     let
@@ -62,7 +64,14 @@
       "starlabs" = nixos-generators.nixosGenerate {
         system = "x86_64-linux";
         specialArgs = { inherit inputs outputs; };
-        modules = [ ./hosts/starlabs ];
+        modules = [
+          ./home-manager/juuso.nix
+          ./hosts/starlabs
+          ./system/ramdisk.nix
+          {
+            nixpkgs.overlays = [ inputs.nixpkgs-wayland.overlay ];
+          }
+        ];
         customFormats = customFormats;
         format = "kexecTree";
       };
