@@ -105,8 +105,11 @@
       gnupg = with config.home-manager.users.juuso.home; {
         home = "${homeDirectory}/.gnupg/trezor";
       };
-      secrets."wireguard/ponkila" = with config.home-manager.users.juuso.home; {
-        path = "${homeDirectory}/.config/wireguard/ponkila.conf";
+      secrets."wireguard/ponkila.conf" = {
+        path = "%r/wireguard/ponkila.conf";
+      };
+      secrets."git/sendemail" = {
+        path = "%r/git/sendemail";
       };
     };
 
@@ -141,25 +144,16 @@
       yt-dlp
     ];
 
-    programs.fish = with config.home-manager.users.juuso.home;  {
+    programs.fish = with config.home-manager.users.juuso; {
       enable = true;
       loginShellInit = ''
         set -x EDITOR nvim
-        set -x GNUPGHOME ${homeDirectory}/.gnupg/trezor
-        set -x NIX_PATH "${lib.concatStringsSep ":" [
-          "darwin-config=${lib.concatStringsSep ":" [
-            "${homeDirectory}/.nixpkgs/darwin-configuration.nix"
-            "${homeDirectory}/.nix-defexpr/channels"
-          ]}"
-          "nixpkgs=${lib.concatStringsSep ":" [
-            "/nix/var/nix/profiles/per-user/root/channels/nixpkgs"
-            "/nix/var/nix/profiles/per-user/root/channels"
-          ]}"
-        ]}"
+        set -x ponkila (getconf DARWIN_USER_TEMP_DIR)${sops.secrets."wireguard/ponkila.conf".name}
+        set -x GNUPGHOME ${home.homeDirectory}/.gnupg/trezor
         set -x PATH '${lib.concatStringsSep ":" [
-          "${homeDirectory}/.nix-profile/bin"
+          "${home.homeDirectory}/.nix-profile/bin"
           "/run/wrappers/bin"
-          "/etc/profiles/per-user/${username}/bin"
+          "/etc/profiles/per-user/${home.username}/bin"
           "/run/current-system/sw/bin"
           "/nix/var/nix/profiles/default/bin"
           "/opt/homebrew/bin"
@@ -331,6 +325,10 @@
 
     programs.git = {
       enable = true;
+      package = pkgs.gitFull;
+      includes = with config.home-manager.users.juuso; [{
+        path = sops.secrets."git/sendemail".path;
+      }];
       signing.key = "8F84B8738E67A3453F05D29BC2DC6A67CB7F891F";
       signing.signByDefault = true;
       userEmail = "juuso@ponkila.com";
