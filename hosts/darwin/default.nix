@@ -274,6 +274,8 @@
         yamlfmt
       ] ++ [
         outputs.packages.aarch64-darwin.bqnlsp
+        # bqnlsp assumes cbqn in path
+        pkgs.cbqn
       ];
       plugins = with pkgs.vimPlugins; [
         (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
