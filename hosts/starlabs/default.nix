@@ -9,24 +9,31 @@ with lib; {
     ../../system/ramdisk.nix
   ];
 
-  networking.hostName = "amd";
-  time.timeZone = "Europe/Helsinki";
+  nix = {
+    # This will add each flake input as a registry
+    # To make nix3 commands consistent with your flake
+    registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
+
+    # This will additionally add your inputs to the system's legacy channels
+    # Making legacy nix commands consistent as well, awesome!
+    nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
+
+    settings = {
+      # Enable flakes and new 'nix' command
+      experimental-features = "nix-command flakes";
+      # Deduplicate and optimize nix store
+      auto-optimise-store = true;
+    };
+
+    package = pkgs.nix;
+
+  };
+
+  networking.hostName = "starlabs";
+  time.timeZone = "Europe/London";
 
   boot.kernelParams = [
     "boot.shell_on_fail"
-
-    "mitigations=off"
-    "l1tf=off"
-    "mds=off"
-    "no_stf_barrier"
-    "noibpb"
-    "noibrs"
-    "nopti"
-    "nospec_store_bypass_disable"
-    "nospectre_v1"
-    "nospectre_v2"
-    "tsx=on"
-    "tsx_async_abort=off"
   ];
   boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_latest);
 
@@ -36,9 +43,12 @@ with lib; {
   };
   services.openssh = {
     enable = true;
-    passwordAuthentication = false;
+    settings.PasswordAuthentication = false;
   };
   networking.firewall.enable = false;
+  networking.wireless.iwd.enable = true;
+
+  services.fwupd.enable = true;
 
   nixpkgs.config.allowUnfree = true;
 
@@ -81,5 +91,7 @@ with lib; {
 
   ## Firmware blobs
   hardware.enableRedistributableFirmware = true;
+  hardware.cpu.amd.updateMicrocode = true;
 
+  system.stateVersion = "23.05";
 }
