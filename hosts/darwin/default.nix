@@ -53,9 +53,6 @@
       utm
       zoom-us
     ];
-    etc."wireguard/ponkila.conf" = {
-      source = "${config.home-manager.users.juuso.home.homeDirectory}/.config/wireguard/ponkila.conf";
-    };
   };
 
   networking.hostName = "darwin";
