@@ -59,6 +59,14 @@
         format = "kexecTree";
       };
 
+      "starlabs" = nixos-generators.nixosGenerate {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs outputs; };
+        modules = [ ./hosts/starlabs ];
+        customFormats = customFormats;
+        format = "kexecTree";
+      };
+
       # Devshell for bootstrapping
       # Acessible through 'nix develop' or 'nix-shell' (legacy)
       devShells = forAllSystems (system:
