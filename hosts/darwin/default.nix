@@ -97,6 +97,12 @@
 
     home.stateVersion = "23.05";
 
+    programs.nix-index.enable = true;
+    programs.direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
+
     sops = {
       defaultSopsFile = ./secrets/default.yaml;
       gnupg = with config.home-manager.users.juuso.home; {
@@ -332,6 +338,7 @@
       userName = "Juuso Haavisto";
       ignores = [
         ".DS_Store"
+        ".direnv"
       ];
     };
   };
