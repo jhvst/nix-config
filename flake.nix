@@ -69,7 +69,7 @@
           ./hosts/starlabs
           ./system/ramdisk.nix
           {
-            nixpkgs.overlays = [ inputs.nixpkgs-wayland.overlay ];
+            nixpkgs.overlays = [ inputs.wayland.overlay ];
           }
         ];
         customFormats = customFormats;
