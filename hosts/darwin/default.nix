@@ -52,7 +52,6 @@
       discord
       mpv
       utm
-      zoom-us
     ];
   };
 
@@ -118,25 +117,17 @@
     };
 
     home.packages = with pkgs; [
-      age
       bind # nslookup
-      butane
-      cloudflared
       exiftool
-      ffmpeg_5
       file
       gnupg
-      imagemagick
       lsof
       nmap
       pam-reattach
       passage
       pngquant
-      reattach-to-user-namespace
       ripgrep-all
       socat
-      sops
-      subnetcalc
       tree
       trezor_agent
       trezord
@@ -145,7 +136,6 @@
       wireguard-go
       wireguard-tools
       yle-dl
-      yt-dlp
     ];
 
     programs.fish = with config.home-manager.users.juuso; {
@@ -189,8 +179,6 @@
     };
 
     programs.fzf.enable = true;
-
-    programs.bottom.enable = true;
 
     programs.alacritty = {
       enable = true;
