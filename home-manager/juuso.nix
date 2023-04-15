@@ -10,7 +10,7 @@
   users.users.juuso = {
     isNormalUser = true;
     group = "juuso";
-    extraGroups = [ "wheel" "networkmanager" "video" ];
+    extraGroups = [ "wheel" "networkmanager" "video" "input" ];
     openssh.authorizedKeys.keys = [
       "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNMKgTTpGSvPG4p8pRUWg1kqnP9zPKybTHQ0+Q/noY5+M6uOxkLy7FqUIEFUT9ZS/fflLlC/AlJsFBU212UzobA= ssh@secretive.sandbox.local"
     ];
@@ -35,8 +35,6 @@
     };
 
     programs.firefox.enable = true;
-
-    services.clipman.enable = true;
 
     programs = {
       tmux.enable = true;
