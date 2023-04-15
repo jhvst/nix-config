@@ -33,7 +33,7 @@
       {
         hostName = "ponkila-ephemeral-beta";
         systems = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
-        supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" ];
+        supportedFeatures = [ "nixos-test" ];
         maxJobs = 12;
       }
     ];
