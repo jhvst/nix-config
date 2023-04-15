@@ -66,10 +66,16 @@
         specialArgs = { inherit inputs outputs; };
         modules = [
           ./home-manager/juuso.nix
+          ./home-manager/programs/neovim
           ./hosts/starlabs
           ./system/ramdisk.nix
           {
-            nixpkgs.overlays = [ inputs.wayland.overlay ];
+            nixpkgs.overlays = [
+              wayland.overlay
+              outputs.overlays.additions
+              outputs.overlays.modifications
+            ];
+            nixpkgs.config.allowUnfree = true;
           }
         ];
         customFormats = customFormats;
@@ -93,11 +99,20 @@
         system = "aarch64-darwin"; # "x86_64-darwin" if you're using a pre M1 mac
         modules = [
           ./hosts/darwin/default.nix
+          ./home-manager/programs/neovim
           home-manager.darwinModules.home-manager
           {
             home-manager.sharedModules = [
               sops-nix.homeManagerModules.sops
             ];
+          }
+          {
+            nixpkgs.overlays = [
+              inputs.wayland.overlay
+              outputs.overlays.additions
+              outputs.overlays.modifications
+            ];
+            nixpkgs.config.allowUnfree = true;
           }
         ];
       };
