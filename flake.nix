@@ -42,8 +42,13 @@
           imports = [ ./system/netboot.nix ];
         };
       };
+
     in
     {
+
+      formatter = forAllSystems (system:
+        nixpkgs.legacyPackages.${system}.nixpkgs-fmt
+      );
 
       # Your custom packages
       # Acessible through 'nix build', 'nix shell', etc
