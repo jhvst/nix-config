@@ -23,12 +23,20 @@
       auto-optimise-store = true;
     };
 
-    buildMachines = [{
-      hostName = "muro";
-      systems = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
-      supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" ];
-      maxJobs = 24;
-    }];
+    buildMachines = [
+      {
+        hostName = "muro";
+        systems = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
+        supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" ];
+        maxJobs = 24;
+      }
+      {
+        hostName = "ponkila-ephemeral-beta";
+        systems = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
+        supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" ];
+        maxJobs = 12;
+      }
+    ];
     distributedBuilds = true;
     # optional, useful when the builder has a faster internet connection than yours
     extraOptions = ''
