@@ -51,12 +51,7 @@ with lib; {
     enable = true;
     settings.PasswordAuthentication = false;
   };
-  networking.firewall.enable = false;
   networking.wireless.iwd.enable = true;
-
-  services.fwupd.enable = true;
-
-  nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
     fuse-overlayfs
@@ -92,6 +87,19 @@ with lib; {
     extraPackages = [ pkgs.amdvlk ];
     extraPackages32 = [ pkgs.driversi686Linux.amdvlk ];
   };
+
+  hardware.steam-hardware.enable = true;
+  hardware.xpadneo.enable = true;
+
+  ##
+  ##  $ bluetoothctl
+  ##  [bluetooth] # power on
+  ##  [bluetooth] # agent on
+  ##  [bluetooth] # default-agent
+  ##  [bluetooth] # scan on
+  ##  ...put device in pairing mode and wait [hex-address] to appear here...
+  ##  [bluetooth] # pair [hex-address]
+  ##  [bluetooth] # connect [hex-address]
   hardware.bluetooth.enable = true;
 
   services.pipewire = {
@@ -103,6 +111,9 @@ with lib; {
 
   ### System APIs
   services.dbus.enable = true;
+
+  # NFS mounting support
+  services.rpcbind.enable = true;
 
   security.rtkit.enable = true;
 
