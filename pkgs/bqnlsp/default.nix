@@ -1,14 +1,14 @@
-{ fetchFromSourcehut, rustPlatform, libffi, pkg-config }:
+{ fetchFromSourcehut, rustPlatform, lib, libffi, pkg-config }:
 
 rustPlatform.buildRustPackage {
   pname = "bqnlsp";
   version = "unstable";
 
   src = fetchFromSourcehut {
-    owner = "~juuso";
+    owner = "~detegr";
     repo = "bqnlsp";
-    rev = "47376673dbd5580924e8ed8bd5fe3622361d952b";
-    sha256 = "sha256-dXbf5wZM1fa81ro/11R9Zxy+w/aikIF/71C8pWpWzkQ=";
+    rev = "e45d20673dd1bc20572e8e74f0a3b967f7001770";
+    sha256 = "sha256-cu+rJkrLevqBg63d8mlbjBTmfUJG49DgUm+TXY5LDBc=";
     fetchSubmodules = true;
   };
 
