@@ -4,8 +4,11 @@
 # for a more complex example.
 keys:
   - &juuso 8F84B8738E67A3453F05D29BC2DC6A67CB7F891F
+  - &darwin age1z2e5qzsg730g70vxanyyfm40fz42rvgydklce48r5lgra55re3esyr7dyz
 creation_rules:
   - path_regex: hosts/darwin/secrets/[^/]+\.yaml$
     key_groups:
     - pgp:
       - *juuso
+      age:
+      - *darwin

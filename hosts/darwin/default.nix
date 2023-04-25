@@ -102,16 +102,13 @@
       nix-direnv.enable = true;
     };
 
-    sops = {
+    programs.htop.enable = true;
+
+    sops = with config.home-manager.users.juuso.home; {
+      age.keyFile = "${homeDirectory}/.config/age/.age-key.txt";
       defaultSopsFile = ./secrets/default.yaml;
-      gnupg = with config.home-manager.users.juuso.home; {
-        home = "${homeDirectory}/.gnupg/trezor";
-      };
       secrets."wireguard/ponkila.conf" = {
         path = "%r/wireguard/ponkila.conf";
-      };
-      secrets."git/sendemail" = {
-        path = "%r/git/sendemail";
       };
     };
 
@@ -182,9 +179,6 @@
     programs.git = {
       enable = true;
       package = pkgs.gitFull;
-      includes = with config.home-manager.users.juuso; [{
-        path = sops.secrets."git/sendemail".path;
-      }];
       signing.key = "8F84B8738E67A3453F05D29BC2DC6A67CB7F891F";
       signing.signByDefault = true;
       userEmail = "juuso@ponkila.com";
