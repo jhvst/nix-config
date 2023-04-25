@@ -75,6 +75,9 @@
           ./hosts/starlabs
           ./system/ramdisk.nix
           {
+            home-manager.useGlobalPkgs = true;
+          }
+          {
             nixpkgs.overlays = [
               wayland.overlay
               outputs.overlays.additions
@@ -110,6 +113,7 @@
             home-manager.sharedModules = [
               sops-nix.homeManagerModules.sops
             ];
+            home-manager.useGlobalPkgs = true;
           }
           {
             nixpkgs.overlays = [

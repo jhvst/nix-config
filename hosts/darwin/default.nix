@@ -14,6 +14,16 @@
       experimental-features = "nix-command flakes";
       # Deduplicate and optimize nix store
       auto-optimise-store = true;
+
+      extra-substituters = [
+        "https://cache.nixos.org"
+        "https://nix-community.cachix.org"
+      ];
+      extra-trusted-public-keys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      ];
+
     };
 
     buildMachines = [
@@ -22,12 +32,6 @@
         systems = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
         supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" ];
         maxJobs = 24;
-      }
-      {
-        hostName = "ponkila-ephemeral-beta";
-        systems = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
-        supportedFeatures = [ "nixos-test" ];
-        maxJobs = 12;
       }
     ];
     distributedBuilds = true;
@@ -49,9 +53,6 @@
 
   environment = {
     systemPackages = with pkgs; [
-      discord
-      mpv
-      utm
     ];
   };
 
@@ -69,9 +70,7 @@
     ];
     brews = [ ];
     casks = [
-      "balenaetcher"
       "element"
-      "firefox"
       "handbrake"
       "homebrew/cask/dash"
       "numi"
@@ -117,31 +116,20 @@
     };
 
     home.packages = with pkgs; [
-      bind # nslookup
-      exiftool
-      file
       gnupg
-      lsof
-      nmap
       pam-reattach
-      passage
-      pngquant
-      ripgrep-all
-      socat
-      tree
       trezor_agent
       trezord
-      unar
-      watch
       wireguard-go
       wireguard-tools
-      yle-dl
+      discord
     ];
+
+    programs.mpv.enable = true;
 
     programs.fish = with config.home-manager.users.juuso; {
       enable = true;
       loginShellInit = ''
-        set -x EDITOR nvim
         set -x ponkila (getconf DARWIN_USER_TEMP_DIR)${sops.secrets."wireguard/ponkila.conf".name}
         set -x GNUPGHOME ${home.homeDirectory}/.gnupg/trezor
         set -x PATH '${lib.concatStringsSep ":" [
@@ -178,6 +166,7 @@
       shortcut = "a";
     };
 
+    # https://andrew-quinn.me/fzf/
     programs.fzf.enable = true;
 
     programs.alacritty = {
@@ -203,6 +192,8 @@
       ignores = [
         ".DS_Store"
         ".direnv"
+        "node_modules"
+        "result"
       ];
     };
   };
