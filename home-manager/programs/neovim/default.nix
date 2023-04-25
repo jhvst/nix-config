@@ -31,6 +31,7 @@
         };
       };
     };
+    defaultEditor = true;
     extraConfig = ''
       set cursorline
       set laststatus=2
@@ -51,16 +52,14 @@
       au BufRead,BufNewFile *.bqn setf bqn
       au BufRead,BufNewFile * if getline(1) =~ '^#!.*bqn$' | setf bqn | endif
 
-      au BufRead,BufNewFile *.md setf markdown
-
       augroup autoformat_settings
         autocmd FileType html,css,sass,scss,less,json,js AutoFormatBuffer js-beautify
         autocmd FileType nix AutoFormatBuffer nixpkgs-fmt
         autocmd FileType rust AutoFormatBuffer rustfmt
         autocmd Filetype yaml AutoFormatBuffer yamlfmt
       augroup END
-
-      lua << EOF
+    '';
+    extraLuaConfig = ''
       require('gitsigns').setup()
       require("indent_blankline").setup {
         show_current_context = true,
@@ -74,7 +73,6 @@
         }
       }
       require('crates').setup()
-      EOF
     '';
     extraPackages = with pkgs; [
       bqnlsp
@@ -93,6 +91,7 @@
       coc-rust-analyzer
       coc-tsserver
       coc-yaml
+      coq_nvim
       crates-nvim
       editorconfig-vim
       gitsigns-nvim
