@@ -5,28 +5,10 @@
 , ...
 }:
 {
-  imports = [ inputs.home-manager.nixosModules.home-manager ];
-
-  users.users.juuso = {
-    isNormalUser = true;
-    group = "juuso";
-    extraGroups = [ "wheel" "networkmanager" "video" "input" ];
-    openssh.authorizedKeys.keys = [
-      "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNMKgTTpGSvPG4p8pRUWg1kqnP9zPKybTHQ0+Q/noY5+M6uOxkLy7FqUIEFUT9ZS/fflLlC/AlJsFBU212UzobA= ssh@secretive.sandbox.local"
-    ];
-    shell = pkgs.fish;
-  };
-  users.groups.juuso = { };
-  environment.shells = [ pkgs.fish ];
-  programs.fish.enable = true;
 
   home-manager.users.juuso = { pkgs, ... }: {
 
-    home.packages = with pkgs; [
-      file
-      tree
-      bind # nslookup
-    ];
+    home.stateVersion = "23.05";
 
     programs.nix-index.enable = true;
     programs.direnv = {
@@ -34,19 +16,76 @@
       nix-direnv.enable = true;
     };
 
-    programs.firefox.enable = true;
+    programs.htop.enable = true;
 
-    programs = {
-      tmux.enable = true;
-      htop.enable = true;
-      vim.enable = true;
-      git.enable = true;
-      fish.enable = true;
-      fish.loginShellInit = "fish_add_path --move --prepend --path $HOME/.nix-profile/bin /run/wrappers/bin /etc/profiles/per-user/$USER/bin /run/current-system/sw/bin /nix/var/nix/profiles/default/bin";
+    home.packages = with pkgs; [
+      gnupg
+      pam-reattach
+      trezor_agent
+      trezord
+      wireguard-go
+      wireguard-tools
+      discord
+    ];
 
-      home-manager.enable = true;
+    programs.mpv.enable = true;
+
+    programs.fish = with config.home-manager.users.juuso; {
+      enable = true;
+      loginShellInit = ''
+        set -x ponkila (getconf DARWIN_USER_TEMP_DIR)${sops.secrets."wireguard/ponkila.conf".name}
+        set -x GNUPGHOME ${home.homeDirectory}/.gnupg/trezor
+        set -x PATH '${lib.concatStringsSep ":" [
+          "${home.homeDirectory}/.nix-profile/bin"
+          "/run/wrappers/bin"
+          "/etc/profiles/per-user/${home.username}/bin"
+          "/run/current-system/sw/bin"
+          "/nix/var/nix/profiles/default/bin"
+          "/opt/homebrew/bin"
+          "/usr/bin"
+          "/sbin"
+          "/bin"
+        ]}'
+      '';
     };
 
-    home.stateVersion = "23.05";
+    programs.tmux = {
+      enable = true;
+      baseIndex = 1;
+      plugins = with pkgs.tmuxPlugins; [
+        extrakto # Ctrl+a+Tab
+        tilish # Option+Enter
+        tmux-fzf # Ctrl+a+Shift+f
+      ];
+      extraConfig = ''
+        set -g @tilish-dmenu 'on'
+        set -g mouse on
+
+        bind | split-window -h
+        unbind %
+
+        set -g focus-events on
+      '';
+      shortcut = "a";
+    };
+
+    # https://andrew-quinn.me/fzf/
+    programs.fzf.enable = true;
+
+    programs.git = {
+      enable = true;
+      package = pkgs.gitFull;
+      signing.key = "8F84B8738E67A3453F05D29BC2DC6A67CB7F891F";
+      signing.signByDefault = true;
+      userEmail = "juuso@ponkila.com";
+      userName = "Juuso Haavisto";
+      ignores = [
+        ".DS_Store"
+        ".direnv"
+        "node_modules"
+        "result"
+      ];
+    };
   };
+
 }

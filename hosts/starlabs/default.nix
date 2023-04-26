@@ -1,39 +1,6 @@
 # nix-build -A pix.ipxe amd.nix -I home-manager=https://github.com/nix-community/home-manager/archive/master.tar.gz -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/refs/heads/nixos-unstable.zip
 
-{ inputs, outputs, pkgs, config, lib, ... }:
-
-with lib; {
-
-  nix = {
-
-    # This will add each flake input as a registry
-    # To make nix3 commands consistent with your flake
-    registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
-
-    # This will additionally add your inputs to the system's legacy channels
-    # Making legacy nix commands consistent as well, awesome!
-    nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
-
-    settings = {
-      # Enable flakes and new 'nix' command
-      experimental-features = "nix-command flakes";
-      # Deduplicate and optimize nix store
-      auto-optimise-store = true;
-
-      trusted-public-keys = [
-        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-        "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
-      ];
-
-      substituters = [
-        "https://cache.nixos.org"
-        "https://nixpkgs-wayland.cachix.org"
-      ];
-    };
-
-    package = pkgs.nix;
-
-  };
+{ inputs, outputs, pkgs, config, lib, ... }: {
 
   networking.hostName = "starlabs";
   time.timeZone = "Europe/London";
@@ -43,9 +10,22 @@ with lib; {
   ];
   boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_latest);
 
+  users.users.juuso = {
+    isNormalUser = true;
+    group = "juuso";
+    extraGroups = [ "wheel" "networkmanager" "video" "input" ];
+    openssh.authorizedKeys.keys = [
+      "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNMKgTTpGSvPG4p8pRUWg1kqnP9zPKybTHQ0+Q/noY5+M6uOxkLy7FqUIEFUT9ZS/fflLlC/AlJsFBU212UzobA= ssh@secretive.sandbox.local"
+    ];
+    shell = pkgs.fish;
+  };
+  users.groups.juuso = { };
+  environment.shells = [ pkgs.fish ];
+  programs.fish.enable = true;
+
   security.sudo = {
-    enable = mkDefault true;
-    wheelNeedsPassword = mkForce false;
+    enable = lib.mkDefault true;
+    wheelNeedsPassword = lib.mkForce false;
   };
   services.openssh = {
     enable = true;
