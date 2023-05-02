@@ -22,7 +22,7 @@
           filetypes = [ "bqn" ];
         };
         grammarly = {
-          command = "grammarly-languageserver";
+          command = "${pkgs.grammarly}/extension/dist/server/index.node.js";
           args = [ "--stdio" ];
           initializationOptions = {
             clientId = "client_BaDkMgx4X19X9UxxYRCXZo";
@@ -80,7 +80,7 @@
       gopls
       nil
       nixpkgs-fmt
-      nodePackages.grammarly-languageserver
+      grammarly
       nodePackages.js-beautify
       rustfmt
       yamlfmt
