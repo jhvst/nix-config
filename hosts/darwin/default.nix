@@ -9,6 +9,10 @@
 
   networking.hostName = "darwin";
 
+  environment.systemPackages = with pkgs; [
+    pam-reattach
+  ];
+
   homebrew = {
     enable = true;
     onActivation = {

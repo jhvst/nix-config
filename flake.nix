@@ -13,6 +13,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     sops-nix.url = "github:Mic92/sops-nix";
     wayland.url = "github:nix-community/nixpkgs-wayland";
+    ponkila.url = "git+ssh://git@github.com/jhvst/ponkila";
   };
 
   # add the inputs declared above to the argument attribute set
@@ -24,6 +25,7 @@
     , nixpkgs
     , sops-nix
     , wayland
+    , ponkila
     }@inputs:
 
     let
@@ -43,30 +45,26 @@
         };
       };
 
-    in
-    {
-
-      formatter = forAllSystems (system:
-        nixpkgs.legacyPackages.${system}.nixpkgs-fmt
-      );
-
-      # Your custom packages
-      # Acessible through 'nix build', 'nix shell', etc
-      packages = forAllSystems (system:
-        let pkgs = nixpkgs.legacyPackages.${system};
-        in import ./pkgs { inherit pkgs; }
-      );
-
-      # nixos-generators
-      "amd" = nixos-generators.nixosGenerate {
+      muro = {
         system = "x86_64-linux";
         specialArgs = { inherit inputs outputs; };
-        modules = [ ./hosts/amd ];
+        modules = [
+          ./home-manager/juuso.nix
+          ./home-manager/programs/neovim
+          ./hosts/muro
+          ./nix-settings.nix
+          ./system/ramdisk.nix
+          ponkila.nixosModules.muro
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+          }
+        ];
         customFormats = customFormats;
         format = "kexecTree";
       };
 
-      "starlabs" = nixos-generators.nixosGenerate {
+      starlabs = {
         system = "x86_64-linux";
         specialArgs = { inherit inputs outputs; };
         modules = [
@@ -84,19 +82,15 @@
         format = "kexecTree";
       };
 
-      # Devshell for bootstrapping
-      # Acessible through 'nix develop' or 'nix-shell' (legacy)
-      devShells = forAllSystems (system:
-        let pkgs = nixpkgs.legacyPackages.${system};
-        in import ./shell.nix { inherit pkgs; }
-      );
+      amd = {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs outputs; };
+        modules = [ ./hosts/amd ];
+        customFormats = customFormats;
+        format = "kexecTree";
+      };
 
-      # Your custom packages and modifications, exported as overlays
-      overlays = import ./overlays { inherit inputs; };
-
-      darwinConfigurations."darwin" = darwin.lib.darwinSystem {
-        # you can have multiple darwinConfigurations per flake, one per hostname
-
+      host-darwin = {
         specialArgs = { inherit inputs outputs; };
         system = "aarch64-darwin"; # "x86_64-darwin" if you're using a pre M1 mac
         modules = [
@@ -112,6 +106,45 @@
             home-manager.useGlobalPkgs = true;
           }
         ];
+      };
+
+    in
+    {
+
+      formatter = forAllSystems (system:
+        nixpkgs.legacyPackages.${system}.nixpkgs-fmt
+      );
+
+      # Your custom packages
+      # Acessible through 'nix build', 'nix shell', etc
+      packages = forAllSystems (system:
+        let pkgs = nixpkgs.legacyPackages.${system};
+        in import ./pkgs { inherit pkgs; }
+      );
+
+      # nixos-generators
+      "amd" = nixos-generators.nixosGenerate amd;
+      "starlabs" = nixos-generators.nixosGenerate starlabs;
+      "muro" = nixos-generators.nixosGenerate muro;
+
+      # Devshell for bootstrapping
+      # Acessible through 'nix develop' or 'nix-shell' (legacy)
+      devShells = forAllSystems (system:
+        let pkgs = nixpkgs.legacyPackages.${system};
+        in import ./shell.nix { inherit pkgs; }
+      );
+
+      # Your custom packages and modifications, exported as overlays
+      overlays = import ./overlays { inherit inputs; };
+
+      nixosConfigurations = with nixpkgs.lib; {
+        "starlabs" = nixosSystem (getAttrs [ "system" "specialArgs" "modules" ] starlabs);
+        "muro" = nixosSystem (getAttrs [ "system" "specialArgs" "modules" ] muro);
+        "amd" = nixosSystem (getAttrs [ "system" "specialArgs" "modules" ] amd);
+      };
+
+      darwinConfigurations = with darwin.lib; {
+        "host-darwin" = darwinSystem host-darwin;
       };
     };
 }

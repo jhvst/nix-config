@@ -20,7 +20,6 @@
 
     home.packages = with pkgs; [
       gnupg
-      pam-reattach
       trezor_agent
       trezord
       wireguard-go
@@ -33,7 +32,9 @@
     programs.fish = with config.home-manager.users.juuso; {
       enable = true;
       loginShellInit = ''
-        set -x ponkila (getconf DARWIN_USER_TEMP_DIR)${sops.secrets."wireguard/ponkila.conf".name}
+        ${if pkgs.system == "aarch64-darwin" then
+          "set -x ponkila (getconf DARWIN_USER_TEMP_DIR)${sops.secrets."wireguard/ponkila.conf".name}"
+        else ""}
         set -x GNUPGHOME ${home.homeDirectory}/.gnupg/trezor
         set -x PATH '${lib.concatStringsSep ":" [
           "${home.homeDirectory}/.nix-profile/bin"
