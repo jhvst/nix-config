@@ -2,6 +2,11 @@
 
 { inputs, outputs, pkgs, config, lib, ... }: {
 
+  fonts.fontDir.enable = true;
+  fonts.fonts = with pkgs; [
+    (nerdfonts.override { fonts = [ "iA-Writer" ]; })
+  ];
+
   networking.hostName = "starlabs";
   time.timeZone = "Europe/London";
 
