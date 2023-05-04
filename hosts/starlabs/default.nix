@@ -54,8 +54,8 @@
 
       description = "local nvme storage";
 
-      what = "/dev/disk/by-label/nvme";
-      where = "/var/mnt/nvme";
+      what = "/dev/disk/sdb2";
+      where = "/var/mnt/btrfs";
       options = "compress=zstd:2,noatime";
       type = "btrfs";
 
