@@ -7,6 +7,27 @@
     (nerdfonts.override { fonts = [ "iA-Writer" ]; })
   ];
 
+  home-manager.users.juuso.programs.waybar.enable = true;
+  home-manager.users.juuso.wayland.windowManager.sway = {
+    enable = true;
+    config = {
+      bars = [{
+        command = "${pkgs.waybar}/bin/waybar";
+        fonts = {
+          names = [ "iMWritingMonoS Nerd Font" ];
+          style = "Bold Semi-Condensed";
+          size = 11.0;
+        };
+      }];
+      input = {
+        "type:touchpad" = {
+          tap = "enabled";
+          natural_scroll = "enabled";
+        };
+      };
+    };
+  };
+
   networking.hostName = "starlabs";
   time.timeZone = "Europe/London";
 
