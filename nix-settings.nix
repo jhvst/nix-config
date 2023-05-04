@@ -33,6 +33,13 @@
         supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" ];
         maxJobs = 24;
       }
+      {
+        sshUser = "juuso";
+        hostName = "buidl0.ponkila.com";
+        systems = [ "i686-linux" "x86_64-linux" "aarch64-linux" "armv7l-linux" ];
+        supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
+        maxJobs = 20;
+      }
     ];
     distributedBuilds = true;
     # optional, useful when the builder has a faster internet connection than yours
