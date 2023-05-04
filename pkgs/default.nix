@@ -3,7 +3,6 @@
 
 { pkgs ? (import ../nixpkgs.nix) { } }: {
   # example = pkgs.callPackage ./example { };
-  bqnlsp = pkgs.callPackage ./bqnlsp { };
   bqn-vim = pkgs.callPackage ./bqn-vim { };
   savilerow = pkgs.callPackage ./savilerow { };
   nvim-bqn = pkgs.vimUtils.buildVimPluginFrom2Nix {

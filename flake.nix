@@ -14,6 +14,7 @@
     sops-nix.url = "github:Mic92/sops-nix";
     wayland.url = "github:nix-community/nixpkgs-wayland";
     ponkila.url = "git+ssh://git@github.com/jhvst/ponkila";
+    bqnlsp.url = "sourcehut:~detegr/bqnlsp";
   };
 
   # add the inputs declared above to the argument attribute set
@@ -26,6 +27,7 @@
     , sops-nix
     , wayland
     , ponkila
+    , bqnlsp
     }@inputs:
 
     let

@@ -75,7 +75,6 @@
       require('crates').setup()
     '';
     extraPackages = with pkgs; [
-      bqnlsp
       cbqn # bqnlsp assumes cbqn in path
       gopls
       nil
@@ -84,6 +83,8 @@
       nodePackages.js-beautify
       rustfmt
       yamlfmt
+    ] ++ [
+      inputs.bqnlsp.packages.${pkgs.system}.lsp
     ];
     plugins = with pkgs.vimPlugins; [
       (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
