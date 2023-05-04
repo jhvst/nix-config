@@ -14,5 +14,4 @@
     };
     meta.homepage = "https://git.sr.ht/~detegr/nvim-bqn/";
   };
-  grammarly = pkgs.callPackage ./grammarly { };
 }

@@ -21,14 +21,6 @@
           command = "bqnlsp";
           filetypes = [ "bqn" ];
         };
-        grammarly = {
-          command = "${pkgs.grammarly}/extension/dist/server/index.node.js";
-          args = [ "--stdio" ];
-          initializationOptions = {
-            clientId = "client_BaDkMgx4X19X9UxxYRCXZo";
-          };
-          filetypes = [ "markdown" ];
-        };
       };
     };
     defaultEditor = true;
@@ -79,7 +71,6 @@
       gopls
       nil
       nixpkgs-fmt
-      grammarly
       nodePackages.js-beautify
       rustfmt
       yamlfmt
