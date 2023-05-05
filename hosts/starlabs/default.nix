@@ -1,34 +1,58 @@
 # nix-build -A pix.ipxe amd.nix -I home-manager=https://github.com/nix-community/home-manager/archive/master.tar.gz -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/refs/heads/nixos-unstable.zip
 
-{ inputs, outputs, pkgs, config, lib, ... }: {
+{ inputs, outputs, pkgs, config, lib, ... }:
+let
+  sshKeysPath = "/var/mnt/btrfs/.secrets/ssh/id_ed25519";
+in
+{
 
   fonts.fontDir.enable = true;
   fonts.fonts = with pkgs; [
     (nerdfonts.override { fonts = [ "iA-Writer" ]; })
   ];
 
-  home-manager.users.juuso.programs.waybar.enable = true;
-  home-manager.users.juuso.wayland.windowManager.sway = {
-    enable = true;
-    config = {
-      bars = [{
-        command = "${pkgs.waybar}/bin/waybar";
-        fonts = {
-          names = [ "iMWritingMonoS Nerd Font" ];
-          style = "Bold Semi-Condensed";
-          size = 11.0;
+  home-manager.users.juuso = {
+
+    programs.foot = {
+      enable = true;
+      settings = {
+        main = {
+          term = "xterm-256color";
+
+          font = "iMWritingMonoS Nerd Font:size=14";
+          dpi-aware = "yes";
         };
-      }];
-      input = {
-        "type:touchpad" = {
-          tap = "enabled";
-          natural_scroll = "enabled";
+
+        mouse = {
+          hide-when-typing = "yes";
+        };
+      };
+    };
+    programs.firefox.enable = true;
+    programs.waybar.enable = true;
+
+    wayland.windowManager.sway = {
+      enable = true;
+      config = {
+        bars = [{
+          command = "${pkgs.waybar}/bin/waybar";
+          fonts = {
+            names = [ "iMWritingMonoS Nerd Font" ];
+            style = "Bold Semi-Condensed";
+            size = 11.0;
+          };
+        }];
+        input = {
+          "type:touchpad" = {
+            tap = "disabled";
+            natural_scroll = "enabled";
+          };
         };
       };
     };
   };
 
-  networking.hostName = "starlabs";
+  networking.hostName = "starbook-mkvi-amd";
   time.timeZone = "Europe/London";
 
   boot.kernelParams = [
@@ -56,13 +80,15 @@
   services.openssh = {
     enable = true;
     settings.PasswordAuthentication = false;
+    hostKeys = [{
+      path = sshKeysPath;
+      type = "ed25519";
+    }];
   };
   networking.wireless.iwd.enable = true;
 
   environment.systemPackages = with pkgs; [
-    fuse-overlayfs
     btrfs-progs
-    ksmbd-tools
     lm_sensors
     nfs-utils
 
@@ -75,11 +101,12 @@
 
       description = "local nvme storage";
 
-      what = "/dev/disk/sdb2";
+      what = "/dev/sda2";
       where = "/var/mnt/btrfs";
       options = "compress=zstd:2,noatime";
       type = "btrfs";
 
+      before = [ "sshd.service" ];
       wantedBy = [ "multi-user.target" ];
     }
   ];
@@ -88,10 +115,6 @@
     ## radv: an open-source Vulkan driver from freedesktop
     driSupport = true;
     driSupport32Bit = true;
-
-    ## amdvlk: an open-source Vulkan driver from AMD
-    extraPackages = [ pkgs.amdvlk ];
-    extraPackages32 = [ pkgs.driversi686Linux.amdvlk ];
   };
 
   hardware.steam-hardware.enable = true;
@@ -107,6 +130,11 @@
   ##  [bluetooth] # pair [hex-address]
   ##  [bluetooth] # connect [hex-address]
   hardware.bluetooth.enable = true;
+
+  # "my laptop has LVFS updates btw"
+  services.fwupd.enable = true;
+
+  services.trezord.enable = true;
 
   services.pipewire = {
     enable = true;
