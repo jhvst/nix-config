@@ -92,6 +92,14 @@
         format = "kexecTree";
       };
 
+      nvidia = {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs outputs; };
+        modules = [ ./nixosConfigurations/nvidia ];
+        customFormats = customFormats;
+        format = "kexecTree";
+      };
+
       host-darwin = {
         specialArgs = { inherit inputs outputs; };
         system = "aarch64-darwin"; # "x86_64-darwin" if you're using a pre M1 mac
@@ -108,6 +116,14 @@
             home-manager.useGlobalPkgs = true;
           }
         ];
+      };
+
+      minimal = {
+        specialArgs = { inherit inputs outputs; };
+        system = "x86_64-linux";
+        modules = [ ./nixosConfigurations/minimal ];
+        customFormats = customFormats;
+        format = "kexecTree";
       };
 
     in
@@ -128,6 +144,8 @@
       "amd" = nixos-generators.nixosGenerate amd;
       "starlabs" = nixos-generators.nixosGenerate starlabs;
       "muro" = nixos-generators.nixosGenerate muro;
+      "minimal" = nixos-generators.nixosGenerate minimal;
+      "nvidia" = nixos-generators.nixosGenerate nvidia;
 
       # Devshell for bootstrapping
       # Acessible through 'nix develop' or 'nix-shell' (legacy)
@@ -143,6 +161,8 @@
         "starlabs" = nixosSystem (getAttrs [ "system" "specialArgs" "modules" ] starlabs);
         "muro" = nixosSystem (getAttrs [ "system" "specialArgs" "modules" ] muro);
         "amd" = nixosSystem (getAttrs [ "system" "specialArgs" "modules" ] amd);
+        "minimal" = nixosSystem (getAttrs [ "system" "specialArgs" "modules" ] minimal);
+        "nvidia" = nixosSystem (getAttrs [ "system" "specialArgs" "modules" ] nvidia);
       };
 
       darwinConfigurations = with darwin.lib; {
