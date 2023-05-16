@@ -66,6 +66,7 @@
         unbind %
 
         set -g focus-events on
+        set-option -g default-shell "${lib.getExe pkgs.fish}"
       '';
       shortcut = "a";
     };
