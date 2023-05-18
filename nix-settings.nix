@@ -29,16 +29,23 @@
     buildMachines = [
       {
         hostName = "muro";
-        systems = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
+        systems = [ "i686-linux" "x86_64-linux" ];
         supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" ];
         maxJobs = 24;
       }
       {
+        systems = [ "aarch64-linux" "i686-linux" "x86_64-linux" ];
+        supportedFeatures = [ "benchmark" "big-parallel" "kvm" "nixos-test" ];
         sshUser = "juuso";
         hostName = "buidl0.ponkila.com";
-        systems = [ "i686-linux" "x86_64-linux" "aarch64-linux" "armv7l-linux" ];
-        supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
         maxJobs = 20;
+      }
+      {
+        systems = [ "aarch64-linux" "armv7l-linux" ];
+        supportedFeatures = [ "benchmark" "big-parallel" "gccarch-armv8-a" "kvm" "nixos-test" ];
+        sshUser = "juuso";
+        hostName = "buidl1.ponkila.com";
+        maxJobs = 16;
       }
     ];
     distributedBuilds = true;
