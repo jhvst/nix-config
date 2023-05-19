@@ -1,9 +1,6 @@
 # nix-build -A pix.ipxe amd.nix -I home-manager=https://github.com/nix-community/home-manager/archive/master.tar.gz -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/refs/heads/nixos-unstable.zip
 
 { inputs, outputs, pkgs, config, lib, ... }:
-let
-  sshKeysPath = "/var/mnt/btrfs/.secrets/ssh/id_ed25519";
-in
 {
 
   fonts.fontDir.enable = true;
@@ -19,7 +16,7 @@ in
         main = {
           term = "xterm-256color";
 
-          font = "iMWritingMonoS Nerd Font:size=14";
+          font = "iMWritingMonoS Nerd Font:size=11";
           dpi-aware = "yes";
         };
 
@@ -52,7 +49,7 @@ in
     };
   };
 
-  networking.hostName = "starbook-mkvi-amd";
+  networking.hostName = "starlabs";
   time.timeZone = "Europe/London";
 
   boot.kernelParams = [
@@ -67,23 +64,12 @@ in
     openssh.authorizedKeys.keys = [
       "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNMKgTTpGSvPG4p8pRUWg1kqnP9zPKybTHQ0+Q/noY5+M6uOxkLy7FqUIEFUT9ZS/fflLlC/AlJsFBU212UzobA= ssh@secretive.sandbox.local"
     ];
-    shell = pkgs.fish;
   };
   users.groups.juuso = { };
-  environment.shells = [ pkgs.fish ];
-  programs.fish.enable = true;
 
   security.sudo = {
     enable = lib.mkDefault true;
     wheelNeedsPassword = lib.mkForce false;
-  };
-  services.openssh = {
-    enable = true;
-    settings.PasswordAuthentication = false;
-    hostKeys = [{
-      path = sshKeysPath;
-      type = "ed25519";
-    }];
   };
   networking.wireless.iwd.enable = true;
 
@@ -91,22 +77,43 @@ in
     btrfs-progs
     lm_sensors
     nfs-utils
-
-    vulkan-tools
   ];
 
   systemd.mounts = [
     {
       enable = true;
-
-      description = "local nvme storage";
-
       what = "/dev/sda2";
-      where = "/var/mnt/btrfs";
-      options = "compress=zstd:2,noatime";
+      where = "/home/juuso/scratchpad";
+      options = "subvolid=262";
       type = "btrfs";
 
-      before = [ "sshd.service" ];
+      wantedBy = [ "multi-user.target" ];
+    }
+    {
+      enable = true;
+      what = "/dev/sda2";
+      where = "/var/lib/iwd";
+      options = "subvolid=261";
+      type = "btrfs";
+
+      wantedBy = [ "multi-user.target" ];
+    }
+    {
+      enable = true;
+      what = "/dev/sda2";
+      where = "/home/juuso/.ssh";
+      options = "subvolid=260";
+      type = "btrfs";
+
+      wantedBy = [ "multi-user.target" ];
+    }
+    {
+      enable = true;
+      what = "/dev/sda2";
+      where = "/home/juuso/.gnupg/trezor";
+      options = "subvolid=259";
+      type = "btrfs";
+
       wantedBy = [ "multi-user.target" ];
     }
   ];
@@ -117,7 +124,6 @@ in
     driSupport32Bit = true;
   };
 
-  hardware.steam-hardware.enable = true;
   hardware.xpadneo.enable = true;
 
   ##
@@ -158,9 +164,7 @@ in
   '';
   services.getty.autologinUser = "juuso";
 
-  ## Firmware blobs
   hardware.enableRedistributableFirmware = true;
   hardware.cpu.amd.updateMicrocode = true;
-
   system.stateVersion = "23.05";
 }
