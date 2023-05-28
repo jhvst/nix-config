@@ -10,6 +10,54 @@
 
     home.stateVersion = "23.05";
 
+    accounts.email.accounts = with config.home-manager.users.juuso; {
+      "ponkila" = {
+        primary = true;
+        himalaya = {
+          enable = true;
+          settings = {
+            backend = "notmuch";
+            notmuch-db-path = "${home.homeDirectory}/Maildir";
+            sender = "smtp";
+          };
+        };
+        mbsync = {
+          enable = true;
+          create = "maildir";
+        };
+        notmuch.enable = true;
+        address = "juuso@ponkila.com";
+        userName = "juuso@ponkila.com";
+        realName = "Juuso Haavisto";
+        passwordCommand = [
+          ''cat $(getconf DARWIN_USER_TEMP_DIR)email/ponkila.com''
+        ];
+        imap = {
+          host = "mail.gandi.net";
+          port = 993;
+          tls = {
+            enable = true;
+          };
+        };
+        smtp = {
+          host = "mail.gandi.net";
+          port = 465;
+          tls = {
+            enable = true;
+          };
+        };
+      };
+    };
+
+    programs.himalaya.enable = true;
+    programs.notmuch = {
+      enable = true;
+      hooks = {
+        preNew = "mbsync --all";
+      };
+    };
+    programs.mbsync.enable = true;
+
     programs.nix-index.enable = true;
     programs.direnv = {
       enable = true;

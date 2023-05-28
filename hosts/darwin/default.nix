@@ -55,6 +55,9 @@
       secrets."wireguard/ponkila.conf" = {
         path = "%r/wireguard/ponkila.conf";
       };
+      secrets."email/ponkila.com" = {
+        path = "%r/email/ponkila.com";
+      };
     };
 
     programs.alacritty = {
