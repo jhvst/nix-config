@@ -194,7 +194,7 @@
     serviceConfig = {
       Type = "oneshot";
       ExecStart = ''
-        /run/current-system/sw/bin/loginctl enable-linger core
+        /run/current-system/sw/bin/loginctl enable-linger juuso
       '';
     };
 
@@ -228,8 +228,8 @@
     serviceConfig = {
       Restart = "always";
       RestartSec = "5s";
-      User = "core";
-      Group = "core";
+      User = "juuso";
+      Group = "juuso";
       Type = "simple";
     };
 
@@ -264,8 +264,8 @@
     serviceConfig = {
       Restart = "always";
       RestartSec = "5s";
-      User = "core";
-      Group = "core";
+      User = "juuso";
+      Group = "juuso";
       Type = "simple";
     };
 
@@ -298,8 +298,8 @@
     serviceConfig = {
       Restart = "always";
       RestartSec = "5s";
-      User = "core";
-      Group = "core";
+      User = "juuso";
+      Group = "juuso";
       Type = "simple";
     };
 
