@@ -28,5 +28,8 @@
       buildInputs = oldAttrs.buildInputs ++ [ prev.notmuch ];
       buildFeatures = oldAttrs.buildFeatures ++ [ "notmuch-backend" ];
     });
+    ksmbd-tools = prev.ksmbd-tools.overrideAttrs (oldAttrs: {
+      configureFlags = oldAttrs.configureFlags ++ [ "--with-rundir=/run" ];
+    });
   };
 }
