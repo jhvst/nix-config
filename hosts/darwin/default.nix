@@ -58,6 +58,9 @@
       secrets."email/ponkila.com" = {
         path = "%r/email/ponkila.com";
       };
+      secrets."email/mail.com" = {
+        path = "%r/email/mail.com";
+      };
     };
 
     programs.alacritty = {

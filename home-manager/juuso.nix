@@ -47,6 +47,42 @@
           };
         };
       };
+      "mail.com" = {
+        himalaya = {
+          enable = true;
+          settings = {
+            backend = "notmuch";
+            notmuch-db-path = "${home.homeDirectory}/Maildir";
+            sender = "smtp";
+          };
+        };
+        mbsync = {
+          enable = true;
+          create = "maildir";
+        };
+        notmuch.enable = true;
+        address = "juuso@mail.com";
+        userName = "juuso@mail.com";
+        realName = "Juuso Haavisto";
+        passwordCommand = [
+          ''cat $(getconf DARWIN_USER_TEMP_DIR)email/mail.com''
+        ];
+        imap = {
+          host = "imap.mail.com";
+          port = 993;
+          tls = {
+            enable = true;
+          };
+        };
+        smtp = {
+          host = "smtp.mail.com";
+          port = 587;
+          tls = {
+            useStartTls = true;
+          };
+        };
+      };
+
     };
 
     programs.himalaya.enable = true;
