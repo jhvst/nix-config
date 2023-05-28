@@ -318,8 +318,8 @@
     wantedBy = [ "multi-user.target" ];
   };
 
-  fileSystems."/export/lutris" = {
-    device = "/var/mnt/bakhal/lutris";
+  fileSystems."/export/nfs" = {
+    device = "/var/mnt/bakhal/nfs";
     options = [ "bind" ];
   };
   services.nfs.server = {
@@ -329,8 +329,8 @@
     statdPort = 4000;
     extraNfsdConfig = '''';
     exports = ''
-      /export         *.ponkila.intra(rw,fsid=0,no_subtree_check)
-      /export/lutris  *.ponkila.intra(rw,nohide,insecure,no_subtree_check)
+      /export         *.ponkila.periferia(rw,fsid=0,no_subtree_check)
+      /export/nfs     *.ponkila.periferia(rw,nohide,insecure,no_subtree_check)
     '';
   };
 
