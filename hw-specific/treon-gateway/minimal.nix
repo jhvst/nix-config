@@ -39,12 +39,24 @@
   services.openssh = {
     enable = true;
     passwordAuthentication = false;
+    kbdInteractiveAuthentication = false;
   };
 
   security.sudo = {
     enable = lib.mkDefault true;
     wheelNeedsPassword = lib.mkForce false;
   };
+
+  # networking.nftables.enable = true;
+  # networking.firewall.enable = false;
+  # services.dbus.implementation = "broker";
+  environment.noXlibs = true;
+  documentation.doc.enable = false;
+  xdg.mime.enable = false;
+  xdg.menus.enable = false;
+  xdg.icons.enable = false;
+  xdg.sounds.enable = false;
+  xdg.autostart.enable = false;
 
   users.users.matti = {
     isNormalUser = true;

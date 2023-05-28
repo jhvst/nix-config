@@ -23,7 +23,7 @@
         disabledTests = old.disabledTests ++ [ "test_disk_partitions" ];
       });
 
-      packages.x86_64-linux.default = self.packages.armv7l-linux.kexec-tools;
+      packages.aarch64-darwin.default = self.packages.armv7l-linux.kexec-tools;
 
       "minimal" = nixos-generators.nixosGenerate {
         specialArgs = { inherit inputs outputs; };

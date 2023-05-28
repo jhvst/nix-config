@@ -3,8 +3,7 @@
 , ...
 }:
 {
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.grub.enable = lib.mkForce false;
 
   # These kmodules are implicit requirements of netboot
   boot.initrd.availableKernelModules = [ "squashfs" "overlay" ];
