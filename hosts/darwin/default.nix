@@ -4,7 +4,7 @@
 
   fonts.fontDir.enable = true;
   fonts.fonts = with pkgs; [
-    (nerdfonts.override { fonts = [ "iA-Writer" ]; })
+    (nerdfonts.override { fonts = [ "IBMPlexMono" ]; })
   ];
 
   networking.hostName = "darwin";
@@ -30,7 +30,6 @@
       "homebrew/cask/dash"
       "numi"
       "remarkable"
-      "rescuetime"
       "secretive"
       "signal"
       "slack"
@@ -67,8 +66,8 @@
       enable = true;
       settings = {
         font = {
-          normal.family = "iMWritingMonoS Nerd Font";
-          size = 14;
+          normal.family = "BlexMono Nerd Font Mono";
+          size = 18;
         };
       };
     };
