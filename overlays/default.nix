@@ -9,24 +9,7 @@
   # https://nixos.wiki/wiki/Overlays
   modifications = final: prev: with prev.lib; {
     himalaya = prev.himalaya.overrideAttrs (oldAttrs: rec {
-      version = "0.7.3";
-
-      src = prev.fetchFromGitHub {
-        owner = "soywod";
-        repo = "himalaya";
-        rev = "v0.7.3";
-        sha256 = "sha256-HmH4qL70ii8rS8OeUnUxsy9/wMx+f2SBd1AyRqlfKfc=";
-      };
-      cargoDeps = oldAttrs.cargoDeps.overrideAttrs (const {
-        name = "himalaya-0.7.3-vendor.tar.gz";
-        inherit src;
-        outputHash = "sha256-NJFOtWlfKZRLr9vvDvPQjpT4LGMeytk0JFJb0r77bwE=";
-      });
-
-      cargoBuildFlags = [ "--features=notmuch-backend" ];
-
-      buildInputs = oldAttrs.buildInputs ++ [ prev.notmuch ];
-      buildFeatures = oldAttrs.buildFeatures ++ [ "notmuch-backend" ];
+      withNotmuchBackend = true;
     });
     ksmbd-tools = prev.ksmbd-tools.overrideAttrs (oldAttrs: {
       configureFlags = oldAttrs.configureFlags ++ [ "--with-rundir=/run" ];
