@@ -11,6 +11,8 @@
 
   environment.systemPackages = with pkgs; [
     pam-reattach
+    discord
+    mpv
   ];
 
   homebrew = {

@@ -107,10 +107,7 @@
       trezord
       wireguard-go
       wireguard-tools
-      discord
     ];
-
-    programs.mpv.enable = true;
 
     programs.fish = with config.home-manager.users.juuso; {
       enable = true;
