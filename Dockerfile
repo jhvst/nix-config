@@ -1,8 +1,10 @@
-FROM nixos/nix
+FROM docker.io/nixos/nix
 
-RUN nix-channel --add https://nixos.org/channels/nixpkgs-unstable
-RUN nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
-RUN nix-channel --update
-RUN nix-env -iA nixpkgs.rsync
+ARG hostname
+ENV BUILD_ME=$hostname
 
-CMD nix-build -A pix.ipxe && rsync -L -r result out && unlink result
+RUN echo "extra-experimental-features = flakes nix-command" > /etc/nix/nix.conf \
+    && echo "accept-flake-config = true" >> /etc/nix/nix.conf
+
+CMD nix develop && nix build .#$BUILD_ME \
+    && rsync -L -r result out && unlink result
