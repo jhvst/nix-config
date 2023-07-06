@@ -60,10 +60,10 @@
               git
               jq
               nix
-              nix-tree
               rsync
               ssh-to-age
               zstd
+              ripgrep
             ];
             inputsFrom = [
               config.flake-root.devShell
