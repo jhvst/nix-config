@@ -14,7 +14,7 @@
       "ponkila" = {
         primary = true;
         himalaya = {
-          enable = true;
+          enable = false;
           settings = {
             backend = "notmuch";
             notmuch-db-path = "${home.homeDirectory}/Maildir";
@@ -49,7 +49,7 @@
       };
       "mail.com" = {
         himalaya = {
-          enable = true;
+          enable = false;
           settings = {
             backend = "notmuch";
             notmuch-db-path = "${home.homeDirectory}/Maildir";
@@ -85,7 +85,6 @@
 
     };
 
-    programs.himalaya.enable = true;
     programs.notmuch = {
       enable = true;
       hooks = {

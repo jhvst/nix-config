@@ -87,7 +87,6 @@
       crates-nvim
       editorconfig-vim
       gitsigns-nvim
-      himalaya-vim
       idris-vim
       indent-blankline-nvim
       limelight-vim # :LimeLight (also, consider :setlocal spell spelllang=en_us
