@@ -167,6 +167,12 @@
         "node_modules"
         "result"
       ];
+      extraConfig = {
+        http = {
+          # https://stackoverflow.com/questions/22369200/git-pull-push-error-rpc-failed-result-22-http-code-408
+          postBuffer = "524288000";
+        };
+      };
     };
   };
 
