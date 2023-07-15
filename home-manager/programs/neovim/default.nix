@@ -69,13 +69,12 @@
     extraPackages = with pkgs; [
       cbqn # bqnlsp assumes cbqn in path
       gopls
+      inputs.bqnlsp.packages.${pkgs.system}.lsp
       nil
       nixpkgs-fmt
       nodePackages.js-beautify
       rustfmt
       yamlfmt
-    ] ++ [
-      inputs.bqnlsp.packages.${pkgs.system}.lsp
     ];
     plugins = with pkgs.vimPlugins; [
       (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
@@ -96,12 +95,11 @@
       nvim-base16
       nvim-dap
       nvim-dap-ui
+      outputs.packages.${pkgs.system}.bqn-vim
+      outputs.packages.${pkgs.system}.nvim-bqn
       vim-codefmt
       vim-devicons
       vim-fugitive
-    ] ++ [
-      pkgs.nvim-bqn
-      pkgs.bqn-vim
     ];
     viAlias = true;
     vimAlias = true;

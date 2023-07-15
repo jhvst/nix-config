@@ -72,6 +72,18 @@
           };
         };
         packages = with flake.nixosConfigurations; {
+          "bqn-vim" = pkgs.callPackage ./pkgs/bqn-vim { };
+          "savilerow" = pkgs.callPackage ./pkgs/savilerow { };
+          "nvim-bqn" = pkgs.vimUtils.buildVimPluginFrom2Nix {
+            pname = "nvim-bqn";
+            version = "unstable";
+            src = builtins.fetchGit {
+              url = "https://git.sr.ht/~detegr/nvim-bqn";
+              rev = "bbe1a8d93f490d79e55dd0ddf22dc1c43e710eb3";
+            };
+            meta.homepage = "https://git.sr.ht/~detegr/nvim-bqn/";
+          };
+
           "starlabs" = starlabs.config.system.build.kexecTree;
           "muro" = muro.config.system.build.kexecTree;
           "amd" = amd.config.system.build.kexecTree;
