@@ -77,6 +77,7 @@
           "amd" = amd.config.system.build.kexecTree;
           "minimal" = minimal.config.system.build.kexecTree;
           "nvidia" = nvidia.config.system.build.kexecTree;
+          "matrix-ponkila-com" = matrix-ponkila-com.config.system.build.kexecTree;
         };
       };
 
@@ -164,6 +165,21 @@
             ];
           };
 
+          matrix-ponkila-com = {
+            specialArgs = { inherit inputs outputs; };
+            system = "x86_64-linux";
+            modules = [
+              ./nixosConfigurations/matrix.ponkila.com
+              ./system/netboot.nix
+              ./system/ramdisk.nix
+              ./home-manager/juuso.nix
+              home-manager.nixosModules.home-manager
+              {
+                home-manager.useGlobalPkgs = true;
+              }
+            ];
+          };
+
         in
         {
 
@@ -175,6 +191,7 @@
             "amd" = nixosSystem amd;
             "minimal" = nixosSystem minimal;
             "nvidia" = nixosSystem nvidia;
+            "matrix-ponkila-com" = nixosSystem matrix-ponkila-com;
           };
 
           darwinConfigurations = with darwin.lib; {
