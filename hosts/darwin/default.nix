@@ -42,6 +42,7 @@
 
   security.pam.enableSudoTouchIdAuth = true;
 
+  nix.settings.trusted-users = [ "juuso" ];
   users.users.juuso = {
     name = "juuso";
     home = "/Users/juuso";
