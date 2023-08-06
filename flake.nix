@@ -20,6 +20,7 @@
     bqnlsp.url = "sourcehut:~detegr/bqnlsp";
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-root.url = "github:srid/flake-root";
+    nixneovimplugins.url = "github:jooooscha/nixpkgs-vim-extra-plugins";
   };
 
   # add the inputs declared above to the argument attribute set
@@ -33,6 +34,7 @@
     , ponkila
     , bqnlsp
     , flake-parts
+    , nixneovimplugins
     , ...
     }@inputs:
 

@@ -65,16 +65,29 @@
         }
       }
       require('crates').setup()
+      require("papis").setup({
+        db_path = "/Users/juuso/.papis/papis-nvim.sqlite3",
+        papis_python = {
+          dir = "/Users/juuso/.papis",
+          info_name = "info.yaml",
+          notes_name = [[notes.org]],
+        }
+      })
     '';
     extraPackages = with pkgs; [
       cbqn # bqnlsp assumes cbqn in path
+      fd
       gopls
       inputs.bqnlsp.packages.${pkgs.system}.lsp
       nil
       nixpkgs-fmt
       nodePackages.js-beautify
+      papis
+      ripgrep
       rustfmt
+      tree-sitter
       yamlfmt
+      yq
     ];
     plugins = with pkgs.vimPlugins; [
       (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
@@ -90,13 +103,18 @@
       indent-blankline-nvim
       limelight-vim # :LimeLight (also, consider :setlocal spell spelllang=en_us
       markdown-preview-nvim # :MarkdownPreview
-      nerdtree
-      nerdtree-git-plugin
+      nui-nvim
+      null-ls-nvim
       nvim-base16
+      nvim-cmp
       nvim-dap
       nvim-dap-ui
       outputs.packages.${pkgs.system}.bqn-vim
       outputs.packages.${pkgs.system}.nvim-bqn
+      pkgs.vimExtraPlugins.papis-nvim
+      pkgs.vimExtraPlugins.sqlite-lua
+      plenary-nvim
+      telescope-nvim
       vim-codefmt
       vim-devicons
       vim-fugitive

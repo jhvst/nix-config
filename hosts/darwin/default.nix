@@ -10,9 +10,10 @@
   networking.hostName = "darwin";
 
   environment.systemPackages = with pkgs; [
-    pam-reattach
     discord
     mpv
+    ncurses
+    pam-reattach
   ];
 
   homebrew = {
@@ -25,7 +26,9 @@
     taps = [
       "homebrew/cask"
     ];
-    brews = [ ];
+    brews = [
+      "sqlite"
+    ];
     casks = [
       "element"
       "handbrake"
