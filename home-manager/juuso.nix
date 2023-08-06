@@ -115,6 +115,7 @@
         ${if pkgs.system == "aarch64-darwin" then
           "set -x ponkila (getconf DARWIN_USER_TEMP_DIR)${sops.secrets."wireguard/ponkila.conf".name}"
         else ""}
+        set -U fish_greeting
         set -x GNUPGHOME ${home.homeDirectory}/.gnupg/trezor
         set -x PATH '${lib.concatStringsSep ":" [
           "${home.homeDirectory}/.nix-profile/bin"
@@ -147,6 +148,10 @@
 
         set -g focus-events on
         set-option -g default-shell "${lib.getExe pkgs.fish}"
+
+        set-option -sg escape-time 10
+        set-option -g default-terminal "tmux-256color"
+        set-option -sa terminal-features ",*:RGB"
       '';
       shortcut = "a";
     };
