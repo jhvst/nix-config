@@ -32,14 +32,9 @@
       set relativenumber
       set wrap linebreak
 
-      nnoremap <C-f> :NERDTreeFind<CR>
-      nnoremap <C-n> :NERDTree<CR>
-      nnoremap <C-t> :NERDTreeToggle<CR>
-      nnoremap <leader>n :NERDTreeFocus<CR>
-      let NERDTreeShowHidden=1
+      let mapleader="\<SPACE>"
 
-      autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
-      autocmd VimEnter * NERDTree | wincmd p
+      nnoremap <leader>ff :Telescope find_files<CR>
 
       au BufRead,BufNewFile *.bqn setf bqn
       au BufRead,BufNewFile * if getline(1) =~ '^#!.*bqn$' | setf bqn | endif
