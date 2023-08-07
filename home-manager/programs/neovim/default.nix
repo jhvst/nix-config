@@ -33,6 +33,7 @@
       set wrap linebreak
 
       let mapleader="\<SPACE>"
+      let g:sqlite_clib_path = '${pkgs.sqlite.out}/lib/libsqlite3.dylib'
 
       nnoremap <leader>ff :Telescope find_files<CR>
 
@@ -82,7 +83,8 @@
       rustfmt
       tree-sitter
       yamlfmt
-      yq
+      yq-go
+      sqlite
     ];
     plugins = with pkgs.vimPlugins; [
       (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
@@ -106,7 +108,7 @@
       nvim-dap-ui
       outputs.packages.${pkgs.system}.bqn-vim
       outputs.packages.${pkgs.system}.nvim-bqn
-      pkgs.vimExtraPlugins.papis-nvim
+      pkgs.papis-nvim-git
       pkgs.vimExtraPlugins.sqlite-lua
       plenary-nvim
       telescope-nvim

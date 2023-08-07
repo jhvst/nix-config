@@ -26,9 +26,7 @@
     taps = [
       "homebrew/cask"
     ];
-    brews = [
-      "sqlite"
-    ];
+    brews = [ ];
     casks = [
       "element"
       "handbrake"
