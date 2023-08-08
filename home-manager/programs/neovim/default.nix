@@ -67,7 +67,8 @@
           dir = "/Users/juuso/.papis",
           info_name = "info.yaml",
           notes_name = [[notes.org]],
-        }
+        },
+        enable_keymaps = true,
       })
     '';
     extraPackages = with pkgs; [
