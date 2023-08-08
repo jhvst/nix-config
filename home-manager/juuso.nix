@@ -128,6 +128,7 @@
           "/sbin"
           "/bin"
         ]}'
+        test $TERM = "xterm-256color"; and exec tmux
       '';
     };
 
@@ -135,9 +136,9 @@
       enable = true;
       baseIndex = 1;
       plugins = with pkgs.tmuxPlugins; [
-        extrakto # Ctrl+a+Tab
+        extrakto # Ctrl+Space+Tab
         tilish # Option+Enter
-        tmux-fzf # Ctrl+a+Shift+f
+        tmux-fzf # Ctrl+Space+f
       ];
       extraConfig = ''
         set -g @tilish-dmenu 'on'
@@ -147,13 +148,15 @@
         unbind %
 
         set -g focus-events on
-        set-option -g default-shell "${lib.getExe pkgs.fish}"
+        set-option -g default-shell "${pkgs.fish}/bin/fish"
 
         set-option -sg escape-time 10
         set-option -g default-terminal "tmux-256color"
         set-option -sa terminal-features ",*:RGB"
+
+        TMUX_FZF_LAUNCH_KEY="f"
       '';
-      shortcut = "a";
+      shortcut = "Space";
     };
 
     # https://andrew-quinn.me/fzf/
