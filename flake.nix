@@ -4,23 +4,25 @@
 {
 
   inputs = {
-    darwin.inputs.nixpkgs.follows = "nixpkgs";
-    darwin.url = "github:lnl7/nix-darwin";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    home-manager.url = "github:nix-community/home-manager";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
-    sops-nix.url = "github:Mic92/sops-nix";
-    wayland.inputs.nixpkgs.follows = "nixpkgs";
-    wayland.url = "github:nix-community/nixpkgs-wayland";
-    ponkila.inputs.nixpkgs.follows = "nixpkgs";
-    ponkila.url = "git+ssh://git@github.com/jhvst/ponkila";
-    mission-control.url = "github:Platonic-Systems/mission-control";
     bqnlsp.inputs.nixpkgs.follows = "nixpkgs";
     bqnlsp.url = "sourcehut:~detegr/bqnlsp";
+    darwin.inputs.nixpkgs.follows = "nixpkgs";
+    darwin.url = "github:lnl7/nix-darwin";
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-root.url = "github:srid/flake-root";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager.url = "github:nix-community/home-manager";
+    mission-control.url = "github:Platonic-Systems/mission-control";
     nixneovimplugins.url = "github:jooooscha/nixpkgs-vim-extra-plugins";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    ponkila.inputs.nixpkgs.follows = "nixpkgs";
+    ponkila.url = "git+ssh://git@github.com/jhvst/ponkila";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
+    sops-nix.url = "github:Mic92/sops-nix";
+    sounds.inputs.nixpkgs.follows = "nixpkgs";
+    sounds.url = "github:jhvst/nix-config?dir=packages/sounds";
+    wayland.inputs.nixpkgs.follows = "nixpkgs";
+    wayland.url = "github:nix-community/nixpkgs-wayland";
   };
 
   # add the inputs declared above to the argument attribute set
@@ -85,6 +87,7 @@
             };
             meta.homepage = "https://git.sr.ht/~detegr/nvim-bqn/";
           };
+          "sounds" = inputs.sounds.packages.${system}.default;
 
           "starlabs" = starlabs.config.system.build.kexecTree;
           "muro" = muro.config.system.build.kexecTree;
