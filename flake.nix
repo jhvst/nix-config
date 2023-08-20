@@ -74,8 +74,8 @@
           };
         };
         packages = with flake.nixosConfigurations; {
-          "bqn-vim" = pkgs.callPackage ./pkgs/bqn-vim { };
-          "savilerow" = pkgs.callPackage ./pkgs/savilerow { };
+          "bqn-vim" = pkgs.callPackage ./packages/bqn-vim { };
+          "savilerow" = pkgs.callPackage ./packages/savilerow { };
           "nvim-bqn" = pkgs.vimUtils.buildVimPluginFrom2Nix {
             pname = "nvim-bqn";
             version = "unstable";
