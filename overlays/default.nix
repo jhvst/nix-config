@@ -8,7 +8,8 @@
     ksmbd-tools = prev.ksmbd-tools.overrideAttrs (oldAttrs: {
       configureFlags = oldAttrs.configureFlags ++ [ "--with-rundir=/run" ];
     });
-    papis-nvim-git = prev.vimExtraPlugins.papis-nvim.overrideAttrs (oldAttrs: {
+    himalaya = prev.himalaya.overrideAttrs (oldAttrs: {
+      buildInputs = oldAttrs.buildInputs ++ optionals prev.stdenv.hostPlatform.isDarwin [ prev.pkgs.darwin.Security ];
     });
   };
 }

@@ -35,6 +35,9 @@
       let mapleader="\<SPACE>"
       let g:sqlite_clib_path = '${pkgs.sqlite.out}/lib/libsqlite3.dylib'
 
+      let g:himalaya_folder_picker = 'telescope'
+      let g:himalaya_folder_picker_telescope_preview = 1
+
       nnoremap <leader>ff :Telescope find_files<CR>
 
       au BufRead,BufNewFile *.bqn setf bqn
@@ -95,6 +98,7 @@
       crates-nvim
       editorconfig-vim
       gitsigns-nvim
+      himalaya-vim
       idris-vim
       indent-blankline-nvim
       limelight-vim # :LimeLight (also, consider :setlocal spell spelllang=en_us

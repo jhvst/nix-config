@@ -10,15 +10,61 @@
 
     home.stateVersion = "23.05";
 
+    accounts.calendar = {
+      accounts = {
+        "ponkila" = {
+          primary = true;
+          primaryCollection = "Personal Calendar";
+          local = {
+            type = "filesystem";
+            fileExt = ".ics";
+          };
+          remote = {
+            passwordCommand = [
+              ''cat $(getconf DARWIN_USER_TEMP_DIR)email/ponkila.com''
+            ];
+            type = "caldav";
+            url = "https://webmail.gandi.net/SOGo/dav/juuso@ponkila.com/Calendar/personal/";
+            userName = "juuso@ponkila.com";
+          };
+          qcal.enable = true;
+        };
+      };
+      accounts = {
+        "mail.com" = {
+          primary = false;
+          primaryCollection = "My Calendar";
+          local = {
+            type = "filesystem";
+            fileExt = ".ics";
+          };
+          remote = {
+            passwordCommand = [
+              ''cat $(getconf DARWIN_USER_TEMP_DIR)email/mail.com''
+            ];
+            type = "caldav";
+            url = "https://caldav.mail.com/begenda/dav/juuso@mail.com/calendar/";
+            userName = "juuso@mail.com";
+          };
+          qcal.enable = true;
+        };
+      };
+      basePath = ".calendar";
+    };
+
     accounts.email.accounts = with config.home-manager.users.juuso; {
       "ponkila" = {
         primary = true;
         himalaya = {
-          enable = false;
+          enable = true;
           settings = {
             backend = "notmuch";
             notmuch-db-path = "${home.homeDirectory}/Maildir";
             sender = "smtp";
+
+            folder-aliases = {
+              inbox = "tag:inbox";
+            };
           };
         };
         mbsync = {
@@ -49,16 +95,22 @@
       };
       "mail.com" = {
         himalaya = {
-          enable = false;
+          enable = true;
           settings = {
             backend = "notmuch";
             notmuch-db-path = "${home.homeDirectory}/Maildir";
             sender = "smtp";
+
+            folder-aliases = {
+              inbox = "tag:inbox";
+            };
           };
         };
         mbsync = {
           enable = true;
-          create = "maildir";
+          create = "both";
+          expunge = "both";
+          remove = "both";
         };
         notmuch.enable = true;
         address = "juuso@mail.com";
@@ -82,6 +134,76 @@
           };
         };
       };
+      "gmail" = {
+        himalaya = {
+          enable = true;
+          settings = {
+            backend = "notmuch";
+            notmuch-db-path = "${home.homeDirectory}/Maildir";
+            sender = "smtp";
+
+            folder-aliases = {
+              inbox = "tag:inbox";
+            };
+          };
+        };
+        mbsync = {
+          enable = true;
+          create = "both";
+          expunge = "both";
+          remove = "both";
+        };
+        notmuch.enable = true;
+        address = "haavijuu@gmail.com";
+        userName = "haavijuu@gmail.com";
+        realName = "Juuso Haavisto";
+        passwordCommand = [
+          ''security find-generic-password -a haavijuu@gmail.com -w''
+        ];
+        flavor = "gmail.com";
+      };
+      "oxford" = {
+        himalaya = {
+          enable = true;
+          settings = {
+            backend = "notmuch";
+            notmuch-db-path = "${home.homeDirectory}/Maildir";
+            sender = "smtp";
+
+            folder-aliases = {
+              inbox = "tag:inbox";
+            };
+          };
+        };
+        mbsync = {
+          enable = true;
+          create = "maildir";
+          extraConfig.account = {
+            CertificateFile = "~/.config/davmail/oxford/davmail.pem";
+          };
+        };
+        notmuch.enable = true;
+        address = "juuso.haavisto@reuben.ox.ac.uk";
+        userName = "reub0117@OX.AC.UK";
+        realName = "Juuso Haavisto";
+        passwordCommand = [
+          ''security find-generic-password -a reub0117@OX.AC.UK -w''
+        ];
+        imap = {
+          host = "192.168.76.40";
+          port = 1143;
+          tls = {
+            enable = true;
+          };
+        };
+        smtp = {
+          host = "192.168.76.40";
+          port = 1025;
+          tls = {
+            enable = true;
+          };
+        };
+      };
 
     };
 
@@ -92,6 +214,11 @@
       };
     };
     programs.mbsync.enable = true;
+    programs.himalaya = {
+      enable = true;
+      package = pkgs.himalaya.override { withNotmuchBackend = true; };
+    };
+    programs.qcal.enable = true;
 
     programs.nix-index.enable = true;
     programs.direnv = {
