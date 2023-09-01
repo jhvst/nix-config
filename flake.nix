@@ -12,7 +12,6 @@
     flake-root.url = "github:srid/flake-root";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
-    mission-control.url = "github:Platonic-Systems/mission-control";
     nixneovimplugins.url = "github:jooooscha/nixpkgs-vim-extra-plugins";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     ponkila.inputs.nixpkgs.follows = "nixpkgs";
@@ -44,7 +43,6 @@
 
       imports = [
         inputs.flake-root.flakeModule
-        inputs.mission-control.flakeModule
       ];
 
       systems = [
@@ -56,7 +54,6 @@
 
       perSystem = { pkgs, lib, config, system, ... }: {
         formatter = nixpkgs.legacyPackages.${system}.nixpkgs-fmt;
-        mission-control.scripts = { };
         devShells = {
           default = pkgs.mkShell {
             nativeBuildInputs = with pkgs; [
@@ -71,7 +68,6 @@
             ];
             inputsFrom = [
               config.flake-root.devShell
-              config.mission-control.devShell
             ];
           };
         };
