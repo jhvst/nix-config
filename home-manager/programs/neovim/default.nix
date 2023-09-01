@@ -81,10 +81,10 @@
       papis
       ripgrep
       rustfmt
+      sqlite
       tree-sitter
       yamlfmt
       yq-go
-      sqlite
     ];
     plugins = with pkgs.vimPlugins; [
       coc-html
@@ -108,7 +108,7 @@
       nvim-treesitter.withAllGrammars
       outputs.packages.${pkgs.system}.bqn-vim
       outputs.packages.${pkgs.system}.nvim-bqn
-      pkgs.papis-nvim-git
+      pkgs.vimExtraPlugins.papis-nvim
       pkgs.vimExtraPlugins.sqlite-lua
       plenary-nvim
       telescope-nvim
