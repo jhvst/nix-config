@@ -38,6 +38,9 @@
       let g:himalaya_folder_picker = 'telescope'
       let g:himalaya_folder_picker_telescope_preview = 1
 
+      let g:limelight_bop = '^'
+      let g:limelight_eop = '$'
+
       nnoremap <leader>ff :Telescope find_files<CR>
 
       au BufRead,BufNewFile *.bqn setf bqn
@@ -98,6 +101,7 @@
       crates-nvim
       editorconfig-vim
       gitsigns-nvim
+      goyo-vim
       himalaya-vim
       idris-vim
       indent-blankline-nvim
