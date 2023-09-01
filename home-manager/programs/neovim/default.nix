@@ -57,7 +57,6 @@
       require'nvim-treesitter.configs'.setup {
         highlight = {
           enable = true,
-          disable = { "rust", "nix" },
         }
       }
       require('crates').setup()
@@ -88,7 +87,6 @@
       sqlite
     ];
     plugins = with pkgs.vimPlugins; [
-      (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
       coc-html
       coc-rust-analyzer
       coc-tsserver
@@ -107,6 +105,7 @@
       nvim-cmp
       nvim-dap
       nvim-dap-ui
+      nvim-treesitter.withAllGrammars
       outputs.packages.${pkgs.system}.bqn-vim
       outputs.packages.${pkgs.system}.nvim-bqn
       pkgs.papis-nvim-git
