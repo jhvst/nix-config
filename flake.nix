@@ -212,6 +212,10 @@
           darwinConfigurations = with darwin.lib; {
             "host-darwin" = darwinSystem host-darwin;
           };
+
+          nixosModules = {
+            neovim = import ./nixosModules/neovim;
+          };
         };
     };
 }
