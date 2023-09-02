@@ -106,6 +106,9 @@
               ponkila.nixosModules.muro
               home-manager.nixosModules.home-manager
               {
+                home-manager.sharedModules = [
+                  nixvim.homeManagerModules.nixvim
+                ];
                 home-manager.useGlobalPkgs = true;
               }
             ];
@@ -123,6 +126,9 @@
               ./system/netboot.nix
               home-manager.nixosModules.home-manager
               {
+                home-manager.sharedModules = [
+                  nixvim.homeManagerModules.nixvim
+                ];
                 home-manager.useGlobalPkgs = true;
               }
             ];
