@@ -24,9 +24,6 @@
 
       nnoremap <leader>ff :Telescope find_files<CR>
 
-      au BufRead,BufNewFile *.bqn setf bqn
-      au BufRead,BufNewFile * if getline(1) =~ '^#!.*bqn$' | setf bqn | endif
-
       augroup autoformat_settings
         autocmd FileType nix AutoFormatBuffer nixpkgs-fmt
       augroup END
@@ -43,7 +40,6 @@
       })
     '';
     extraPackages = with pkgs; [
-      cbqn # bqnlsp assumes cbqn in path
       fd
       nixpkgs-fmt
       papis
@@ -57,28 +53,6 @@
         servers = {
           nil_ls.enable = true;
         };
-        preConfig = ''
-          local configs = require('lspconfig.configs')
-          local util = require('lspconfig.util')
-
-          if not configs.bqnlsp then
-            configs.bqnlsp = {
-              default_config = {
-                cmd = { 'bqnlsp' },
-                cmd_env = {},
-                filetypes = { 'bqn' },
-                root_dir = util.find_git_ancestor,
-                single_file_support = false,
-              },
-              docs = {
-                description = [[ BQN Language Server ]],
-                default_config = {
-                  root_dir = [[util.find_git_ancestor]],
-                },
-              },
-            }
-          end
-        '';
       };
       gitsigns.enable = true;
       indent-blankline = {
@@ -105,9 +79,6 @@
       vim-codefmt
       vim-fugitive
     ] ++ [
-      pkgs.bqn-vim
-      pkgs.bqnlsp
-      pkgs.nvim-bqn
       pkgs.papis-nvim
       pkgs.sqlite-lua
     ];

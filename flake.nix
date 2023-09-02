@@ -4,8 +4,6 @@
 {
 
   inputs = {
-    bqnlsp.inputs.nixpkgs.follows = "nixpkgs";
-    bqnlsp.url = "sourcehut:~detegr/bqnlsp";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     darwin.url = "github:lnl7/nix-darwin";
     flake-parts.url = "github:hercules-ci/flake-parts";
@@ -28,7 +26,6 @@
   # add the inputs declared above to the argument attribute set
   outputs =
     { self
-    , bqnlsp
     , darwin
     , flake-parts
     , home-manager
@@ -65,7 +62,7 @@
         };
 
         overlayAttrs = {
-          inherit (config.packages) bqn-vim nvim-bqn bqnlsp papis-nvim sqlite-lua himalaya;
+          inherit (config.packages) papis-nvim sqlite-lua himalaya;
         };
 
         formatter = nixpkgs.legacyPackages.${system}.nixpkgs-fmt;
@@ -86,20 +83,9 @@
         };
 
         packages = with flake.nixosConfigurations; {
-          "bqn-vim" = (pkgs.callPackage ./packages/bqn-vim { });
           "savilerow" = pkgs.callPackage ./packages/savilerow { };
-          "nvim-bqn" = pkgs.vimUtils.buildVimPluginFrom2Nix {
-            pname = "nvim-bqn";
-            version = "unstable";
-            src = builtins.fetchGit {
-              url = "https://git.sr.ht/~detegr/nvim-bqn";
-              rev = "bbe1a8d93f490d79e55dd0ddf22dc1c43e710eb3";
-            };
-            meta.homepage = "https://git.sr.ht/~detegr/nvim-bqn/";
-          };
           "papis-nvim" = inputs.nixneovimplugins.packages.${system}.papis-nvim;
           "sqlite-lua" = inputs.nixneovimplugins.packages.${system}.sqlite-lua;
-          "bqnlsp" = inputs.bqnlsp.packages.${system}.lsp;
           "sounds" = inputs.sounds.packages.${system}.default;
           "himalaya" = pkgs.himalaya.overrideAttrs (oldAttrs: {
             buildInputs = oldAttrs.buildInputs ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin [ pkgs.darwin.Security ];
