@@ -32,12 +32,10 @@
       augroup autoformat_settings
         autocmd FileType html,css,sass,scss,less,json,js AutoFormatBuffer js-beautify
         autocmd FileType nix AutoFormatBuffer nixpkgs-fmt
-        autocmd FileType rust AutoFormatBuffer rustfmt
         autocmd Filetype yaml AutoFormatBuffer yamlfmt
       augroup END
     '';
     extraConfigLua = ''
-      require('crates').setup()
       require("papis").setup({
         db_path = "/Users/juuso/.papis/papis-nvim.sqlite3",
         papis_python = {
@@ -56,7 +54,6 @@
       nodePackages.js-beautify
       papis
       ripgrep
-      rustfmt
       sqlite
       yamlfmt
       yq-go
@@ -68,7 +65,6 @@
           gopls.enable = true;
           html.enable = true;
           nil_ls.enable = true;
-          rust-analyzer.enable = true;
           tsserver.enable = true;
           yamlls.enable = true;
         };
@@ -105,7 +101,6 @@
     };
     extraPlugins = with pkgs.vimPlugins; [
       coq_nvim
-      crates-nvim
       editorconfig-vim
       goyo-vim
       himalaya-vim
