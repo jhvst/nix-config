@@ -30,9 +30,7 @@
       au BufRead,BufNewFile * if getline(1) =~ '^#!.*bqn$' | setf bqn | endif
 
       augroup autoformat_settings
-        autocmd FileType html,css,sass,scss,less,json,js AutoFormatBuffer js-beautify
         autocmd FileType nix AutoFormatBuffer nixpkgs-fmt
-        autocmd Filetype yaml AutoFormatBuffer yamlfmt
       augroup END
     '';
     extraConfigLua = ''
@@ -51,22 +49,16 @@
       fd
       inputs.bqnlsp.packages.${pkgs.system}.lsp
       nixpkgs-fmt
-      nodePackages.js-beautify
       papis
       ripgrep
       sqlite
-      yamlfmt
       yq-go
     ];
     plugins = {
       lsp = {
         enable = true;
         servers = {
-          gopls.enable = true;
-          html.enable = true;
           nil_ls.enable = true;
-          tsserver.enable = true;
-          yamlls.enable = true;
         };
         preConfig = ''
           local configs = require('lspconfig.configs')
