@@ -92,7 +92,7 @@
       coq_nvim
       editorconfig-vim
       goyo-vim
-      #himalaya-vim
+      himalaya-vim
       limelight-vim # :LimeLight (also, consider :setlocal spell spelllang=en_us
       markdown-preview-nvim # :MarkdownPreview
       nui-nvim
@@ -100,11 +100,17 @@
       nvim-cmp
       nvim-dap
       nvim-dap-ui
-
       plenary-nvim
       telescope-nvim
       vim-codefmt
       vim-fugitive
+    ] ++ [
+      pkgs.bqn-vim
+      pkgs.bqnlsp
+      pkgs.nvim-bqn
+    ] ++ [
+      pkgs.vimExtraPlugins.papis-nvim
+      pkgs.vimExtraPlugins.sqlite-lua
     ];
 
   };

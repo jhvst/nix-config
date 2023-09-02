@@ -51,7 +51,31 @@
       ];
 
       perSystem = { pkgs, lib, config, system, ... }: {
+
+        _module.args.pkgs = import inputs.nixpkgs {
+          inherit system;
+          overlays = [
+            inputs.nixneovimplugins.overlays.default
+            (final: prev: {
+              bqn-vim = (pkgs.callPackage ./packages/bqn-vim { });
+              nvim-bqn = pkgs.vimUtils.buildVimPluginFrom2Nix {
+                pname = "nvim-bqn";
+                version = "unstable";
+                src = builtins.fetchGit {
+                  url = "https://git.sr.ht/~detegr/nvim-bqn";
+                  rev = "bbe1a8d93f490d79e55dd0ddf22dc1c43e710eb3";
+                };
+                meta.homepage = "https://git.sr.ht/~detegr/nvim-bqn/";
+              };
+              bqnlsp = inputs.bqnlsp.packages.${pkgs.system}.lsp;
+            })
+            self.overlays.modifications
+          ];
+          config = { };
+        };
+
         formatter = nixpkgs.legacyPackages.${system}.nixpkgs-fmt;
+
         devShells = {
           default = pkgs.mkShell {
             nativeBuildInputs = with pkgs; [
@@ -66,34 +90,16 @@
             ];
           };
         };
+
         packages = with flake.nixosConfigurations; {
-          "bqn-vim" = pkgs.callPackage ./packages/bqn-vim { };
+          "bqn-vim" = pkgs.bqn-vim;
           "savilerow" = pkgs.callPackage ./packages/savilerow { };
-          "nvim-bqn" = pkgs.vimUtils.buildVimPluginFrom2Nix {
-            pname = "nvim-bqn";
-            version = "unstable";
-            src = builtins.fetchGit {
-              url = "https://git.sr.ht/~detegr/nvim-bqn";
-              rev = "bbe1a8d93f490d79e55dd0ddf22dc1c43e710eb3";
-            };
-            meta.homepage = "https://git.sr.ht/~detegr/nvim-bqn/";
-          };
+          "nvim-bqn" = pkgs.nvim-bqn;
           "sounds" = inputs.sounds.packages.${system}.default;
-          "nixvim" = nixvim.legacyPackages.${system}.makeNixvimWithModule {
+          "neovim" = nixvim.legacyPackages.${system}.makeNixvimWithModule {
             inherit pkgs;
             module = {
-              imports = [
-                self.nixosModules.neovim
-              ];
-              extraPackages = [
-                #inputs.bqnlsp.packages.${pkgs.system}.lsp
-
-              ];
-              extraPlugins = [
-                (pkgs.callPackage ./packages/bqn-vim { })
-                #inputs.vimExtraPlugins.${system}.papis-nvim
-                #inputs.vimExtraPlugins.${system}.sqlite-lua
-              ];
+              imports = [ self.nixosModules.neovim ];
             };
           };
 
@@ -231,7 +237,9 @@
           };
 
           nixosModules = {
-            neovim = import ./nixosModules/neovim;
+            neovim = {
+              imports = [ ./nixosModules/neovim ];
+            };
           };
         };
     };
