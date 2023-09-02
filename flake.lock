@@ -670,11 +670,11 @@
       },
       "locked": {
         "dir": "packages/sounds",
-        "lastModified": 1693621726,
-        "narHash": "sha256-8KaFBapwjCF9Wi6C+uY/1Kx5a0e65VsMg5JS0N2b2yM=",
+        "lastModified": 1693692823,
+        "narHash": "sha256-3hSX0hxMuTtRcGE046bH9zB8/vP4LUR7/YxXMAV3zuk=",
         "owner": "jhvst",
         "repo": "nix-config",
-        "rev": "ae912020fb7e91a17ce165622af9f5cf0187ee99",
+        "rev": "1eaa1d4d4a63b3c77f64f658edc57494cf81d086",
         "type": "github"
       },
       "original": {

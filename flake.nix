@@ -40,13 +40,7 @@
 
     flake-parts.lib.mkFlake { inherit inputs; } rec {
 
-      systems = [
-        "aarch64-darwin"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "x86_64-linux"
-      ];
-
+      systems = nixpkgs.lib.systems.flakeExposed;
       imports = [
         inputs.flake-parts.flakeModules.easyOverlay
       ];
