@@ -9,11 +9,12 @@
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     darwin.url = "github:lnl7/nix-darwin";
     flake-parts.url = "github:hercules-ci/flake-parts";
-    flake-root.url = "github:srid/flake-root";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     nixneovimplugins.url = "github:jooooscha/nixpkgs-vim-extra-plugins";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixvim.inputs.nixpkgs.follows = "nixpkgs";
+    nixvim.url = "github:nix-community/nixvim";
     ponkila.inputs.nixpkgs.follows = "nixpkgs";
     ponkila.url = "git+ssh://git@github.com/jhvst/ponkila";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
@@ -27,23 +28,20 @@
   # add the inputs declared above to the argument attribute set
   outputs =
     { self
+    , bqnlsp
     , darwin
+    , flake-parts
     , home-manager
+    , nixneovimplugins
     , nixpkgs
+    , nixvim
+    , ponkila
     , sops-nix
     , wayland
-    , ponkila
-    , bqnlsp
-    , flake-parts
-    , nixneovimplugins
     , ...
     }@inputs:
 
     flake-parts.lib.mkFlake { inherit inputs; } rec {
-
-      imports = [
-        inputs.flake-root.flakeModule
-      ];
 
       systems = [
         "aarch64-darwin"
@@ -65,9 +63,6 @@
               ssh-to-age
               zstd
               ripgrep
-            ];
-            inputsFrom = [
-              config.flake-root.devShell
             ];
           };
         };
@@ -162,6 +157,7 @@
               home-manager.darwinModules.home-manager
               {
                 home-manager.sharedModules = [
+                  nixvim.homeManagerModules.nixvim
                   sops-nix.homeManagerModules.sops
                 ];
                 home-manager.useGlobalPkgs = true;

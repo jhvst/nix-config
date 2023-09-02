@@ -1,30 +1,13 @@
 { inputs, outputs, nixpkgs, config, lib, pkgs, ... }: {
 
-  home-manager.users.juuso.programs.neovim = {
+  home-manager.users.juuso.programs.nixvim = {
 
     enable = true;
-    coc.enable = true;
-    coc.settings = {
-      "languageserver" = {
-        go = {
-          command = "gopls";
-          rootPatterns = [ "go.mod" ];
-          trace.server = "verbose";
-          filetypes = [ "go" ];
-        };
-        nix = {
-          command = "nil";
-          filetypes = [ "nix" ];
-          rootPatterns = [ "flake.nix" ];
-        };
-        bqn = {
-          command = "bqnlsp";
-          filetypes = [ "bqn" ];
-        };
-      };
+    colorschemes.base16 = {
+      enable = true;
+      colorscheme = "ia-dark";
     };
-    defaultEditor = true;
-    extraConfig = ''
+    extraConfigVim = ''
       set cursorline
       set laststatus=2
       set nobackup
@@ -53,18 +36,7 @@
         autocmd Filetype yaml AutoFormatBuffer yamlfmt
       augroup END
     '';
-    extraLuaConfig = ''
-      require('gitsigns').setup()
-      require("indent_blankline").setup {
-        show_current_context = true,
-        show_current_context_start = true,
-      }
-      vim.cmd('colorscheme base16-ia-dark')
-      require'nvim-treesitter.configs'.setup {
-        highlight = {
-          enable = true,
-        }
-      }
+    extraConfigLua = ''
       require('crates').setup()
       require("papis").setup({
         db_path = "/Users/juuso/.papis/papis-nvim.sqlite3",
@@ -79,41 +51,71 @@
     extraPackages = with pkgs; [
       cbqn # bqnlsp assumes cbqn in path
       fd
-      gopls
       inputs.bqnlsp.packages.${pkgs.system}.lsp
-      nil
       nixpkgs-fmt
       nodePackages.js-beautify
       papis
       ripgrep
       rustfmt
       sqlite
-      tree-sitter
       yamlfmt
       yq-go
     ];
-    plugins = with pkgs.vimPlugins; [
-      coc-html
-      coc-rust-analyzer
-      coc-tsserver
-      coc-yaml
+    plugins = {
+      lsp = {
+        enable = true;
+        servers = {
+          gopls.enable = true;
+          html.enable = true;
+          nil_ls.enable = true;
+          rust-analyzer.enable = true;
+          tsserver.enable = true;
+          yamlls.enable = true;
+        };
+        preConfig = ''
+          local configs = require('lspconfig.configs')
+          local util = require('lspconfig.util')
+
+          if not configs.bqnlsp then
+            configs.bqnlsp = {
+              default_config = {
+                cmd = { 'bqnlsp' },
+                cmd_env = {},
+                filetypes = { 'bqn' },
+                root_dir = util.find_git_ancestor,
+                single_file_support = false,
+              },
+              docs = {
+                description = [[ BQN Language Server ]],
+                default_config = {
+                  root_dir = [[util.find_git_ancestor]],
+                },
+              },
+            }
+          end
+        '';
+      };
+      gitsigns.enable = true;
+      indent-blankline = {
+        enable = true;
+        showCurrentContext = true;
+        showCurrentContextStart = true;
+      };
+      treesitter.enable = true;
+    };
+    extraPlugins = with pkgs.vimPlugins; [
       coq_nvim
       crates-nvim
       editorconfig-vim
-      gitsigns-nvim
       goyo-vim
       himalaya-vim
-      idris-vim
-      indent-blankline-nvim
       limelight-vim # :LimeLight (also, consider :setlocal spell spelllang=en_us
       markdown-preview-nvim # :MarkdownPreview
       nui-nvim
       null-ls-nvim
-      nvim-base16
       nvim-cmp
       nvim-dap
       nvim-dap-ui
-      nvim-treesitter.withAllGrammars
       outputs.packages.${pkgs.system}.bqn-vim
       outputs.packages.${pkgs.system}.nvim-bqn
       pkgs.vimExtraPlugins.papis-nvim
@@ -121,12 +123,10 @@
       plenary-nvim
       telescope-nvim
       vim-codefmt
-      vim-devicons
       vim-fugitive
     ];
     viAlias = true;
     vimAlias = true;
-    withNodeJs = true;
   };
 
   home-manager.users.juuso.editorconfig = {
