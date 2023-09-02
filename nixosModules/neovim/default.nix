@@ -45,7 +45,6 @@
     extraPackages = with pkgs; [
       cbqn # bqnlsp assumes cbqn in path
       fd
-      inputs.bqnlsp.packages.${pkgs.system}.lsp
       nixpkgs-fmt
       papis
       ripgrep
@@ -93,7 +92,7 @@
       coq_nvim
       editorconfig-vim
       goyo-vim
-      himalaya-vim
+      #himalaya-vim
       limelight-vim # :LimeLight (also, consider :setlocal spell spelllang=en_us
       markdown-preview-nvim # :MarkdownPreview
       nui-nvim
@@ -101,10 +100,7 @@
       nvim-cmp
       nvim-dap
       nvim-dap-ui
-      outputs.packages.${pkgs.system}.bqn-vim
-      outputs.packages.${pkgs.system}.nvim-bqn
-      pkgs.vimExtraPlugins.papis-nvim
-      pkgs.vimExtraPlugins.sqlite-lua
+
       plenary-nvim
       telescope-nvim
       vim-codefmt

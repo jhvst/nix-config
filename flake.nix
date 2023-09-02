@@ -79,6 +79,23 @@
             meta.homepage = "https://git.sr.ht/~detegr/nvim-bqn/";
           };
           "sounds" = inputs.sounds.packages.${system}.default;
+          "nixvim" = nixvim.legacyPackages.${system}.makeNixvimWithModule {
+            inherit pkgs;
+            module = {
+              imports = [
+                self.nixosModules.neovim
+              ];
+              extraPackages = [
+                #inputs.bqnlsp.packages.${pkgs.system}.lsp
+
+              ];
+              extraPlugins = [
+                (pkgs.callPackage ./packages/bqn-vim { })
+                #inputs.vimExtraPlugins.${system}.papis-nvim
+                #inputs.vimExtraPlugins.${system}.sqlite-lua
+              ];
+            };
+          };
 
           "starlabs" = starlabs.config.system.build.kexecTree;
           "muro" = muro.config.system.build.kexecTree;
