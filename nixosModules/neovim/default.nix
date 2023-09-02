@@ -108,9 +108,8 @@
       pkgs.bqn-vim
       pkgs.bqnlsp
       pkgs.nvim-bqn
-    ] ++ [
-      pkgs.vimExtraPlugins.papis-nvim
-      pkgs.vimExtraPlugins.sqlite-lua
+      pkgs.papis-nvim
+      pkgs.sqlite-lua
     ];
 
   };

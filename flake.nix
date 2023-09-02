@@ -50,28 +50,22 @@
         "x86_64-linux"
       ];
 
+      imports = [
+        inputs.flake-parts.flakeModules.easyOverlay
+      ];
+
       perSystem = { pkgs, lib, config, system, ... }: {
 
         _module.args.pkgs = import inputs.nixpkgs {
           inherit system;
           overlays = [
-            inputs.nixneovimplugins.overlays.default
-            (final: prev: {
-              bqn-vim = (pkgs.callPackage ./packages/bqn-vim { });
-              nvim-bqn = pkgs.vimUtils.buildVimPluginFrom2Nix {
-                pname = "nvim-bqn";
-                version = "unstable";
-                src = builtins.fetchGit {
-                  url = "https://git.sr.ht/~detegr/nvim-bqn";
-                  rev = "bbe1a8d93f490d79e55dd0ddf22dc1c43e710eb3";
-                };
-                meta.homepage = "https://git.sr.ht/~detegr/nvim-bqn/";
-              };
-              bqnlsp = inputs.bqnlsp.packages.${pkgs.system}.lsp;
-            })
-            self.overlays.modifications
+            self.overlays.default
           ];
           config = { };
+        };
+
+        overlayAttrs = {
+          inherit (config.packages) bqn-vim nvim-bqn bqnlsp papis-nvim sqlite-lua himalaya;
         };
 
         formatter = nixpkgs.legacyPackages.${system}.nixpkgs-fmt;
@@ -92,10 +86,24 @@
         };
 
         packages = with flake.nixosConfigurations; {
-          "bqn-vim" = pkgs.bqn-vim;
+          "bqn-vim" = (pkgs.callPackage ./packages/bqn-vim { });
           "savilerow" = pkgs.callPackage ./packages/savilerow { };
-          "nvim-bqn" = pkgs.nvim-bqn;
+          "nvim-bqn" = pkgs.vimUtils.buildVimPluginFrom2Nix {
+            pname = "nvim-bqn";
+            version = "unstable";
+            src = builtins.fetchGit {
+              url = "https://git.sr.ht/~detegr/nvim-bqn";
+              rev = "bbe1a8d93f490d79e55dd0ddf22dc1c43e710eb3";
+            };
+            meta.homepage = "https://git.sr.ht/~detegr/nvim-bqn/";
+          };
+          "papis-nvim" = inputs.nixneovimplugins.packages.${system}.papis-nvim;
+          "sqlite-lua" = inputs.nixneovimplugins.packages.${system}.sqlite-lua;
+          "bqnlsp" = inputs.bqnlsp.packages.${system}.lsp;
           "sounds" = inputs.sounds.packages.${system}.default;
+          "himalaya" = pkgs.himalaya.overrideAttrs (oldAttrs: {
+            buildInputs = oldAttrs.buildInputs ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin [ pkgs.darwin.Security ];
+          });
           "neovim" = nixvim.legacyPackages.${system}.makeNixvimWithModule {
             inherit pkgs;
             module = {
