@@ -57,7 +57,6 @@
   };
 
   nixpkgs.overlays = [
-    inputs.nixneovimplugins.overlays.default
     inputs.wayland.overlay
     outputs.overlays.modifications
     outputs.overlays.default

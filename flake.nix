@@ -9,7 +9,6 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
-    nixneovimplugins.url = "github:jooooscha/nixpkgs-vim-extra-plugins";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
     nixvim.url = "github:nix-community/nixvim";
@@ -29,7 +28,6 @@
     , darwin
     , flake-parts
     , home-manager
-    , nixneovimplugins
     , nixpkgs
     , nixvim
     , ponkila
@@ -56,7 +54,7 @@
         };
 
         overlayAttrs = {
-          inherit (config.packages) papis-nvim sqlite-lua himalaya;
+          inherit (config.packages) himalaya;
         };
 
         formatter = nixpkgs.legacyPackages.${system}.nixpkgs-fmt;
@@ -78,8 +76,6 @@
 
         packages = with flake.nixosConfigurations; {
           "savilerow" = pkgs.callPackage ./packages/savilerow { };
-          "papis-nvim" = inputs.nixneovimplugins.packages.${system}.papis-nvim;
-          "sqlite-lua" = inputs.nixneovimplugins.packages.${system}.sqlite-lua;
           "sounds" = inputs.sounds.packages.${system}.default;
           "himalaya" = pkgs.himalaya.overrideAttrs (oldAttrs: {
             buildInputs = oldAttrs.buildInputs ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin [ pkgs.darwin.Security ];
