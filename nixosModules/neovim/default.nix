@@ -43,19 +43,22 @@
         showCurrentContext = true;
         showCurrentContextStart = true;
       };
+      telescope = {
+        enable = true;
+        extensions.fzf-native.enable = true;
+      };
       treesitter.enable = true;
+      fugitive.enable = true;
+      coq-nvim = {
+        enable = true;
+        autoStart = true;
+        installArtifacts = true;
+      };
     };
     extraPlugins = with pkgs.vimPlugins; [
-      coq_nvim
       editorconfig-vim
       himalaya-vim
-      nvim-cmp
-      nvim-dap
-      nvim-dap-ui
-      telescope-nvim
       vim-codefmt
-      vim-fugitive
     ];
-
   };
 }
