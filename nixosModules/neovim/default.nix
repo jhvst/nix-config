@@ -78,6 +78,28 @@
           { name = "tmux"; }
         ];
       };
+      lualine = {
+        enable = true;
+        theme = "base16";
+        iconsEnabled = false;
+        sections = {
+          lualine_a = [ "" ];
+          lualine_b = [ "" ];
+          lualine_c = [ "location" { name = "filename"; extraConfig.path = 1; } "filetype" ];
+          lualine_x = [ "diagonostics" ];
+          lualine_y = [ "" ];
+          lualine_z = [ "mode" ];
+        };
+        componentSeparators = {
+          left = "";
+          right = "";
+        };
+        sectionSeparators = {
+          left = "";
+          right = "";
+        };
+      };
+
     };
     extraPlugins = with pkgs.vimPlugins; [
       editorconfig-vim
