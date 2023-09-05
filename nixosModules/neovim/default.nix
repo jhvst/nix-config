@@ -19,10 +19,6 @@
       let g:himalaya_folder_picker_telescope_preview = 1
 
       nnoremap <leader>ff :Telescope find_files<CR>
-
-      augroup autoformat_settings
-        autocmd FileType nix AutoFormatBuffer nixpkgs-fmt
-      augroup END
     '';
     extraConfigLua = '''';
     extraPackages = with pkgs; [
@@ -39,6 +35,7 @@
           nixd.enable = true;
         };
       };
+      lsp-format.enable = true;
       gitsigns.enable = true;
       indent-blankline = {
         enable = true;
@@ -60,7 +57,6 @@
     extraPlugins = with pkgs.vimPlugins; [
       editorconfig-vim
       himalaya-vim
-      vim-codefmt
     ];
   };
 }
