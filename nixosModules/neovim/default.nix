@@ -47,7 +47,34 @@
         enable = true;
         extensions.fzf-native.enable = true;
       };
-      treesitter.enable = true;
+      treesitter = {
+        enable = true;
+        indent = true;
+        nixvimInjections = true;
+        grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
+          bash
+          c # c is implicit dependency, not specifying it will lead to healtcheck errors
+          diff
+          fish
+          git_config
+          git_rebase
+          gitattributes
+          gitcommit
+          gitignore
+          json
+          lua
+          luadoc
+          make
+          nix
+          query # implicit
+          regex
+          toml
+          vim
+          vimdoc
+          xml
+          yaml
+        ];
+      };
       fugitive.enable = true;
       nvim-cmp = {
         enable = true;
