@@ -29,11 +29,13 @@
       fd
       nixpkgs-fmt
       ripgrep
+      shellcheck
     ];
     plugins = {
       lsp = {
         enable = true;
         servers = {
+          bashls.enable = true;
           nixd.enable = true;
         };
       };
