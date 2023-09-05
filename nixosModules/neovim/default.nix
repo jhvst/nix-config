@@ -36,6 +36,7 @@
         };
       };
       lsp-format.enable = true;
+      luasnip.enable = true;
       gitsigns.enable = true;
       indent-blankline = {
         enable = true;
@@ -48,10 +49,34 @@
       };
       treesitter.enable = true;
       fugitive.enable = true;
-      coq-nvim = {
+      nvim-cmp = {
         enable = true;
-        autoStart = true;
-        installArtifacts = true;
+        snippet.expand = "luasnip";
+        mapping = {
+          "<CR>" = "cmp.mapping.confirm({ select = true })";
+          "<Tab>" = {
+            action = ''
+              function(fallback)
+                if cmp.visible() then
+                  cmp.select_next_item()
+                else
+                  fallback()
+                end
+              end
+            '';
+            modes = [
+              "i"
+              "s"
+            ];
+          };
+        };
+        sources = [
+          { name = "buffer"; }
+          { name = "luasnip"; }
+          { name = "nvim_lsp"; }
+          { name = "path"; }
+          { name = "tmux"; }
+        ];
       };
     };
     extraPlugins = with pkgs.vimPlugins; [
