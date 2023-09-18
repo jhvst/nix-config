@@ -65,6 +65,8 @@
           lua
           luadoc
           make
+          markdown # dep of noice
+          markdown_inline # dep of noice
           nix
           query # implicit
           regex
@@ -76,6 +78,8 @@
         ];
       };
       fugitive.enable = true;
+      noice.enable = true;
+      notify.enable = true;
       nvim-cmp = {
         enable = true;
         snippet.expand = "luasnip";
