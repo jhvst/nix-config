@@ -301,6 +301,7 @@
         ".direnv"
         "node_modules"
         "result"
+        ".devenv"
       ];
       extraConfig = {
         http = {
