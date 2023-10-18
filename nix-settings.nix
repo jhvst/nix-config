@@ -40,13 +40,6 @@
         hostName = "buidl0.ponkila.com";
         maxJobs = 20;
       }
-      {
-        systems = [ "aarch64-linux" "armv7l-linux" ];
-        supportedFeatures = [ "benchmark" "big-parallel" "gccarch-armv8-a" "kvm" "nixos-test" ];
-        sshUser = "juuso";
-        hostName = "buidl1.ponkila.com";
-        maxJobs = 16;
-      }
     ];
     distributedBuilds = true;
     # optional, useful when the builder has a faster internet connection than yours
