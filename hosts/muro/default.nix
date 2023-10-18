@@ -14,6 +14,13 @@
     "aarch64-linux"
   ];
 
+  networking.nat = {
+    enable = true;
+    internalInterfaces = [ "ve-+" ];
+    externalInterface = "enp5s0";
+    # Lazy IPv6 connectivity for the container
+    enableIPv6 = true;
+  };
   networking.hostName = "muro";
   time.timeZone = "Europe/Helsinki";
 
@@ -185,6 +192,9 @@
   virtualisation.podman.defaultNetwork.settings.dns_enabled = true;
   virtualisation.podman.extraPackages = [ pkgs.cni-plugin-flannel ];
 
+  virtualisation.containers.enable = true;
+  virtualisation.containers.containersConf.cniPlugins = [ pkgs.cni-plugin-flannel ];
+
   systemd.services.linger = {
     enable = true;
 
@@ -201,25 +211,9 @@
     wantedBy = [ "multi-user.target" ];
   };
 
-  systemd.services.unmodeset = {
-    enable = true;
-
-    after = [ "umount.target" ];
-    before = [ "kexec.target" ];
-
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = ''
-        /run/current-system/sw/bin/modprobe -r amdgpu nvidia_drm nouveau
-      '';
-    };
-
-    wantedBy = [ "kexec.target" ];
-  };
-
   systemd.services.ispyagentdvr = {
     path = [ "/run/wrappers" ];
-    enable = true;
+    enable = false;
 
     description = "ispyagentdvr";
     requires = [ "network-online.target" ];
@@ -288,8 +282,7 @@
   };
 
   systemd.services.synapse = {
-    path = [ "/run/wrappers" ];
-    enable = false;
+    enable = true;
 
     description = "Matrix homeserver";
     requires = [ "network-online.target" ];
@@ -303,16 +296,43 @@
       Type = "simple";
     };
 
-    script = ''${pkgs.podman}/bin/podman \
-      --storage-opt "overlay.mount_program=${pkgs.fuse-overlayfs}/bin/fuse-overlayfs" run \
-      --replace \
-      --rm \
-      --rmi \
-      --net=host \
-      --name matrix \
-      -v /var/mnt/bakhal/matrix/config:/data:z \
-      -v /var/mnt/bakhal/matrix/acme:/acme:z \
-      docker.io/matrixdotorg/synapse:latest
+    script = ''${pkgs.matrix-synapse}/bin/synapse_homeserver \
+      -c /var/mnt/bakhal/matrix/ponkila.com/ponkila.yaml
+    '';
+
+    wantedBy = [ "multi-user.target" ];
+  };
+
+  systemd.user.services.yarr = {
+    enable = true;
+
+    serviceConfig = {
+      Restart = "always";
+      RestartSec = "5s";
+      Type = "simple";
+      User = "juuso";
+      Group = "juuso";
+    };
+
+    script = ''${pkgs.yarr}/bin/yarr \
+      -db /var/mnt/bakhal/yarr/yarr.db \
+      -addr 192.168.76.40:7070
+    '';
+
+    wantedBy = [ "multi-user.target" ];
+  };
+
+  systemd.services.davmail = {
+    enable = true;
+
+    serviceConfig = {
+      Restart = "always";
+      RestartSec = "5s";
+      Type = "simple";
+    };
+
+    script = ''${pkgs.davmail}/bin/davmail \
+      /var/mnt/bakhal/davmail/davmail.properties
     '';
 
     wantedBy = [ "multi-user.target" ];
