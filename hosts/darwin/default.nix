@@ -14,6 +14,7 @@
     mpv
     ncurses
     pam-reattach
+    teams
   ];
 
   homebrew = {
