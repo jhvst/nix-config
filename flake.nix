@@ -208,12 +208,12 @@
           overlays = import ./overlays { inherit inputs; };
 
           nixosConfigurations = with nixpkgs.lib; {
-            "starlabs" = nixosSystem starlabs;
-            "muro" = nixosSystem muro;
             "amd" = nixosSystem amd;
-            "minimal" = nixosSystem minimal;
-            "nvidia" = nixosSystem nvidia;
             "matrix-ponkila-com" = nixosSystem matrix-ponkila-com;
+            "minimal" = nixosSystem minimal;
+            "muro" = nixosSystem muro;
+            "nvidia" = nixosSystem nvidia;
+            "starlabs" = nixosSystem starlabs;
           };
 
           darwinConfigurations = with darwin.lib; {
