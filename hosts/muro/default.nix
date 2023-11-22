@@ -320,7 +320,7 @@
       -addr 192.168.76.40:7070
     '';
 
-    wantedBy = [ "multi-user.target" ];
+    wantedBy = [ "default.target" ];
   };
 
   systemd.services.davmail = {
