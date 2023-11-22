@@ -9,6 +9,8 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
+    libedgetpu.inputs.nixpkgs.follows = "nixpkgs";
+    libedgetpu.url = "github:jhvst/nix-flake-edgetpu";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
     nixvim.url = "github:nix-community/nixvim";
@@ -28,6 +30,7 @@
     , darwin
     , flake-parts
     , home-manager
+    , libedgetpu
     , nixpkgs
     , nixvim
     , ponkila
@@ -54,7 +57,7 @@
         };
 
         overlayAttrs = {
-          inherit (config.packages) himalaya;
+          inherit (config.packages) himalaya libedgetpu;
         };
 
         formatter = nixpkgs.legacyPackages.${system}.nixpkgs-fmt;
@@ -90,6 +93,7 @@
               imports = [ self.nixosModules.neovim ];
             };
           };
+          "libedgetpu" = inputs.libedgetpu.packages.${system}.libedgetpu;
 
           "starlabs" = starlabs.config.system.build.kexecTree;
           "muro" = muro.config.system.build.kexecTree;

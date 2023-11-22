@@ -57,6 +57,11 @@
                     boot.isContainer = true;
                     system.stateVersion = "23.05";
 
+                    services.udev.extraRules = ''
+                      SUBSYSTEM=="usb",ATTRS{idVendor}=="1a6e",GROUP="frigate"
+                      SUBSYSTEM=="usb",ATTRS{idVendor}=="18d1",GROUP="frigate"
+                    '';
+
                     environment.systemPackages = [
                       outputs.packages.${pkgs.system}.libedgetpu
                     ];

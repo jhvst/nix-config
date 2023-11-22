@@ -126,6 +126,7 @@
     # pkgs.lutris
     # https://github.com/Plagman/gamescope
     # gamescope
+    libedgetpu
   ];
 
   hardware.opengl = {
@@ -353,6 +354,11 @@
       /export/nfs     *.ponkila.periferia(rw,nohide,insecure,no_subtree_check)
     '';
   };
+
+  services.udev.extraRules = ''
+    SUBSYSTEM=="usb",ATTRS{idVendor}=="1a6e",GROUP="juuso"
+    SUBSYSTEM=="usb",ATTRS{idVendor}=="18d1",GROUP="juuso"
+  '';
 
   system.stateVersion = "23.05";
 }
