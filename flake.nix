@@ -76,6 +76,10 @@
 
         packages = with flake.nixosConfigurations; {
           "savilerow" = pkgs.callPackage ./packages/savilerow { };
+          "prism" = pkgs.callPackage ./packages/prism {
+            java = pkgs.openjdk17;
+            stdenv = if pkgs.stdenv.isDarwin then pkgs.gccStdenv else pkgs.stdenv;
+          };
           "sounds" = inputs.sounds.packages.${system}.default;
           "himalaya" = pkgs.himalaya.overrideAttrs (oldAttrs: {
             buildInputs = oldAttrs.buildInputs ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin [ pkgs.darwin.Security ];
