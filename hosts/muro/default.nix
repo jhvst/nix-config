@@ -393,8 +393,6 @@
       Restart = "always";
       RestartSec = "5s";
       Type = "simple";
-      User = "juuso";
-      Group = "juuso";
     };
 
     script = ''${pkgs.yarr}/bin/yarr \
