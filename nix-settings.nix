@@ -26,21 +26,7 @@
 
     };
 
-    buildMachines = [
-      {
-        hostName = "muro";
-        systems = [ "i686-linux" "x86_64-linux" ];
-        supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" ];
-        maxJobs = 24;
-      }
-      {
-        systems = [ "aarch64-linux" "i686-linux" "x86_64-linux" ];
-        supportedFeatures = [ "benchmark" "big-parallel" "kvm" "nixos-test" ];
-        sshUser = "juuso";
-        hostName = "buidl0.ponkila.com";
-        maxJobs = 20;
-      }
-    ];
+    buildMachines = [ ];
     distributedBuilds = true;
     # optional, useful when the builder has a faster internet connection than yours
     extraOptions = ''
