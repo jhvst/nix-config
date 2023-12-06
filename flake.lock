@@ -449,6 +449,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-stable-patched": {
+      "locked": {
+        "lastModified": 1700776500,
+        "narHash": "sha256-zZ9hXnbiD4FdfER2ngmUX4+eiCUt8gzg+sfWVnNBLTg=",
+        "owner": "majbacka-labs",
+        "repo": "nixpkgs",
+        "rev": "c527b293d474eb075e12c877c35b7a73ffba8df5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "majbacka-labs",
+        "ref": "patch-init1sh",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-stable_2": {
       "locked": {
         "lastModified": 1699756042,
@@ -606,6 +622,7 @@
         "home-manager": "home-manager",
         "libedgetpu": "libedgetpu",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-stable-patched": "nixpkgs-stable-patched",
         "nixvim": "nixvim",
         "ponkila": "ponkila",
         "sops-nix": "sops-nix",

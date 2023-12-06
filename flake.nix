@@ -12,6 +12,7 @@
     libedgetpu.inputs.nixpkgs.follows = "nixpkgs";
     libedgetpu.url = "github:jhvst/nix-flake-edgetpu";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-stable-patched.url = "github:majbacka-labs/nixpkgs/patch-init1sh";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
     nixvim.url = "github:nix-community/nixvim";
     ponkila.inputs.nixpkgs.follows = "nixpkgs";
@@ -32,6 +33,7 @@
     , home-manager
     , libedgetpu
     , nixpkgs
+    , nixpkgs-stable-patched
     , nixvim
     , ponkila
     , sops-nix
@@ -96,7 +98,7 @@
           "libedgetpu" = inputs.libedgetpu.packages.${system}.libedgetpu;
 
           "starlabs" = starlabs.config.system.build.kexecTree;
-          "muro" = muro.config.system.build.kexecTree;
+          "muro" = muro.config.system.build.squashfs;
           "amd" = amd.config.system.build.kexecTree;
           "minimal" = minimal.config.system.build.kexecTree;
           "nvidia" = nvidia.config.system.build.kexecTree;
@@ -219,10 +221,11 @@
             "amd" = nixosSystem amd;
             "matrix-ponkila-com" = nixosSystem matrix-ponkila-com;
             "minimal" = nixosSystem minimal;
-            "muro" = nixosSystem muro;
             "nvidia" = nixosSystem nvidia;
             "starlabs" = nixosSystem starlabs;
-          };
+          } // (with nixpkgs-stable-patched.lib; {
+            "muro" = nixosSystem muro;
+          });
 
           darwinConfigurations = with darwin.lib; {
             "host-darwin" = darwinSystem host-darwin;

@@ -1,8 +1,25 @@
 { self
+, config
 , lib
 , pkgs
 , ...
 }: {
+
+  system.build.squashfs = pkgs.linkFarm "squashfs" [
+    {
+      name = "squashfs.img";
+      path = "${config.system.build.squashfsStore}";
+    }
+    {
+      # NOTE: this is only the initial ramdisk (12MB)
+      name = "initrd.zst";
+      path = "${config.system.build.initialRamdisk}/initrd";
+    }
+    {
+      name = "bzImage";
+      path = "${config.system.build.kernel}/${config.system.boot.loader.kernelFile}";
+    }
+  ];
 
   # Allows this server to be used as a remote builder
   nix.settings.trusted-users = [
@@ -24,6 +41,9 @@
   networking.hostName = "muro";
   time.timeZone = "Europe/Helsinki";
 
+  boot.initrd.extraFiles."/etc/resolv.conf".source = pkgs.writeText "resolv.conf" ''
+    nameserver 1.1.1.1
+  '';
   boot.kernelParams = [
     "boot.shell_on_fail"
     "ip=dhcp"
@@ -43,13 +63,75 @@
     "tsx=on"
     "tsx_async_abort=off"
   ];
-  boot.kernelPatches = [{
-    name = "CONFIG_SMB_SERVER";
-    patch = null;
-    extraConfig = ''
-      SMB_SERVER m
-    '';
-  }];
+  boot.kernelPatches = [
+    {
+      name = "CONFIG_SMB_SERVER";
+      patch = null;
+      extraConfig = ''
+        SMB_SERVER m
+      '';
+    }
+    {
+      name = "enable NICs";
+      patch = null;
+      extraConfig = ''
+        ETHERNET y
+        IGB y
+        IXGBE y
+        NET_VENDOR_INTEL y
+      '';
+    }
+    {
+      name = "network config base";
+      patch = null;
+      extraConfig = ''
+        # IP Configuration and DNS
+        IP_PNP y
+        IP_PNP_DHCP y
+        IP_PNP_BOOTP y
+        IP_PNP_RARP y
+        DNS_RESOLVER y
+
+        # Transport Layer Security
+        TLS y
+        CRYPTO_AEAD y
+        CRYPTO_NULL y
+        CRYPTO_GCM y
+        CRYPTO_CTR y
+        CRYPTO_CRC32C y
+        CRYPTO_GHASH y
+        CRYPTO_AES y
+        CRYPTO_LIB_AES y
+
+        # Misc
+        PHYLIB y
+
+        # PTP clock
+        PPS y
+        PTP_1588_CLOCK y
+
+        # Filesystem
+        BLK_DEV_LOOP y
+        LIBCRC32C y
+        OVERLAY_FS y
+        SQUASHFS y
+
+        # USB and HID
+        HID y
+        HID_GENERIC y
+        KEYBOARD_ATKBD y
+        TYPEC y
+        USB y
+        USB_COMMON y
+        USB_EHCI_HCD y
+        USB_EHCI_PCI y
+        USB_HID y
+        USB_OHCI_HCD y
+        USB_UHCI_HCD y
+        USB_XHCI_HCD y
+      '';
+    }
+  ];
   boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_latest);
 
   users.users.juuso = {
