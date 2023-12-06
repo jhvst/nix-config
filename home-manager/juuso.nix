@@ -8,7 +8,7 @@
 
   home-manager.users.juuso = { pkgs, ... }: {
 
-    home.stateVersion = "23.05";
+    home.stateVersion = "23.11";
 
     accounts.calendar = {
       accounts = {

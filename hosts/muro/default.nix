@@ -162,9 +162,9 @@
   networking.firewall.enable = false;
 
   ## Gaming start
-  programs.steam.enable = false;
+  programs.steam.enable = true;
   programs.gamemode = {
-    enable = false;
+    enable = true;
     settings = {
       general = {
         renice = 10;
@@ -198,16 +198,16 @@
     # To enable: MANGOHUD=1 MANGOHUD_CONFIG=full steam
     mangohud
     # debug utils for graphics
-    # pkgs.glxinfo
+    glxinfo
     vulkan-tools
     # Upscaler
     # pkgs.vkBasalt
     # Mixer and audio control
-    # easyeffects
-    # helvum
+    easyeffects
+    helvum
     # pkgs.lutris
     # https://github.com/Plagman/gamescope
-    # gamescope
+    gamescope
     libedgetpu
   ];
 
@@ -442,5 +442,5 @@
     SUBSYSTEM=="usb",ATTRS{idVendor}=="18d1",GROUP="juuso"
   '';
 
-  system.stateVersion = "23.05";
+  system.stateVersion = "23.11";
 }
