@@ -7,12 +7,13 @@
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     darwin.url = "github:lnl7/nix-darwin";
     flake-parts.url = "github:hercules-ci/flake-parts";
+    graham33.url = "github:graham33/nur-packages";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
-    libedgetpu.inputs.nixpkgs.follows = "nixpkgs";
-    libedgetpu.url = "github:jhvst/nix-flake-edgetpu";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nix-pxe.inputs.nixpkgs.follows = "nixpkgs";
+    nix-pxe.url = "git+ssh://git@github.com/majbacka-labs/Nix-PXE";
     nixpkgs-stable-patched.url = "github:majbacka-labs/nixpkgs/patch-init1sh";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
     nixvim.url = "github:nix-community/nixvim";
     ponkila.inputs.nixpkgs.follows = "nixpkgs";
@@ -30,8 +31,9 @@
     { self
     , darwin
     , flake-parts
+    , graham33
     , home-manager
-    , libedgetpu
+    , nix-pxe
     , nixpkgs
     , nixpkgs-stable-patched
     , nixvim
@@ -59,7 +61,12 @@
         };
 
         overlayAttrs = {
-          inherit (config.packages) himalaya libedgetpu;
+          inherit (config.packages)
+            himalaya
+            libedgetpu
+            alsa-hwid
+            pxe-generate
+            pxe-compile;
         };
 
         formatter = nixpkgs.legacyPackages.${system}.nixpkgs-fmt;
@@ -80,6 +87,7 @@
         };
 
         packages = with flake.nixosConfigurations; {
+          "alsa-hwid" = pkgs.callPackage ./packages/alsa-hwid { };
           "savilerow" = pkgs.callPackage ./packages/savilerow { };
           "prism" = pkgs.callPackage ./packages/prism {
             java = pkgs.openjdk17;
@@ -95,14 +103,17 @@
               imports = [ self.nixosModules.neovim ];
             };
           };
-          "libedgetpu" = inputs.libedgetpu.packages.${system}.libedgetpu;
+          "libedgetpu" = inputs.graham33.packages.${system}.libedgetpu;
+          "pxe-generate" = inputs.nix-pxe.packages.${system}.pxe-generate;
+          "pxe-compile" = inputs.nix-pxe.packages.${system}.pxe-compile;
 
-          "starlabs" = starlabs.config.system.build.kexecTree;
-          "muro" = muro.config.system.build.squashfs;
           "amd" = amd.config.system.build.kexecTree;
-          "minimal" = minimal.config.system.build.kexecTree;
-          "nvidia" = nvidia.config.system.build.kexecTree;
+          "kotikone" = kotikone.config.system.build.squashfs;
           "matrix-ponkila-com" = matrix-ponkila-com.config.system.build.kexecTree;
+          "minimal" = minimal.config.system.build.kexecTree;
+          "muro" = muro.config.system.build.squashfs;
+          "nvidia" = nvidia.config.system.build.kexecTree;
+          "starlabs" = starlabs.config.system.build.kexecTree;
         };
       };
 
@@ -157,6 +168,17 @@
             modules = [
               ./hosts/amd
               ./system/netboot.nix
+            ];
+          };
+
+          kotikone = {
+            system = "x86_64-linux";
+            specialArgs = { inherit inputs outputs; };
+            modules = [
+              ./nixosConfigurations/kotikone
+              ./nix-settings.nix
+              ./system/netboot.nix
+              ./system/ramdisk.nix
             ];
           };
 
@@ -224,6 +246,7 @@
             "nvidia" = nixosSystem nvidia;
             "starlabs" = nixosSystem starlabs;
           } // (with nixpkgs-stable-patched.lib; {
+            "kotikone" = nixosSystem kotikone;
             "muro" = nixosSystem muro;
           });
 
