@@ -431,10 +431,5 @@
     '';
   };
 
-  services.udev.extraRules = ''
-    SUBSYSTEM=="usb",ATTRS{idVendor}=="1a6e",GROUP="juuso"
-    SUBSYSTEM=="usb",ATTRS{idVendor}=="18d1",GROUP="juuso"
-  '';
-
   system.stateVersion = "23.11";
 }
