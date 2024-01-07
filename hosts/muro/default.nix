@@ -41,9 +41,7 @@
   networking.hostName = "muro";
   time.timeZone = "Europe/Helsinki";
 
-  boot.initrd.extraFiles."/etc/resolv.conf".source = pkgs.writeText "resolv.conf" ''
-    nameserver 1.1.1.1
-  '';
+  boot.kernel.sysctl."net.ipv4.tcp_mtu_probing" = 1; # Ubisoft Connect fix: https://www.protondb.com/app/2225070#5tJ0kpnj43
   boot.kernelParams = [
     "boot.shell_on_fail"
     "ip=dhcp"
@@ -142,6 +140,7 @@
       "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNMKgTTpGSvPG4p8pRUWg1kqnP9zPKybTHQ0+Q/noY5+M6uOxkLy7FqUIEFUT9ZS/fflLlC/AlJsFBU212UzobA= ssh@secretive.sandbox.local"
     ];
     shell = pkgs.fish;
+    linger = true;
   };
   users.groups.juuso = { };
   environment.shells = [ pkgs.fish ];
@@ -208,7 +207,9 @@
     # pkgs.lutris
     # https://github.com/Plagman/gamescope
     gamescope
-    libedgetpu
+
+    pxe-generate
+    pxe-compile
   ];
 
   hardware.opengl = {
@@ -223,7 +224,13 @@
   hardware.steam-hardware.enable = true;
   hardware.xpadneo.enable = true;
   hardware.bluetooth.enable = true;
+  security.rtkit.enable = true;
 
+  services.shairport-sync = {
+    enable = true;
+    # DACs like "USB Modi Device" gets trimmed to just a Device
+    arguments = "-v -o alsa -- -d hw:Device";
+  };
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -269,6 +276,17 @@
 
       wantedBy = [ "multi-user.target" ];
     }
+    {
+      enable = true;
+
+      what = "/dev/disk/by-label/bakhal";
+      where = "/var/lib/frigate";
+      type = "btrfs";
+      options = "subvolid=272";
+
+      before = [ "frigate.service" ];
+      wantedBy = [ "multi-user.target" ];
+    }
   ];
 
   virtualisation.podman.enable = true;
@@ -278,56 +296,34 @@
   virtualisation.containers.enable = true;
   virtualisation.containers.containersConf.cniPlugins = [ pkgs.cni-plugin-flannel ];
 
-  systemd.services.linger = {
+  services.frigate = {
     enable = true;
-
-    requires = [ "local-fs.target" ];
-    after = [ "local-fs.target" ];
-
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = ''
-        /run/current-system/sw/bin/loginctl enable-linger juuso
-      '';
+    package = pkgs.frigate;
+    hostname = "muro.ponkila.intra";
+    settings = {
+      detectors = {
+        coral = {
+          type = "edgetpu";
+          device = "usb";
+        };
+      };
+      cameras = {
+        piha.ffmpeg.inputs = [{
+        }];
+      };
     };
-
-    wantedBy = [ "multi-user.target" ];
   };
+  # https://github.com/NixOS/nixpkgs/issues/188719#issuecomment-1774169734
+  systemd.services.frigate.environment.LD_LIBRARY_PATH = "${pkgs.libedgetpu}/lib";
+  systemd.services.frigate.serviceConfig = {
+    SupplementaryGroups = "plugdev";
+  };
+  services.udev.packages = [ pkgs.libedgetpu ];
+  users.groups.plugdev = { };
 
-  systemd.services.ispyagentdvr = {
-    path = [ "/run/wrappers" ];
+  services.photoprism = {
     enable = false;
-
-    description = "ispyagentdvr";
-    requires = [ "network-online.target" ];
-    after = [ "network-online.target" ];
-
-    serviceConfig = {
-      Restart = "always";
-      RestartSec = "5s";
-      User = "juuso";
-      Group = "juuso";
-      Type = "simple";
-    };
-
-    script = ''${pkgs.podman}/bin/podman \
-      --storage-opt "overlay.mount_program=${pkgs.fuse-overlayfs}/bin/fuse-overlayfs" run \
-      --replace \
-      --rm \
-      --rmi \
-      --name ispyagentdvr \
-      --network=host \
-      -p 8090:8090 \
-      -p 3478:3478/udp \
-      -p 50000-50010:50000-50010/udp \
-      -v /var/mnt/bakhal/ispyagentdvr/config:/agent/Media/XML:Z \
-      -v /var/mnt/bakhal/ispyagentdvr/media:/agent/Media/WebServerRoot/Media:Z \
-      -v /var/mnt/bakhal/ispyagentdvr/archive:/agent/Media/WebServerRoot/Archive:Z \
-      -v /var/mnt/bakhal/ispyagentdvr/commands:/agent/Commands:Z \
-      docker.io/doitandbedone/ispyagentdvr
-  '';
-
-    wantedBy = [ "multi-user.target" ];
+    originalsPath = "/var/mnt/bakhal/Photos";
   };
 
   systemd.services.netbootxyz = {
