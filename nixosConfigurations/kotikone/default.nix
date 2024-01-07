@@ -3,11 +3,12 @@
   networking.hostName = "kotikone";
   time.timeZone = "Europe/Helsinki";
   services.xserver.xkb.layout = "fi";
+  i18n.defaultLocale = "fi_FI.UTF-8";
 
   users.users.kotikone = {
     isNormalUser = true;
     group = "kotikone";
-    extraGroups = [ "wheel" "video" "input" ];
+    extraGroups = [ "wheel" "video" "input" "scanner" "lp" ];
     openssh.authorizedKeys.keys = [
       "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNMKgTTpGSvPG4p8pRUWg1kqnP9zPKybTHQ0+Q/noY5+M6uOxkLy7FqUIEFUT9ZS/fflLlC/AlJsFBU212UzobA= ssh@secretive.sandbox.local"
     ];
@@ -15,15 +16,46 @@
   users.groups.kotikone = { };
 
   services.xserver.enable = true;
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.displayManager.defaultSession = "plasmawayland";
+  services.xserver.displayManager.sddm = {
+    enable = true;
+    settings = {
+      Autologin = {
+        Session = "plasma.desktop";
+        User = "kotikone";
+      };
+    };
+  };
   services.xserver.desktopManager.plasma5.enable = true;
 
   programs.firefox = {
     enable = true;
     languagePacks = [ "fi" ];
   };
-  services.printing.enable = true;
+
+  hardware.sane.enable = true;
+  services.ipp-usb.enable = true;
+  services.printing = {
+    enable = true;
+    drivers = [ pkgs.cnijfilter2 ];
+  };
+  hardware.printers = {
+    ensurePrinters = [
+      {
+        name = "MG5700";
+        location = "Home";
+        deviceUri = "usb://Canon/MG5700%20series?serial=204EE0";
+        model = "${pkgs.cnijfilter2}/share/cups/model/canonmg5700.ppd";
+        ppdOptions = {
+          PageSize = "A4";
+        };
+      }
+    ];
+    ensureDefaultPrinter = "MG5700";
+  };
+  environment.systemPackages = with pkgs; [
+    xsane
+    vlc
+  ];
 
   boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_latest);
 
@@ -113,9 +145,10 @@
   };
 
   # https://github.com/colemickens/nixcfg/blob/dea191cc9930ec06812d4c4d8ef0469688ddcb7e/mixins/gfx-nvidia.nix
-  services.xserver.videoDrivers = [ "nvidia" "modesetting" ];
+  services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
   hardware.nvidia.modesetting.enable = true;
+  hardware.nvidia.nvidiaSettings = true;
 
   #### Audio
   services.pipewire = {
@@ -126,16 +159,6 @@
   };
   ### System APIs
   services.dbus.enable = true;
-
-  ## Window manager
-  ## https://github.com/colemickens/nixcfg/blob/dea191cc9930ec06812d4c4d8ef0469688ddcb7e/mixins/gfx-nvidia.nix
-  environment.sessionVariables = {
-    WLR_DRM_NO_ATOMIC = "1";
-    WLR_NO_HARDWARE_CURSORS = "1";
-    LIBVA_DRIVER_NAME = "nvidia";
-    MOZ_DISABLE_RDD_SANDBOX = "1";
-    EGL_PLATFORM = "wayland";
-  };
 
   system.build.squashfs = pkgs.linkFarm "squashfs" [
     {
