@@ -59,5 +59,9 @@
       name = "kexec-boot";
       path = config.system.build.kexecScript;
     }
+    {
+      name = "entry.ipxe";
+      path = config.system.build.netbootIpxeScript;
+    }
   ];
 }
