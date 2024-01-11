@@ -5,6 +5,7 @@
     enable = true;
     viAlias = true;
     vimAlias = true;
+    defaultEditor = true;
   };
 
   home-manager.users.juuso.editorconfig = {

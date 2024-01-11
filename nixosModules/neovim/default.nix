@@ -40,8 +40,10 @@
       gitsigns.enable = true;
       indent-blankline = {
         enable = true;
-        showCurrentContext = true;
-        showCurrentContextStart = true;
+        scope = {
+          enabled = true;
+          showStart = true;
+        };
       };
       telescope = {
         enable = true;
