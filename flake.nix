@@ -148,11 +148,12 @@
             modules = [
               ./home-manager/juuso.nix
               ./home-manager/programs/neovim
-              ./hosts/starlabs
+              ./nixosConfigurations/starlabs
               ./nix-settings.nix
               ./system/ramdisk.nix
               ./system/netboot.nix
               home-manager.nixosModules.home-manager
+              sops-nix.nixosModules.sops
               {
                 home-manager.sharedModules = [
                   nixvim.homeManagerModules.nixvim

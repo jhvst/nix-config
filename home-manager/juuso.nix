@@ -21,7 +21,7 @@
           };
           remote = {
             passwordCommand = [
-              ''cat $(getconf DARWIN_USER_TEMP_DIR)email/ponkila.com''
+              ''cat ${config.sops.secrets."mbsync/ponkila".path}''
             ];
             type = "caldav";
             url = "https://webmail.gandi.net/SOGo/dav/juuso@ponkila.com/Calendar/personal/";
@@ -40,7 +40,7 @@
           };
           remote = {
             passwordCommand = [
-              ''cat $(getconf DARWIN_USER_TEMP_DIR)email/mail.com''
+              ''cat ${config.sops.secrets."mbsync/mail.com".path}''
             ];
             type = "caldav";
             url = "https://caldav.mail.com/begenda/dav/juuso@mail.com/calendar/";
@@ -76,7 +76,7 @@
         userName = "juuso@ponkila.com";
         realName = "Juuso Haavisto";
         passwordCommand = [
-          ''cat $(getconf DARWIN_USER_TEMP_DIR)email/ponkila.com''
+          ''cat ${config.sops.secrets."mbsync/ponkila".path}''
         ];
         imap = {
           host = "mail.gandi.net";
@@ -117,7 +117,7 @@
         userName = "juuso@mail.com";
         realName = "Juuso Haavisto";
         passwordCommand = [
-          ''cat $(getconf DARWIN_USER_TEMP_DIR)email/mail.com''
+          ''cat ${config.sops.secrets."mbsync/mail.com".path}''
         ];
         imap = {
           host = "imap.mail.com";
@@ -158,7 +158,7 @@
         userName = "haavijuu@gmail.com";
         realName = "Juuso Haavisto";
         passwordCommand = [
-          ''security find-generic-password -a haavijuu@gmail.com -w''
+          ''cat ${config.sops.secrets."mbsync/gmail".path}''
         ];
         flavor = "gmail.com";
       };
@@ -176,7 +176,7 @@
           };
         };
         mbsync = {
-          enable = true;
+          enable = false;
           create = "maildir";
           extraConfig.account = {
             CertificateFile = "~/.config/davmail/oxford/davmail.pem";
@@ -187,7 +187,7 @@
         userName = "reub0117@OX.AC.UK";
         realName = "Juuso Haavisto";
         passwordCommand = [
-          ''security find-generic-password -a reub0117@OX.AC.UK -w''
+          ''cat ${config.sops.secrets."mbsync/oxford".path}''
         ];
         imap = {
           host = "192.168.76.40";
@@ -209,9 +209,6 @@
 
     programs.notmuch = {
       enable = true;
-      hooks = {
-        preNew = "mbsync --all";
-      };
     };
     programs.mbsync.enable = true;
     programs.himalaya = {

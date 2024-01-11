@@ -302,6 +302,16 @@
       before = [ "frigate.service" ];
       wantedBy = [ "multi-user.target" ];
     }
+    {
+      enable = true;
+
+      what = "/dev/disk/by-label/nvme";
+      where = "/home/juuso/Maildir";
+      type = "btrfs";
+      options = "noatime,subvolid=258";
+
+      wantedBy = [ "multi-user.target" ];
+    }
   ];
 
   virtualisation.podman.enable = true;
@@ -436,6 +446,10 @@
     device = "/var/mnt/bakhal/nfs";
     options = [ "bind" ];
   };
+  fileSystems."/export/Maildir" = {
+    device = "/home/juuso/Maildir";
+    options = [ "bind" ];
+  };
   services.nfs.server = {
     enable = true;
     lockdPort = 4001;
@@ -445,12 +459,28 @@
     exports = ''
       /export         *.ponkila.periferia(rw,fsid=0,no_subtree_check)
       /export/nfs     *.ponkila.periferia(rw,nohide,insecure,no_subtree_check)
+      /export/Maildir   *.ponkila.periferia(rw,nohide,insecure,no_subtree_check)
     '';
   };
 
-  sops = {
-    secrets."frigate/piha" = {
-      sopsFile = ./secrets/default.yaml;
+  sops = with config.users.users; {
+    defaultSopsFile = ./secrets/default.yaml;
+    secrets."frigate/piha" = { };
+    secrets."mbsync/ponkila" = {
+      owner = juuso.name;
+      group = juuso.group;
+    };
+    secrets."mbsync/mail.com" = {
+      owner = juuso.name;
+      group = juuso.group;
+    };
+    secrets."mbsync/gmail" = {
+      owner = juuso.name;
+      group = juuso.group;
+    };
+    secrets."mbsync/oxford" = {
+      owner = juuso.name;
+      group = juuso.group;
     };
   };
 
