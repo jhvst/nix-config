@@ -320,6 +320,10 @@
       owner = juuso.name;
       group = juuso.group;
     };
+    secrets."davmail/oxford" = {
+      owner = juuso.name;
+      group = juuso.group;
+    };
   };
 
 }

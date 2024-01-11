@@ -482,6 +482,10 @@
       owner = juuso.name;
       group = juuso.group;
     };
+    secrets."davmail/oxford" = {
+      owner = juuso.name;
+      group = juuso.group;
+    };
   };
 
   system.stateVersion = "23.11";

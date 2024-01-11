@@ -176,10 +176,10 @@
           };
         };
         mbsync = {
-          enable = false;
+          enable = true;
           create = "maildir";
           extraConfig.account = {
-            CertificateFile = "~/.config/davmail/oxford/davmail.pem";
+            CertificateFile = "${config.sops.secrets."davmail/oxford".path}";
           };
         };
         notmuch.enable = true;
