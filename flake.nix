@@ -107,13 +107,11 @@
           "pxe-generate" = inputs.nix-pxe.packages.${system}.pxe-generate;
           "pxe-compile" = inputs.nix-pxe.packages.${system}.pxe-compile;
 
-          "amd" = amd.config.system.build.kexecTree;
-          "kotikone" = kotikone.config.system.build.squashfs;
-          "matrix-ponkila-com" = matrix-ponkila-com.config.system.build.kexecTree;
-          "minimal" = minimal.config.system.build.kexecTree;
-          "muro" = muro.config.system.build.squashfs;
-          "nvidia" = nvidia.config.system.build.kexecTree;
-          "starlabs" = starlabs.config.system.build.kexecTree;
+          "kotikone" = kotikone.cconfig.system.build.squashfs;
+          "matrix-ponkila-com" = mactrix-ponkila-com.config.system.build.kexecTree;
+          "minimal" = minimal.config.csystem.build.kexecTree;
+          "muro" = muro.config.system.bcuild.squashfs;
+          "starlabs" = starlabs.config.sycstem.build.kexecTree;
         };
       };
 
@@ -162,15 +160,6 @@
             ];
           };
 
-          amd = {
-            system = "x86_64-linux";
-            specialArgs = { inherit inputs outputs; };
-            modules = [
-              ./hosts/amd
-              ./system/netboot.nix
-            ];
-          };
-
           kotikone = {
             system = "x86_64-linux";
             specialArgs = { inherit inputs outputs; };
@@ -179,15 +168,6 @@
               ./nix-settings.nix
               ./system/netboot.nix
               ./system/ramdisk.nix
-            ];
-          };
-
-          nvidia = {
-            system = "x86_64-linux";
-            specialArgs = { inherit inputs outputs; };
-            modules = [
-              ./nixosConfigurations/nvidia
-              ./system/netboot.nix
             ];
           };
 
@@ -240,10 +220,8 @@
           overlays = import ./overlays { inherit inputs; };
 
           nixosConfigurations = with nixpkgs.lib; {
-            "amd" = nixosSystem amd;
             "matrix-ponkila-com" = nixosSystem matrix-ponkila-com;
             "minimal" = nixosSystem minimal;
-            "nvidia" = nixosSystem nvidia;
             "starlabs" = nixosSystem starlabs;
           } // (with nixpkgs-stable-patched.lib; {
             "kotikone" = nixosSystem kotikone;
