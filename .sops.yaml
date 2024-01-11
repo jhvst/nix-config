@@ -5,6 +5,7 @@
 keys:
   - &juuso 8F84B8738E67A3453F05D29BC2DC6A67CB7F891F
   - &darwin age1z2e5qzsg730g70vxanyyfm40fz42rvgydklce48r5lgra55re3esyr7dyz
+  - &muro age1alaa93s5t2awzuthqpxxsen76dvgkujh05rgglnv4ked3cnj6p2s56nt4t
 creation_rules:
   - path_regex: hosts/darwin/secrets/[^/]+\.yaml$
     key_groups:
@@ -12,3 +13,9 @@ creation_rules:
       - *juuso
       age:
       - *darwin
+  - path_regex: nixosConfigurations/muro/secrets/[^/]+\.yaml$
+    key_groups:
+    - pgp:
+      - *juuso
+      age:
+      - *muro

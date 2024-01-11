@@ -78,10 +78,11 @@
               git
               jq
               nix
+              ripgrep
               rsync
+              sops
               ssh-to-age
               zstd
-              ripgrep
             ];
           };
         };
@@ -107,11 +108,11 @@
           "pxe-generate" = inputs.nix-pxe.packages.${system}.pxe-generate;
           "pxe-compile" = inputs.nix-pxe.packages.${system}.pxe-compile;
 
-          "kotikone" = kotikone.cconfig.system.build.squashfs;
-          "matrix-ponkila-com" = mactrix-ponkila-com.config.system.build.kexecTree;
-          "minimal" = minimal.config.csystem.build.kexecTree;
-          "muro" = muro.config.system.bcuild.squashfs;
-          "starlabs" = starlabs.config.sycstem.build.kexecTree;
+          "kotikone" = kotikone.config.system.build.squashfs;
+          "matrix-ponkila-com" = matrix-ponkila-com.config.system.build.kexecTree;
+          "minimal" = minimal.config.system.build.kexecTree;
+          "muro" = muro.config.system.build.squashfs;
+          "starlabs" = starlabs.config.system.build.kexecTree;
         };
       };
 
@@ -125,12 +126,13 @@
             modules = [
               ./home-manager/juuso.nix
               ./home-manager/programs/neovim
-              ./hosts/muro
+              ./nixosConfigurations/muro
               ./nix-settings.nix
               ./system/ramdisk.nix
               ./system/netboot.nix
               ponkila.nixosModules.muro
               home-manager.nixosModules.home-manager
+              sops-nix.nixosModules.sops
               {
                 home-manager.sharedModules = [
                   nixvim.homeManagerModules.nixvim

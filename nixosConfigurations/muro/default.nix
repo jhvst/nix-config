@@ -5,6 +5,13 @@
 , ...
 }: {
 
+  fileSystems."/etc/ssh" = lib.mkImageMediaOverride {
+    fsType = "btrfs";
+    device = "/dev/disk/by-label/bakhal";
+    options = [ "subvolid=280" ];
+    neededForBoot = true;
+  };
+
   system.build.squashfs = pkgs.linkFarm "squashfs" [
     {
       name = "squashfs.img";
@@ -157,7 +164,14 @@
   };
   services.openssh = {
     enable = true;
-    settings.PasswordAuthentication = false;
+    hostKeys = [{
+      path = "/etc/ssh/ssh_host_ed25519_key";
+      type = "ed25519";
+    }];
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+    };
   };
   networking.firewall.enable = false;
 
@@ -309,7 +323,10 @@
         };
       };
       cameras = {
-        piha.ffmpeg.inputs = [{ }];
+        piha.ffmpeg.inputs = [{
+          path = "";
+          roles = [ "detect" ];
+        }];
       };
     };
   };
@@ -429,6 +446,12 @@
       /export         *.ponkila.periferia(rw,fsid=0,no_subtree_check)
       /export/nfs     *.ponkila.periferia(rw,nohide,insecure,no_subtree_check)
     '';
+  };
+
+  sops = {
+    secrets."frigate/piha" = {
+      sopsFile = ./secrets/default.yaml;
+    };
   };
 
   system.stateVersion = "23.11";
