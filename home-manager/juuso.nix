@@ -29,8 +29,6 @@
           };
           qcal.enable = true;
         };
-      };
-      accounts = {
         "mail.com" = {
           primary = false;
           primaryCollection = "My Calendar";
@@ -45,6 +43,23 @@
             type = "caldav";
             url = "https://caldav.mail.com/begenda/dav/juuso@mail.com/calendar/";
             userName = "juuso@mail.com";
+          };
+          qcal.enable = true;
+        };
+        "oxford" = {
+          primary = false;
+          primaryCollection = "Calendar";
+          local = {
+            type = "filesystem";
+            fileExt = ".ics";
+          };
+          remote = {
+            passwordCommand = [
+              ''cat ${config.sops.secrets."mbsync/oxford".path}''
+            ];
+            type = "caldav";
+            url = "http://192.168.76.40:1080/users/reub0117@OX.AC.UK/calendar";
+            userName = "reub0117@OX.AC.UK";
           };
           qcal.enable = true;
         };
