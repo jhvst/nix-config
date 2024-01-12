@@ -209,7 +209,7 @@
               ./nixosConfigurations/matrix.ponkila.com
               ./system/netboot.nix
               ./system/ramdisk.nix
-              ./home-manager/juuso.nix
+              ./home-manager/core.nix
               home-manager.nixosModules.home-manager
               {
                 home-manager.useGlobalPkgs = true;
