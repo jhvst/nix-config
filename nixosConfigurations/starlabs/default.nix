@@ -56,6 +56,29 @@
         };
       };
     };
+
+    programs.gpg = with config.home-manager.users.juuso; {
+      enable = true;
+      homedir = "${home.homeDirectory}/.gnupg/trezor";
+      settings = {
+        agent-program = "${home.homeDirectory}/.gnupg/trezor/run-agent.sh";
+        default-key = "Juuso Haavisto <juuso@ponkila.com>";
+      };
+    };
+
+    programs.password-store = with config.home-manager.users.juuso; {
+      enable = true;
+      settings = {
+        PASSWORD_STORE_DIR = "${home.homeDirectory}/.pass";
+        PASSWORD_STORE_KEY = "8F84B8738E67A3453F05D29BC2DC6A67CB7F891F";
+      };
+    };
+
+    programs.browserpass = {
+      enable = true;
+      browsers = [ "firefox" ];
+    };
+
   };
 
   networking = {
