@@ -132,11 +132,8 @@
   #programs.steam.enable = true;
 
   security = {
-    sudo = {
-      enable = lib.mkDefault true;
-      wheelNeedsPassword = lib.mkForce false;
-    };
-    rtkit.enable = true;
+    sudo.enable = false;
+    sudo-rs.enable = true;
   };
 
   environment = {
