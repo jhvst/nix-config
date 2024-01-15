@@ -238,8 +238,6 @@
       nix-direnv.enable = true;
     };
 
-    programs.htop.enable = true;
-
     home.packages = with pkgs; [
       gnupg
       trezor_agent
