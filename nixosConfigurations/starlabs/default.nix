@@ -84,15 +84,18 @@
   networking = {
     hostName = "starlabs";
     nameservers = [
-      "192.168.17.1"
-      "2001:470:27:6a9:8000::1"
       "1.1.1.1"
       "1.0.0.1"
       "2606:4700:4700::1111"
       "2606:4700:4700::1001"
+      "192.168.17.1"
+      "2001:470:27:6a9:8000::1"
     ];
     useDHCP = true;
+    dhcpcd.enable = false;
+    useNetworkd = true;
     wireless.iwd.enable = true;
+    stevenblack.enable = true;
 
     wg-quick.interfaces = {
       "ponkila".configFile = "/etc/wireguard/ponkila.conf";
