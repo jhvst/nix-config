@@ -62,6 +62,7 @@
             himalaya
             libedgetpu
             alsa-hwid
+            notmuch-vim;
         };
 
         formatter = nixpkgs.legacyPackages.${system}.nixpkgs-fmt;
@@ -97,6 +98,16 @@
             inherit pkgs;
             module = {
               imports = [ self.nixosModules.neovim ];
+            };
+          };
+          "notmuch-vim" = pkgs.vimUtils.buildVimPlugin {
+            pname = "notmuch-vim";
+            version = pkgs.notmuch.version;
+            src = pkgs.fetchFromGitHub {
+              owner = "felipec";
+              repo = "notmuch-vim";
+              rev = "v0.7";
+              hash = "sha256-fjXq15ORSEbUkPLjOlYPWnZ7aSDYe+XDmPn5GXnEP0M=";
             };
           };
           "libedgetpu" = inputs.graham33.packages.${system}.libedgetpu;
