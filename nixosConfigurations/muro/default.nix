@@ -222,9 +222,6 @@
     # pkgs.lutris
     # https://github.com/Plagman/gamescope
     gamescope
-
-    pxe-generate
-    pxe-compile
   ];
 
   hardware.opengl = {

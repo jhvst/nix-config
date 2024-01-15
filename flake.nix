@@ -10,8 +10,6 @@
     graham33.url = "github:graham33/nur-packages";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
-    nix-pxe.inputs.nixpkgs.follows = "nixpkgs";
-    nix-pxe.url = "git+ssh://git@github.com/majbacka-labs/Nix-PXE";
     nixpkgs-stable-patched.url = "github:majbacka-labs/nixpkgs/patch-init1sh";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
@@ -33,7 +31,6 @@
     , flake-parts
     , graham33
     , home-manager
-    , nix-pxe
     , nixpkgs
     , nixpkgs-stable-patched
     , nixvim
@@ -65,8 +62,6 @@
             himalaya
             libedgetpu
             alsa-hwid
-            pxe-generate
-            pxe-compile;
         };
 
         formatter = nixpkgs.legacyPackages.${system}.nixpkgs-fmt;
@@ -105,8 +100,6 @@
             };
           };
           "libedgetpu" = inputs.graham33.packages.${system}.libedgetpu;
-          "pxe-generate" = inputs.nix-pxe.packages.${system}.pxe-generate;
-          "pxe-compile" = inputs.nix-pxe.packages.${system}.pxe-compile;
 
           "kotikone" = kotikone.config.system.build.squashfs;
           "matrix-ponkila-com" = matrix-ponkila-com.config.system.build.kexecTree;

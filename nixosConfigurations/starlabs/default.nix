@@ -147,9 +147,6 @@
 
       mangohud
       vulkan-tools
-
-      pxe-generate
-      pxe-compile
     ];
   };
 
