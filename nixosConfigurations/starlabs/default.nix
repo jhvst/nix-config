@@ -216,6 +216,15 @@
       };
       type = "nfs";
     }
+    {
+      enable = true;
+      what = "/dev/sda2";
+      where = "/home/juuso/.papis";
+      options = "subvolid=272";
+      type = "btrfs";
+
+      wantedBy = [ "multi-user.target" ];
+    }
   ];
 
   systemd.automounts = [
