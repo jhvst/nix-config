@@ -36,7 +36,6 @@
   };
 
   nixpkgs.overlays = [
-    inputs.wayland.overlay
     outputs.overlays.modifications
     outputs.overlays.default
   ];

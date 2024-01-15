@@ -164,6 +164,11 @@
               ./nix-settings.nix
               ./system/netboot.nix
               ./system/ramdisk.nix
+              {
+                nixpkgs.overlays = [
+                  wayland.overlay
+                ];
+              }
             ];
           };
 
