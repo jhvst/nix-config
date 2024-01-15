@@ -3,6 +3,8 @@
 { inputs, outputs, pkgs, config, lib, ... }:
 {
 
+  boot.initrd.luks.fido2Support = true;
+
   # sops keys
   fileSystems."/home/juuso/.ssh" = {
     device = "/dev/sda2";
@@ -64,7 +66,7 @@
       enable = true;
       homedir = "${home.homeDirectory}/.gnupg/trezor";
       settings = {
-        agent-program = "${home.homeDirectory}/.gnupg/trezor/run-agent.sh";
+        agent-program = "${pkgs.trezor_agent}/bin/trezor-gpg-agent";
         default-key = "Juuso Haavisto <juuso@ponkila.com>";
       };
     };
