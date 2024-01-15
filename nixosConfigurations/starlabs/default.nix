@@ -3,9 +3,12 @@
 { inputs, outputs, pkgs, config, lib, ... }:
 {
 
-  fileSystems."/boot" = {
-    device = "/dev/sda1";
-    fsType = "vfat";
+  # sops keys
+  fileSystems."/home/juuso/.ssh" = {
+    device = "/dev/sda2";
+    fsType = "btrfs";
+    options = [ "subvolid=260" ];
+    neededForBoot = true;
   };
 
   fonts.fontDir.enable = true;
@@ -175,15 +178,6 @@
     {
       enable = true;
       what = "/dev/sda2";
-      where = "/home/juuso/.ssh";
-      options = "subvolid=260";
-      type = "btrfs";
-
-      wantedBy = [ "multi-user.target" ];
-    }
-    {
-      enable = true;
-      what = "/dev/sda2";
       where = "/home/juuso/.gnupg/trezor";
       options = "subvolid=259";
       type = "btrfs";
@@ -244,6 +238,7 @@
         TimeoutIdleSec = "600";
       };
 
+      after = [ "wg-quick-ponkila.service" ];
       wantedBy = [ "multi-user.target" ];
     }
     {
@@ -252,6 +247,8 @@
         TimeoutIdleSec = "600";
       };
 
+      after = [ "wg-quick-ponkila.service" ];
+      before = [ "home-manager-juuso.service" ];
       wantedBy = [ "multi-user.target" ];
     }
   ];
