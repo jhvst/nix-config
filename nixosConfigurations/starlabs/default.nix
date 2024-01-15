@@ -3,6 +3,8 @@
 { inputs, outputs, pkgs, config, lib, ... }:
 {
 
+  # early console
+  boot.initrd.kernelModules = [ "amdgpu" ];
   boot.initrd.luks.fido2Support = true;
 
   # sops keys
@@ -255,26 +257,39 @@
     }
   ];
 
-  hardware.opengl = {
-    ## radv: an open-source Vulkan driver from freedesktop
-    driSupport = true;
-    driSupport32Bit = true;
+  hardware = {
+    # enables WiFi and GPU drivers
+    enableRedistributableFirmware = true;
+    opengl = {
+      # radv: an open-source Vulkan driver from freedesktop
+      driSupport = true;
+      driSupport32Bit = true;
 
-    setLdLibraryPath = true;
+      setLdLibraryPath = true;
+
+      # amdvlk: an open-source driver from AMD
+      # for some reason integrated GPUs are not detected without amdvlk, and it is seemingly impossible to disable radv
+      extraPackages = [
+        pkgs.amdvlk
+      ];
+      extraPackages32 = [
+        pkgs.driversi686Linux.amdvlk
+      ];
+    };
+
+    ##
+    ##  $ bluetoothctl
+    ##  [bluetooth] # power on
+    ##  [bluetooth] # agent on
+    ##  [bluetooth] # default-agent
+    ##  [bluetooth] # scan on
+    ##  ...put device in pairing mode and wait [hex-address] to appear here...
+    ##  [bluetooth] # pair [hex-address]
+    ##  [bluetooth] # connect [hex-address]
+    bluetooth.enable = true;
+    # Xbox controller
+    xpadneo.enable = true;
   };
-
-  hardware.xpadneo.enable = true;
-
-  ##
-  ##  $ bluetoothctl
-  ##  [bluetooth] # power on
-  ##  [bluetooth] # agent on
-  ##  [bluetooth] # default-agent
-  ##  [bluetooth] # scan on
-  ##  ...put device in pairing mode and wait [hex-address] to appear here...
-  ##  [bluetooth] # pair [hex-address]
-  ##  [bluetooth] # connect [hex-address]
-  hardware.bluetooth.enable = true;
 
   # "my laptop has LVFS updates btw"
   services.fwupd.enable = true;
