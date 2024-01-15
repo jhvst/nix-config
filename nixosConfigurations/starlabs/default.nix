@@ -1,5 +1,3 @@
-# nix-build -A pix.ipxe amd.nix -I home-manager=https://github.com/nix-community/home-manager/archive/master.tar.gz -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/refs/heads/nixos-unstable.zipstarl
-
 { inputs, outputs, pkgs, config, lib, ... }:
 {
 
@@ -137,23 +135,11 @@
   };
 
   environment = {
-    loginShellInit = ''
-      [[ "$(tty)" == /dev/tty1 ]] && sway
-    '';
     shells = [ pkgs.fish ];
     systemPackages = with pkgs; [
       btrfs-progs
-      lm_sensors
       nfs-utils
-      refind
-
-      waypipe
-      wayvnc
-      wev
       wl-clipboard
-
-      mangohud
-      vulkan-tools
     ];
   };
 
@@ -288,14 +274,9 @@
     xpadneo.enable = true;
   };
 
-  # "my laptop has LVFS updates btw"
-  services.fwupd.enable = true;
-
   services.fprintd.enable = true;
 
   services.trezord.enable = true;
-
-  services.keyd.enable = true;
 
   services.pipewire = {
     enable = true;
@@ -362,5 +343,7 @@
       group = juuso.group;
     };
   };
+
+  system.stateVersion = "23.11";
 
 }
