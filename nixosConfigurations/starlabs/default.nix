@@ -305,7 +305,10 @@
   };
 
   ### System APIs
-  services.dbus.enable = true;
+  services.dbus = {
+    enable = true;
+    implementation = "broker";
+  };
 
   # NFS mounting support
   services.rpcbind.enable = true;
