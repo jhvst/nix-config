@@ -1,0 +1,59 @@
+{
+  "fetchPipMetadata": {
+    "sources": {
+      "bech32": {
+        "sha256": "990dc8e5a5e4feabbdf55207b5315fdd9b73db40be294a19b3752cde9e79d981",
+        "type": "url",
+        "url": "https://files.pythonhosted.org/packages/b6/41/7022a226e5a6ac7091a95ba36bad057012ab7330b9894ad4e14e31d0b858/bech32-1.2.0-py3-none-any.whl",
+        "version": "1.2.0"
+      },
+      "cffi": {
+        "sha256": "7b78010e7b97fef4bee1e896df8a4bbb6712b7f05b7ef630f9d1da00f6444d2e",
+        "type": "url",
+        "url": "https://files.pythonhosted.org/packages/9b/89/a31c81e36bbb793581d8bba4406a8aac4ba84b2559301c44eef81f4cf5df/cffi-1.16.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "version": "1.16.0"
+      },
+      "click": {
+        "sha256": "ae74fb96c20a0277a1d615f1e4d73c8414f5a98db8b799a7931d1582f3390c28",
+        "type": "url",
+        "url": "https://files.pythonhosted.org/packages/00/2e/d53fa4befbf2cfa713304affc7ca780ce4fc1fd8710527771b58311a3229/click-8.1.7-py3-none-any.whl",
+        "version": "8.1.7"
+      },
+      "cryptography": {
+        "sha256": "43f2552a2378b44869fe8827aa19e69512e3245a219104438692385b0ee119d1",
+        "type": "url",
+        "url": "https://files.pythonhosted.org/packages/62/bd/69628ab50368b1beb900eb1de5c46f8137169b75b2458affe95f2f470501/cryptography-41.0.7-cp37-abi3-manylinux_2_28_x86_64.whl",
+        "version": "41.0.7"
+      },
+      "fido2": {
+        "sha256": "a3b7d7d233dec3a4fa0d6178fc34d1cce17b820005a824f6ab96917a1e3be8d8",
+        "type": "url",
+        "url": "https://files.pythonhosted.org/packages/e3/99/68bab31fbb49e8b3a58ce31cfde5ed9aede6efe5eebbece2eaf93ade75c0/fido2-1.1.2-py3-none-any.whl",
+        "version": "1.1.2"
+      },
+      "pycparser": {
+        "sha256": "8ee45429555515e1f6b185e78100aea234072576aa43ab53aefcae078162fca9",
+        "type": "url",
+        "url": "https://files.pythonhosted.org/packages/62/d5/5f610ebe421e85889f2e55e33b7f9a6795bd982198517d912eb1c76e1a53/pycparser-2.21-py2.py3-none-any.whl",
+        "version": "2.21"
+      }
+    },
+    "targets": {
+      "default": {
+        "bech32": [],
+        "cffi": [
+          "pycparser"
+        ],
+        "click": [],
+        "cryptography": [
+          "cffi"
+        ],
+        "fido2": [
+          "cryptography"
+        ],
+        "pycparser": []
+      }
+    }
+  },
+  "invalidationHash": "b1a46cb2e9a40a24c56c0bb5dd3a7727705a93c14e3cfd814fc5c7af0b86adb6"
+}
