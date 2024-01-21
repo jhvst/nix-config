@@ -97,8 +97,6 @@
       "2001:470:27:6a9:8000::1"
     ];
     useDHCP = true;
-    dhcpcd.enable = false;
-    useNetworkd = true;
     wireless.iwd.enable = true;
     stevenblack.enable = true;
 
@@ -126,7 +124,6 @@
     shell = pkgs.fish;
   };
   users.groups.juuso = { };
-  programs.fish.enable = true;
   #programs.steam.enable = true;
 
   security = {
@@ -225,6 +222,15 @@
 
       wantedBy = [ "multi-user.target" ];
     }
+    {
+      enable = true;
+
+      what = "/dev/sda2";
+      where = "/home/juuso/.ssh";
+      options = "subvolid=260";
+      type = "btrfs";
+      wantedBy = [ "multi-user.target" ];
+    }
   ];
 
   systemd.automounts = [
@@ -295,10 +301,7 @@
   };
 
   ### System APIs
-  services.dbus = {
-    enable = true;
-    implementation = "broker";
-  };
+  services.dbus.enable = true;
 
   # NFS mounting support
   services.rpcbind.enable = true;
@@ -325,8 +328,13 @@
     };
   };
 
-  ## Window manager
-  programs.sway.enable = true;
+  # programs to enable also for root
+  programs = {
+    sway.enable = true;
+    git.enable = true;
+    fish.enable = true;
+    vim.defaultEditor = true;
+  };
   services.getty.autologinUser = "juuso";
 
   sops = with config.users.users; {
@@ -353,6 +361,6 @@
     };
   };
 
-  system.stateVersion = "23.11";
+  system.stateVersion = "24.05";
 
 }
