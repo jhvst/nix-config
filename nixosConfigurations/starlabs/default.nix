@@ -137,6 +137,8 @@
       btrfs-progs
       nfs-utils
       wl-clipboard
+
+      iamb # matrix client
     ];
   };
 
@@ -228,6 +230,16 @@
       what = "/dev/sda2";
       where = "/home/juuso/.ssh";
       options = "subvolid=260";
+      type = "btrfs";
+
+      wantedBy = [ "multi-user.target" ];
+    }
+    {
+      enable = true;
+
+      what = "/dev/sda2";
+      where = "/home/juuso/.config/iamb";
+      options = "subvolid=274";
       type = "btrfs";
       wantedBy = [ "multi-user.target" ];
     }
