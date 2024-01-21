@@ -226,10 +226,7 @@
       enable = true;
     };
     programs.mbsync.enable = true;
-    programs.himalaya = {
-      enable = true;
-      package = pkgs.himalaya.override { withNotmuchBackend = true; };
-    };
+    programs.himalaya.enable = true;
     programs.qcal.enable = true;
 
     programs.nix-index.enable = true;
