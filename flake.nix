@@ -7,7 +7,6 @@
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     darwin.url = "github:lnl7/nix-darwin";
     flake-parts.url = "github:hercules-ci/flake-parts";
-    graham33.url = "github:graham33/nur-packages";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:soywod/home-manager/himalaya-v1.0.0-beta";
     nixpkgs-stable-patched.url = "github:majbacka-labs/nixpkgs/patch-init1sh";
@@ -29,7 +28,6 @@
     { self
     , darwin
     , flake-parts
-    , graham33
     , home-manager
     , nixpkgs
     , nixpkgs-stable-patched
@@ -108,7 +106,7 @@
               hash = "sha256-fjXq15ORSEbUkPLjOlYPWnZ7aSDYe+XDmPn5GXnEP0M=";
             };
           };
-          "libedgetpu" = inputs.graham33.packages.${system}.libedgetpu;
+          "libedgetpu" = pkgs.callPackage ./packages/libedgetpu { };
 
           "kotikone" = kotikone.config.system.build.squashfs;
           "matrix-ponkila-com" = matrix-ponkila-com.config.system.build.kexecTree;
