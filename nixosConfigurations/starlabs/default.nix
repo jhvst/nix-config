@@ -35,6 +35,7 @@
     };
 
     programs.waybar.enable = true;
+    programs.swaylock.enable = true;
 
     wayland.windowManager.sway = {
       enable = true;
@@ -129,6 +130,11 @@
   security = {
     sudo.enable = false;
     sudo-rs.enable = true;
+    pam.services = {
+      login.u2fAuth = true;
+      sudo.u2fAuth = true;
+    };
+    polkit.enable = true;
   };
 
   environment = {
@@ -241,6 +247,17 @@
       where = "/home/juuso/.config/iamb";
       options = "subvolid=274";
       type = "btrfs";
+
+      wantedBy = [ "multi-user.target" ];
+    }
+    {
+      enable = true;
+
+      what = "/dev/sda2";
+      where = "/home/juuso/.config/Yubico";
+      options = "subvolid=275";
+      type = "btrfs";
+
       wantedBy = [ "multi-user.target" ];
     }
   ];
@@ -303,6 +320,19 @@
 
   services.fprintd.enable = true;
 
+  services.udev = {
+    packages = [ pkgs.yubikey-personalization ];
+    extraRules = ''
+      ACTION=="remove",\
+      ENV{ID_BUS}=="usb",\
+      ENV{ID_MODEL_ID}=="0407",\
+      ENV{ID_VENDOR_ID}=="1050",\
+      ENV{ID_VENDOR}=="Yubico",\
+      RUN+="${pkgs.systemd}/bin/loginctl lock-sessions"
+    '';
+  };
+
+  services.yubikey-agent.enable = true;
   services.trezord.enable = true;
 
   services.pipewire = {
