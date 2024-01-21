@@ -143,6 +143,7 @@
       btrfs-progs
       nfs-utils
       wl-clipboard
+      age-plugin-fido2-hmac
 
       iamb # matrix client
     ];

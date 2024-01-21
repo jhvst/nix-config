@@ -4,6 +4,7 @@
 {
 
   inputs = {
+    age-plugin-fido2-hmac.url = "github:jhvst/nix-config?dir=packages/age-plugin-fido2-hmac";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     darwin.url = "github:lnl7/nix-darwin";
     flake-parts.url = "github:hercules-ci/flake-parts";
@@ -26,6 +27,7 @@
   # add the inputs declared above to the argument attribute set
   outputs =
     { self
+    , age-plugin-fido2-hmac
     , darwin
     , flake-parts
     , home-manager
@@ -60,7 +62,8 @@
             #himalaya
             libedgetpu
             alsa-hwid
-            notmuch-vim;
+            notmuch-vim
+            age-plugin-fido2-hmac;
         };
 
         formatter = nixpkgs.legacyPackages.${system}.nixpkgs-fmt;
@@ -82,6 +85,7 @@
         };
 
         packages = with flake.nixosConfigurations; {
+          "age-plugin-fido2-hmac" = inputs.age-plugin-fido2-hmac.packages.${system}.default;
           "alsa-hwid" = pkgs.callPackage ./packages/alsa-hwid { };
           "savilerow" = pkgs.callPackage ./packages/savilerow { };
           "prism" = pkgs.callPackage ./packages/prism {
