@@ -335,6 +335,21 @@
     fish.enable = true;
     vim.defaultEditor = true;
   };
+
+  # iPhone to Linux audio streaming
+  # usbmuxd makes the iPhone pairable via USB cable
+  # shairport creates an AirPlay receiver
+  # Firewall makes it so that when network sharing from iPhone, the connections are only taken from that local network
+  services.usbmuxd.enable = true;
+  services.shairport-sync = {
+    enable = true;
+    arguments = "-v -o alsa";
+  };
+  networking.firewall.interfaces."enp2s0f3u1c4i2" = {
+    allowedTCPPorts = [ 5000 ];
+    allowedUDPPortRanges = [{ from = 6001; to = 6011; }];
+  };
+
   services.getty.autologinUser = "juuso";
 
   sops = with config.users.users; {
