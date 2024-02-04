@@ -309,6 +309,16 @@
 
       wantedBy = [ "multi-user.target" ];
     }
+    {
+      enable = true;
+
+      what = "/dev/disk/by-label/bakhal";
+      where = "/var/lib/postgresql/15";
+      type = "btrfs";
+      options = "noatime,subvolid=282";
+
+      wantedBy = [ "multi-user.target" ];
+    }
   ];
 
   virtualisation.podman.enable = true;
@@ -317,6 +327,16 @@
 
   virtualisation.containers.enable = true;
   virtualisation.containers.containersConf.cniPlugins = [ pkgs.cni-plugin-flannel ];
+
+  services.postgresql = {
+    enable = true;
+    package = pkgs.postgresql_15;
+  };
+
+  services.invidious = {
+    enable = true;
+    domain = "muro.ponkila.periferia";
+  };
 
   services.frigate = {
     enable = true;
