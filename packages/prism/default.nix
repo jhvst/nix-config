@@ -12,16 +12,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ivZshLRtje9B+8RiG0jhGX8YkLvMCz62+I25ycR5dQs=";
   };
 
-  nativeBuildInputs = [java];
+  nativeBuildInputs = [ java ];
 
   postPatch = ''
     sed -i "s/\/bin\/mv/mv/" prism/install.sh
-    '';
+  '';
 
-  makeFlags = ["JAVA_DIR=${java}"];
+  makeFlags = [ "JAVA_DIR=${java}" ];
   preBuild = ''
     cd prism
-    '';
+  '';
 
   installPhase = ''
     mkdir --parents $out
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     cd $out
     ./install.sh
     rm install.sh
-    '';
+  '';
 
   meta = with lib; {
     description = "A Probabalistic Symbolic Model Checker";
