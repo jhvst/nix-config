@@ -118,7 +118,7 @@
   users.users.juuso = {
     isNormalUser = true;
     group = "juuso";
-    extraGroups = [ "wheel" "networkmanager" "video" "input" ];
+    extraGroups = [ "wheel" "networkmanager" "video" "input" "pipewire" ];
     openssh.authorizedKeys.keys = [
       "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNMKgTTpGSvPG4p8pRUWg1kqnP9zPKybTHQ0+Q/noY5+M6uOxkLy7FqUIEFUT9ZS/fflLlC/AlJsFBU212UzobA= ssh@secretive.sandbox.local"
     ];
@@ -134,19 +134,32 @@
       login.u2fAuth = true;
       sudo.u2fAuth = true;
     };
+    rtkit.enable = true;
     polkit.enable = true;
   };
 
   environment = {
     shells = [ pkgs.fish ];
     systemPackages = with pkgs; [
-      btrfs-progs
-      nfs-utils
-      wl-clipboard
       age-plugin-fido2-hmac
-
+      btrfs-progs
       iamb # matrix client
+      nfs-utils
+      passage
+      sops
+      wl-clipboard
+      xdg-utils # open command
     ];
+    etc = {
+      "wireplumber/bluetooth.lua.d/51-bluez-config.lua".text = ''
+        bluez_monitor.properties = {
+          ["bluez5.enable-sbc-xq"] = true,
+          ["bluez5.enable-msbc"] = true,
+          ["bluez5.enable-hw-volume"] = true,
+          ["bluez5.headset-roles"] = "[ hsp_hs hsp_ag hfp_hf hfp_ag ]"
+        }
+      '';
+    };
   };
 
   systemd.mounts = [
@@ -261,6 +274,16 @@
 
       wantedBy = [ "multi-user.target" ];
     }
+    {
+      enable = true;
+
+      what = "/dev/sda2";
+      where = "/home/juuso/.passage";
+      options = "subvolid=279";
+      type = "btrfs";
+
+      wantedBy = [ "multi-user.target" ];
+    }
   ];
 
   systemd.automounts = [
@@ -314,6 +337,7 @@
     ##  ...put device in pairing mode and wait [hex-address] to appear here...
     ##  [bluetooth] # pair [hex-address]
     ##  [bluetooth] # connect [hex-address]
+    ## https://gitlab.freedesktop.org/pipewire/pipewire/-/wikis/LE-Audio-+-LC3-support
     bluetooth.enable = true;
     # Xbox controller
     xpadneo.enable = true;
@@ -379,19 +403,8 @@
     vim.defaultEditor = true;
   };
 
-  # iPhone to Linux audio streaming
   # usbmuxd makes the iPhone pairable via USB cable
-  # shairport creates an AirPlay receiver
-  # Firewall makes it so that when network sharing from iPhone, the connections are only taken from that local network
   services.usbmuxd.enable = true;
-  services.shairport-sync = {
-    enable = true;
-    arguments = "-v -o alsa";
-  };
-  networking.firewall.interfaces."enp2s0f3u1c4i2" = {
-    allowedTCPPorts = [ 5000 ];
-    allowedUDPPortRanges = [{ from = 6001; to = 6011; }];
-  };
 
   services.getty.autologinUser = "juuso";
 

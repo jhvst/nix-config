@@ -23,6 +23,7 @@
     extraConfigLua = '''';
     extraPackages = with pkgs; [
       fd
+      gcc
       nixpkgs-fmt
       ripgrep
       shellcheck

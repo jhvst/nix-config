@@ -8,7 +8,7 @@
 
   home-manager.users.juuso = { pkgs, ... }: {
 
-    home.stateVersion = "23.11";
+    home.stateVersion = config.system.stateVersion;
 
     accounts.calendar = {
       accounts = {
@@ -227,7 +227,10 @@
     };
     programs.mbsync.enable = true;
     programs.himalaya.enable = true;
-    programs.qcal.enable = true;
+    programs.qcal = {
+      enable = true;
+      timezone = config.time.timeZone;
+    };
 
     programs.nix-index.enable = true;
     programs.direnv = {
@@ -235,32 +238,16 @@
       nix-direnv.enable = true;
     };
 
-    home.packages = with pkgs; [
-      gnupg
-      trezor_agent
-      trezord
-      wireguard-go
-      wireguard-tools
-    ];
-
     programs.fish = with config.home-manager.users.juuso; {
       enable = true;
       loginShellInit = ''
-        ${if pkgs.system == "aarch64-darwin" then
-          "set -x ponkila (getconf DARWIN_USER_TEMP_DIR)${sops.secrets."wireguard/ponkila.conf".name}"
-        else ""}
         set -U fish_greeting
-        set -x GNUPGHOME ${home.homeDirectory}/.gnupg/trezor
         set -x PATH '${lib.concatStringsSep ":" [
           "${home.homeDirectory}/.nix-profile/bin"
           "/run/wrappers/bin"
           "/etc/profiles/per-user/${home.username}/bin"
           "/run/current-system/sw/bin"
           "/nix/var/nix/profiles/default/bin"
-          "/opt/homebrew/bin"
-          "/usr/bin"
-          "/sbin"
-          "/bin"
         ]}'
         test $TERM = "xterm-256color"; and exec tmux
       '';
