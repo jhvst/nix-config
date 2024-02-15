@@ -5,6 +5,11 @@
   boot.initrd.kernelModules = [ "amdgpu" ];
   boot.initrd.luks.fido2Support = true;
 
+  xdg.portal = {
+    enable = true;
+    wlr.enable = true;
+  };
+
   # sops keys
   fileSystems."/home/juuso/.ssh" = {
     device = "/dev/sda2";
@@ -19,6 +24,11 @@
   ];
 
   home-manager.users.juuso = {
+
+    programs.obs-studio = {
+      enable = false;
+      plugins = [ pkgs.obs-studio-plugins.wlrobs ];
+    };
 
     programs.foot = {
       enable = true;
