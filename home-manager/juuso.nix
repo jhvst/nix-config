@@ -73,11 +73,12 @@
         himalaya = {
           enable = true;
           settings = {
-            backend = "notmuch";
-            notmuch-db-path = "${home.homeDirectory}/Maildir";
-            sender = "smtp";
+            notmuch = {
+              database-path = "${home.homeDirectory}/Maildir";
+            };
+            message.send.backend = "smtp";
 
-            folder-aliases = {
+            folder.alias = {
               inbox = "tag:inbox";
             };
           };
@@ -112,11 +113,12 @@
         himalaya = {
           enable = true;
           settings = {
-            backend = "notmuch";
-            notmuch-db-path = "${home.homeDirectory}/Maildir";
-            sender = "smtp";
+            notmuch = {
+              database-path = "${home.homeDirectory}/Maildir";
+            };
+            message.send.backend = "smtp";
 
-            folder-aliases = {
+            folder.alias = {
               inbox = "tag:inbox";
             };
           };
@@ -153,11 +155,12 @@
         himalaya = {
           enable = true;
           settings = {
-            backend = "notmuch";
-            notmuch-db-path = "${home.homeDirectory}/Maildir";
-            sender = "smtp";
+            notmuch = {
+              database-path = "${home.homeDirectory}/Maildir";
+            };
+            message.send.backend = "smtp";
 
-            folder-aliases = {
+            folder.alias = {
               inbox = "tag:inbox";
             };
           };
@@ -181,11 +184,12 @@
         himalaya = {
           enable = true;
           settings = {
-            backend = "notmuch";
-            notmuch-db-path = "${home.homeDirectory}/Maildir";
-            sender = "smtp";
+            notmuch = {
+              database-path = "${home.homeDirectory}/Maildir";
+            };
+            message.send.backend = "smtp";
 
-            folder-aliases = {
+            folder.alias = {
               inbox = "tag:inbox";
             };
           };

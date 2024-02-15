@@ -9,7 +9,7 @@
     darwin.url = "github:lnl7/nix-darwin";
     flake-parts.url = "github:hercules-ci/flake-parts";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    home-manager.url = "github:soywod/home-manager/himalaya-v1.0.0-beta";
+    home-manager.url = "github:nix-community/home-manager";
     nixpkgs-stable-patched.url = "github:majbacka-labs/nixpkgs/patch-init1sh";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
@@ -59,11 +59,11 @@
 
         overlayAttrs = {
           inherit (config.packages)
-            #himalaya
-            libedgetpu
+            age-plugin-fido2-hmac
             alsa-hwid
-            notmuch-vim
-            age-plugin-fido2-hmac;
+            himalaya
+            libedgetpu
+            notmuch-vim;
         };
 
         formatter = nixpkgs.legacyPackages.${system}.nixpkgs-fmt;
@@ -93,7 +93,7 @@
             stdenv = if pkgs.stdenv.isDarwin then pkgs.gccStdenv else pkgs.stdenv;
           };
           "sounds" = inputs.sounds.packages.${system}.default;
-          # "himalaya" = pkgs.himalaya.override { withNotmuch = true; };
+          "himalaya" = nixpkgs.legacyPackages.${system}.himalaya.override { buildFeatures = [ "notmuch" ]; };
           "neovim" = nixvim.legacyPackages.${system}.makeNixvimWithModule {
             inherit pkgs;
             module = {
