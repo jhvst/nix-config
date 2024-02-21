@@ -70,13 +70,6 @@
   ];
   boot.kernelPatches = [
     {
-      name = "CONFIG_SMB_SERVER";
-      patch = null;
-      extraConfig = ''
-        SMB_SERVER m
-      '';
-    }
-    {
       name = "enable NICs";
       patch = null;
       extraConfig = ''
@@ -139,18 +132,36 @@
   ];
   boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_latest);
 
-  users.users.juuso = {
-    isNormalUser = true;
-    group = "juuso";
-    extraGroups = [ "wheel" "networkmanager" "video" "input" ];
-    openssh.authorizedKeys.keys = [
-      "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNMKgTTpGSvPG4p8pRUWg1kqnP9zPKybTHQ0+Q/noY5+M6uOxkLy7FqUIEFUT9ZS/fflLlC/AlJsFBU212UzobA= ssh@secretive.sandbox.local"
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJdbU8l66hVUAqk900GmEme5uhWcs05JMUQv2eD0j7MI juuso@starlabs"
-    ];
-    shell = pkgs.fish;
-    linger = true;
+  users = {
+    users = {
+      juuso = {
+        isNormalUser = true;
+        uid = 1000;
+        group = "juuso";
+        extraGroups = [ "wheel" "networkmanager" "video" "input" ];
+        openssh.authorizedKeys.keys = [
+          "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNMKgTTpGSvPG4p8pRUWg1kqnP9zPKybTHQ0+Q/noY5+M6uOxkLy7FqUIEFUT9ZS/fflLlC/AlJsFBU212UzobA= ssh@secretive.sandbox.local"
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJdbU8l66hVUAqk900GmEme5uhWcs05JMUQv2eD0j7MI juuso@starlabs"
+        ];
+        shell = pkgs.fish;
+        linger = true;
+        hashedPasswordFile = config.sops.secrets."users/juuso".path;
+      };
+      sean = {
+        group = "sean";
+        uid = 2000;
+        hashedPasswordFile = config.sops.secrets."users/sean".path;
+      };
+    };
+    groups = {
+      juuso = {
+        gid = 1000;
+      };
+      sean = {
+        gid = 2000;
+      };
+    };
   };
-  users.groups.juuso = { };
   environment.shells = [ pkgs.fish ];
   programs.fish.enable = true;
 
@@ -195,7 +206,6 @@
   environment.systemPackages = with pkgs; [
     fuse-overlayfs
     btrfs-progs
-    ksmbd-tools
     lm_sensors
     nfs-utils
 
@@ -370,40 +380,6 @@
     originalsPath = "/var/mnt/bakhal/Photos";
   };
 
-  systemd.services.netbootxyz = {
-    path = [ "/run/wrappers" ];
-    enable = true;
-
-    description = "netbootxyz";
-    requires = [ "network-online.target" ];
-    after = [ "network-online.target" ];
-
-    serviceConfig = {
-      Restart = "always";
-      RestartSec = "5s";
-      User = "juuso";
-      Group = "juuso";
-      Type = "simple";
-    };
-
-    preStart = ''
-      ${pkgs.podman}/bin/podman network create netboot || true
-    '';
-    script = ''${pkgs.podman}/bin/podman \
-      --storage-opt "overlay.mount_program=${pkgs.fuse-overlayfs}/bin/fuse-overlayfs" run \
-      --replace \
-      --rm \
-      --rmi \
-      --net=netboot \
-      --name netbootxyz \
-      -v /var/mnt/bakhal/netbootxyz/config:/config:z \
-      -v /var/mnt/bakhal/netbootxyz/assets/public:/assets:z \
-      ghcr.io/netbootxyz/netbootxyz
-    '';
-
-    wantedBy = [ "multi-user.target" ];
-  };
-
   systemd.services.synapse = {
     enable = true;
 
@@ -479,9 +455,28 @@
       /export/Maildir   *.ponkila.periferia(rw,nohide,insecure,no_subtree_check)
     '';
   };
+  services.samba = {
+    enable = true;
+    shares = {
+      sean = {
+        path = "/var/mnt/bakhal/samba/mount/sean";
+        "force user" = "sean";
+        "force group" = "sean";
+        "read only" = "no";
+      };
+      juuso = {
+        path = "/var/mnt/bakhal/samba/mount/juuso";
+        "force user" = "juuso";
+        "force group" = "juuso";
+        "read only" = "no";
+      };
+    };
+  };
 
   sops = with config.users.users; {
     defaultSopsFile = ./secrets/default.yaml;
+    secrets."users/juuso" = { };
+    secrets."users/sean" = { };
     secrets."frigate/piha" = { };
     secrets."mbsync/ponkila" = {
       owner = juuso.name;
