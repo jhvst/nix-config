@@ -116,7 +116,7 @@
           "kotikone" = kotikone.config.system.build.squashfs;
           "matrix-ponkila-com" = matrix-ponkila-com.config.system.build.kexecTree;
           "minimal" = minimal.config.system.build.kexecTree;
-          "muro" = muro.config.system.build.squashfs;
+          "muro" = muro.config.system.build.kexecTree;
           "starlabs" = starlabs.config.system.build.kexecTree;
         };
       };
@@ -235,10 +235,10 @@
           nixosConfigurations = with nixpkgs.lib; {
             "matrix-ponkila-com" = nixosSystem matrix-ponkila-com;
             "minimal" = nixosSystem minimal;
+            "muro" = nixosSystem muro;
             "starlabs" = nixosSystem starlabs;
           } // (with nixpkgs-stable-patched.lib; {
             "kotikone" = nixosSystem kotikone;
-            "muro" = nixosSystem muro;
           });
 
           darwinConfigurations = with darwin.lib; {

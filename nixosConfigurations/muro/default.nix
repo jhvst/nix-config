@@ -148,6 +148,7 @@
         hashedPasswordFile = config.sops.secrets."users/juuso".path;
       };
       sean = {
+        isNormalUser = true;
         group = "sean";
         uid = 2000;
         hashedPasswordFile = config.sops.secrets."users/sean".path;
