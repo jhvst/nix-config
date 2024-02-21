@@ -248,11 +248,6 @@
   hardware.bluetooth.enable = true;
   security.rtkit.enable = true;
 
-  services.shairport-sync = {
-    enable = true;
-    # DACs like "USB Modi Device" gets trimmed to just a Device
-    arguments = "-v -o alsa -- -d hw:Device";
-  };
   services.pipewire = {
     enable = true;
     alsa.enable = true;
