@@ -138,8 +138,7 @@
   #programs.steam.enable = true;
 
   security = {
-    sudo.enable = false;
-    sudo-rs.enable = true;
+    sudo.enable = true;
     pam.services = {
       login.u2fAuth = true;
       sudo.u2fAuth = true;
@@ -159,6 +158,9 @@
       sops
       wl-clipboard
       xdg-utils # open command
+      cryptsetup
+      pinentry
+      gnupg
     ];
     etc = {
       "wireplumber/bluetooth.lua.d/51-bluez-config.lua".text = ''
@@ -407,9 +409,10 @@
 
   # programs to enable also for root
   programs = {
-    sway.enable = true;
-    git.enable = true;
     fish.enable = true;
+    git.enable = true;
+    gnupg.agent.pinentryFlavor = "curses";
+    sway.enable = true;
     vim.defaultEditor = true;
   };
 
