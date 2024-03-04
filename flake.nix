@@ -197,13 +197,22 @@
             ];
           };
 
-          host-darwin = {
+          epsilon = {
             specialArgs = { inherit inputs outputs; };
-            system = "aarch64-darwin"; # "x86_64-darwin" if you're using a pre M1 mac
+            system = "x86_64-darwin";
+            modules = [
+              ./darwinConfigurations/epsilon
+              ./nix-settings.nix
+            ];
+          };
+
+          sandbox = {
+            specialArgs = { inherit inputs outputs; };
+            system = "aarch64-darwin";
             modules = [
               ./home-manager/juuso.nix
               ./home-manager/programs/neovim
-              ./hosts/darwin
+              ./darwinConfigurations/sandbox
               ./nix-settings.nix
               home-manager.darwinModules.home-manager
               {
@@ -255,7 +264,8 @@
           });
 
           darwinConfigurations = with darwin.lib; {
-            "host-darwin" = darwinSystem host-darwin;
+            "epsilon" = darwinSystem epsilon;
+            "sandbox" = darwinSystem sandbox;
           };
 
           nixosModules = {

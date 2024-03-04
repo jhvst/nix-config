@@ -7,7 +7,7 @@
     (nerdfonts.override { fonts = [ "IBMPlexMono" ]; })
   ];
 
-  networking.hostName = "darwin";
+  networking.hostName = "sandbox";
 
   environment.systemPackages = with pkgs; [
     discord
