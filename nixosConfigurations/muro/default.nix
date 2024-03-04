@@ -494,6 +494,28 @@
       owner = juuso.name;
       group = juuso.group;
     };
+    secrets."netdata/health_alarm_notify.conf" = {
+      owner = "netdata";
+      group = "netdata";
+    };
+  };
+
+  services.netdata = {
+    enable = true;
+    configDir = {
+      "health_alarm_notify.conf" = config.sops.secrets."netdata/health_alarm_notify.conf".path;
+    };
+  };
+
+  systemd.tmpfiles.rules = [
+    "d /var/log/smartd 0755 netdata netdata -"
+  ];
+  services.smartd = {
+    enable = true;
+    extraOptions = [
+      "-A /var/log/smartd/"
+      "--interval=600"
+    ];
   };
 
   system.stateVersion = "23.11";
