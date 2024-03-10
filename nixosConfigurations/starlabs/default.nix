@@ -443,6 +443,18 @@
     secretKeyFile = config.sops.secrets."nix-serve".path;
   };
 
+  services.printing = {
+    enable = false;
+    clientConf = ''
+      ServerName cups.cs.ox.ac.uk
+    '';
+  };
+  services.avahi = {
+    enable = false;
+    nssmdns4 = true;
+    openFirewall = true;
+  };
+
   networking.firewall.interfaces."ponkila" = {
     allowedTCPPorts = [ 5000 ];
   };
