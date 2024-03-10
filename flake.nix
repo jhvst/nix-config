@@ -124,7 +124,6 @@
             };
           };
           "libedgetpu" = pkgs.callPackage ./packages/libedgetpu { };
-          "blutgang" = pkgs.callPackage ./packages/blutgang { };
 
           "kotikone" = kotikone.config.system.build.squashfs;
           "matrix-ponkila-com" = matrix-ponkila-com.config.system.build.kexecTree;
