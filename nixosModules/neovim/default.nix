@@ -83,34 +83,22 @@
       fugitive.enable = true;
       noice.enable = true;
       notify.enable = true;
-      nvim-cmp = {
+      cmp = {
         enable = true;
-        snippet.expand = "luasnip";
-        mapping = {
-          "<CR>" = "cmp.mapping.confirm({ select = true })";
-          "<Tab>" = {
-            action = ''
-              function(fallback)
-                if cmp.visible() then
-                  cmp.select_next_item()
-                else
-                  fallback()
-                end
-              end
-            '';
-            modes = [
-              "i"
-              "s"
-            ];
+        settings = {
+          mapping = {
+            "<CR>" = "cmp.mapping.confirm({ select = true })";
+            "<Tab>" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
           };
+          snippet.expand = "luasnip";
+          sources = [
+            { name = "buffer"; }
+            { name = "luasnip"; }
+            { name = "nvim_lsp"; }
+            { name = "path"; }
+            { name = "tmux"; }
+          ];
         };
-        sources = [
-          { name = "buffer"; }
-          { name = "luasnip"; }
-          { name = "nvim_lsp"; }
-          { name = "path"; }
-          { name = "tmux"; }
-        ];
       };
       lualine = {
         enable = true;
