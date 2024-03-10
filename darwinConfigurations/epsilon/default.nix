@@ -17,6 +17,11 @@
   services.nix-daemon.enable = true;
   programs.zsh.enable = true;
 
+  homebrew = {
+    enable = true;
+    brews = [ "podman" ];
+  };
+
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog
   system.stateVersion = 4;
