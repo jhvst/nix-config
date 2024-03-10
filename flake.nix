@@ -101,10 +101,6 @@
           "age-plugin-fido2-hmac" = inputs.age-plugin-fido2-hmac.packages.${system}.default;
           "alsa-hwid" = pkgs.callPackage ./packages/alsa-hwid { };
           "savilerow" = pkgs.callPackage ./packages/savilerow { };
-          "prism" = pkgs.callPackage ./packages/prism {
-            java = pkgs.openjdk17;
-            stdenv = if pkgs.stdenv.isDarwin then pkgs.gccStdenv else pkgs.stdenv;
-          };
           "sounds" = inputs.sounds.packages.${system}.default;
           "himalaya" = nixpkgs.legacyPackages.${system}.himalaya.override { buildFeatures = [ "notmuch" ]; };
           "neovim" = nixvim.legacyPackages.${system}.makeNixvimWithModule {
