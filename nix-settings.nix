@@ -36,7 +36,6 @@
   };
 
   nixpkgs.overlays = [
-    outputs.overlays.modifications
     outputs.overlays.default
   ];
   nixpkgs.config.allowUnfree = true;

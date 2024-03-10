@@ -252,8 +252,6 @@
         in
         {
 
-          overlays = import ./overlays { inherit inputs; };
-
           nixosConfigurations = with nixpkgs.lib; {
             "matrix-ponkila-com" = nixosSystem matrix-ponkila-com;
             "minimal" = nixosSystem minimal;
