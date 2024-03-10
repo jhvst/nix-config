@@ -113,16 +113,6 @@
               imports = [ self.nixosModules.neovim ];
             };
           };
-          "notmuch-vim" = pkgs.vimUtils.buildVimPlugin {
-            pname = "notmuch-vim";
-            version = pkgs.notmuch.version;
-            src = pkgs.fetchFromGitHub {
-              owner = "felipec";
-              repo = "notmuch-vim";
-              rev = "v0.7";
-              hash = "sha256-fjXq15ORSEbUkPLjOlYPWnZ7aSDYe+XDmPn5GXnEP0M=";
-            };
-          };
           "libedgetpu" = pkgs.callPackage ./packages/libedgetpu { };
 
           "kotikone" = kotikone.config.system.build.squashfs;

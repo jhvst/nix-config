@@ -126,6 +126,6 @@
     extraPlugins = with pkgs.vimPlugins; [
       editorconfig-vim
       himalaya-vim
-    ] ++ [ pkgs.notmuch-vim ];
+    ];
   };
 }
