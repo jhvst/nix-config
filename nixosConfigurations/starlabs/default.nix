@@ -153,15 +153,17 @@
     systemPackages = with pkgs; [
       age-plugin-fido2-hmac
       btrfs-progs
+      cryptsetup
+      gnupg
       iamb # matrix client
       nfs-utils
+      nix-output-monitor
+      nix-update
       passage
+      pinentry
       sops
       wl-clipboard
       xdg-utils # open command
-      cryptsetup
-      pinentry
-      gnupg
     ];
   };
 
