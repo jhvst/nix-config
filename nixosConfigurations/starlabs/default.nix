@@ -159,6 +159,7 @@
       nix-update
       passage
       pinentry
+      sioyek
       sops
       wl-clipboard
       xdg-utils # open command
