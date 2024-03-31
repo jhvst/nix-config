@@ -128,7 +128,7 @@
   users.users.juuso = {
     isNormalUser = true;
     group = "juuso";
-    extraGroups = [ "wheel" "networkmanager" "video" "input" "pipewire" ];
+    extraGroups = [ "wheel" "networkmanager" "video" "input" "pipewire" "ipfs" ];
     openssh.authorizedKeys.keys = [
       "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNMKgTTpGSvPG4p8pRUWg1kqnP9zPKybTHQ0+Q/noY5+M6uOxkLy7FqUIEFUT9ZS/fflLlC/AlJsFBU212UzobA= ssh@secretive.sandbox.local"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHDq7kUCTPNw8SPNbGsNslECroKNljRGZk9fIBIEzrvI epsilon"
@@ -156,7 +156,6 @@
       cryptsetup
       gnupg
       iamb # matrix client
-      nfs-utils
       nix-output-monitor
       nix-update
       passage
@@ -224,24 +223,6 @@
     }
     {
       enable = true;
-      what = "muro.ponkila.periferia:/nfs";
-      where = "/var/mnt/muro";
-      mountConfig = {
-        Options = "noatime,nfsvers=4.2";
-      };
-      type = "nfs";
-    }
-    {
-      enable = true;
-      what = "muro.ponkila.periferia:/Maildir";
-      where = "/home/juuso/Maildir";
-      mountConfig = {
-        Options = "noatime,nfsvers=4.2";
-      };
-      type = "nfs";
-    }
-    {
-      enable = true;
       what = "/dev/sda2";
       where = "/home/juuso/.papis";
       options = "subvolid=272";
@@ -289,26 +270,14 @@
 
       wantedBy = [ "multi-user.target" ];
     }
-  ];
-
-  systemd.automounts = [
     {
-      where = "/var/mnt/muro";
-      automountConfig = {
-        TimeoutIdleSec = "600";
-      };
+      enable = true;
 
-      after = [ "wg-quick-ponkila.service" ];
-      wantedBy = [ "multi-user.target" ];
-    }
-    {
-      where = "/home/juuso/Maildir";
-      automountConfig = {
-        TimeoutIdleSec = "600";
-      };
+      what = "/dev/sda2";
+      where = "/var/lib/ipfs";
+      options = "subvolid=281";
+      type = "btrfs";
 
-      after = [ "wg-quick-ponkila.service" ];
-      before = [ "home-manager-juuso.service" ];
       wantedBy = [ "multi-user.target" ];
     }
   ];
@@ -350,16 +319,9 @@
 
   services.fprintd.enable = true;
 
-  services.udev = {
-    packages = [ pkgs.yubikey-personalization ];
-    extraRules = ''
-      ACTION=="remove",\
-      ENV{ID_BUS}=="usb",\
-      ENV{ID_MODEL_ID}=="0407",\
-      ENV{ID_VENDOR_ID}=="1050",\
-      ENV{ID_VENDOR}=="Yubico",\
-      RUN+="${pkgs.systemd}/bin/loginctl lock-sessions"
-    '';
+  services.kubo = {
+    enable = true;
+    localDiscovery = true;
   };
 
   services.yubikey-agent.enable = true;
@@ -374,9 +336,6 @@
 
   ### System APIs
   services.dbus.enable = true;
-
-  # NFS mounting support
-  services.rpcbind.enable = true;
 
   services.timesyncd.enable = false;
   services.chrony = {
