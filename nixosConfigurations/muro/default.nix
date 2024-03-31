@@ -473,6 +473,7 @@
 
   sops = with config.users.users; {
     defaultSopsFile = ./secrets/default.yaml;
+    secrets."ipfs/PrivKey" = { };
     secrets."users/juuso" = { };
     secrets."users/sean" = { };
     secrets."frigate/piha" = { };
@@ -524,6 +525,11 @@
     enable = true;
     localDiscovery = true;
     settings = {
+      Addresses.API = "/ip4/127.0.0.1/tcp/5001";
+      API.HTTPHeaders = {
+        Access-Control-Allow-Origin = [ "http://127.0.0.1:5001" "https://webui.ipfs.io" ];
+        Access-Control-Allow-Methods = [ "PUT" "POST" ];
+      };
       Peering = {
         Peers = [{
           ID = "12D3KooWLiaVwjwrgGbxbQ8Zk7qMNMUHhhU5KQyTh93pf1kYnXxU";

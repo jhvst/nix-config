@@ -246,6 +246,7 @@
       enable = true;
       loginShellInit = ''
         set -U fish_greeting
+        set -x IPFS_PATH ${config.services.kubo.dataDir}
         set -x PATH '${lib.concatStringsSep ":" [
           "${home.homeDirectory}/.nix-profile/bin"
           "/run/wrappers/bin"

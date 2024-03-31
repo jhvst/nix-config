@@ -322,6 +322,19 @@
   services.kubo = {
     enable = true;
     localDiscovery = true;
+    settings = {
+      Addresses.API = "/ip4/127.0.0.1/tcp/5001";
+      API.HTTPHeaders = {
+        Access-Control-Allow-Origin = [ "http://127.0.0.1:5001" "https://webui.ipfs.io" ];
+        Access-Control-Allow-Methods = [ "PUT" "POST" ];
+      };
+      Peering = {
+        Peers = [{
+          ID = "12D3KooWPpN7WoKZyBsYBVfwUDBtFaU22PJ5PgSaQRBx6gvn4Fg7";
+          Addrs = [ "/ip4/192.168.76.40/tcp/4001" ];
+        }];
+      };
+    };
   };
 
   services.yubikey-agent.enable = true;
@@ -376,6 +389,7 @@
 
   sops = with config.users.users; {
     defaultSopsFile = ./secrets/default.yaml;
+    secrets."ipfs/PrivKey" = { }; # cannot be used in derivation, but here for backup
     secrets."mbsync/ponkila" = {
       owner = juuso.name;
       group = juuso.group;
@@ -421,6 +435,5 @@
   };
 
   system.stateVersion = "24.05";
-
 
 }
