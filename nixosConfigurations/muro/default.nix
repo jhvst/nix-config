@@ -342,6 +342,7 @@
   services.invidious = {
     enable = true;
     domain = "muro.ponkila.periferia";
+    settings.db.user = "invidious";
   };
 
   services.frigate = {
