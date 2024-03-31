@@ -208,7 +208,6 @@
     fuse-overlayfs
     btrfs-progs
     lm_sensors
-    nfs-utils
 
     # a Steam dependancy
     libblockdev
@@ -432,26 +431,6 @@
     wantedBy = [ "multi-user.target" ];
   };
 
-  fileSystems."/export/nfs" = {
-    device = "/var/mnt/bakhal/nfs";
-    options = [ "bind" ];
-  };
-  fileSystems."/export/Maildir" = {
-    device = "/home/juuso/Maildir";
-    options = [ "bind" ];
-  };
-  services.nfs.server = {
-    enable = true;
-    lockdPort = 4001;
-    mountdPort = 4002;
-    statdPort = 4000;
-    extraNfsdConfig = '''';
-    exports = ''
-      /export         *.ponkila.periferia(rw,fsid=0,no_subtree_check)
-      /export/nfs     *.ponkila.periferia(rw,nohide,insecure,no_subtree_check)
-      /export/Maildir   *.ponkila.periferia(rw,nohide,insecure,no_subtree_check)
-    '';
-  };
   services.samba = {
     enable = true;
     securityType = "user";
