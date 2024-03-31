@@ -175,4 +175,6 @@
       path = "${config.system.build.kernel}/${config.system.boot.loader.kernelFile}";
     }
   ];
+
+  system.stateVersion = "23.11";
 }
