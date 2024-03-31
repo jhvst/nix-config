@@ -453,15 +453,27 @@
   };
   services.samba = {
     enable = true;
+    securityType = "user";
+    extraConfig = ''
+      workgroup = WORKGROUP
+      server string = muro
+      netbios name = muro
+      security = user
+      hosts allow = 0.0.0.0/0
+      guest account = nobody
+      map to guest = bad user
+    '';
     shares = {
       sean = {
         path = "/var/mnt/bakhal/samba/mount/sean";
+        browseable = "yes";
         "force user" = "sean";
         "force group" = "sean";
         "read only" = "no";
       };
       juuso = {
         path = "/var/mnt/bakhal/samba/mount/juuso";
+        browseable = "yes";
         "force user" = "juuso";
         "force group" = "juuso";
         "read only" = "no";
