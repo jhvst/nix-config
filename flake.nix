@@ -115,7 +115,6 @@
 
           "kotikone" = kotikone.config.system.build.squashfs;
           "matrix-ponkila-com" = matrix-ponkila-com.config.system.build.kexecTree;
-          "minimal" = minimal.config.system.build.kexecTree;
           "muro" = muro.config.system.build.kexecTree;
           "starlabs" = starlabs.config.system.build.kexecTree;
         };
@@ -212,15 +211,6 @@
             ];
           };
 
-          minimal = {
-            specialArgs = { inherit inputs outputs; };
-            system = "x86_64-linux";
-            modules = [
-              ./nixosConfigurations/minimal
-              ./system/netboot.nix
-            ];
-          };
-
           matrix-ponkila-com = {
             specialArgs = { inherit inputs outputs; };
             system = "x86_64-linux";
@@ -241,7 +231,6 @@
 
           nixosConfigurations = with nixpkgs.lib; {
             "matrix-ponkila-com" = nixosSystem matrix-ponkila-com;
-            "minimal" = nixosSystem minimal;
             "muro" = nixosSystem muro;
             "starlabs" = nixosSystem starlabs;
           } // (with nixpkgs-stable-patched.lib; {
