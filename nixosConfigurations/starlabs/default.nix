@@ -1,9 +1,17 @@
 { inputs, outputs, pkgs, config, lib, ... }:
 {
 
-  # early console
-  boot.initrd.kernelModules = [ "amdgpu" ];
-  boot.initrd.luks.fido2Support = true;
+  boot = {
+    initrd = {
+      kernelModules = [ "amdgpu" "btrfs" ];
+      luks.fido2Support = true;
+    };
+    kernel.sysctl."net.ipv4.tcp_mtu_probing" = 1; # Ubisoft Connect fix: https://www.protondb.com/app/2225070#5tJ0kpnj43
+    kernelParams = [
+      "boot.shell_on_fail"
+    ];
+    kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_latest);
+  };
 
   xdg.portal = {
     enable = true;
@@ -18,10 +26,12 @@
     neededForBoot = true;
   };
 
-  fonts.fontDir.enable = true;
-  fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "IBMPlexMono" ]; })
-  ];
+  fonts = {
+    fontDir.enable = true;
+    packages = with pkgs; [
+      (nerdfonts.override { fonts = [ "IBMPlexMono" ]; })
+    ];
+  };
 
   home-manager.users.juuso = {
 
@@ -120,11 +130,6 @@
 
   time.timeZone = "Europe/London";
 
-  boot.kernelParams = [
-    "boot.shell_on_fail"
-  ];
-  boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_latest);
-
   users.users.juuso = {
     isNormalUser = true;
     group = "juuso";
@@ -136,7 +141,6 @@
     shell = pkgs.fish;
   };
   users.groups.juuso = { };
-  #programs.steam.enable = true;
 
   security = {
     sudo.enable = true;
@@ -363,9 +367,10 @@
   programs = {
     fish.enable = true;
     git.enable = true;
-    gnupg.agent.pinentryFlavor = "curses";
+    gnupg.agent.pinentryPackage = pkgs.pinentry-curses;
     sway.enable = true;
     vim.defaultEditor = true;
+    steam.enable = false;
   };
 
   # usbmuxd makes the iPhone pairable via USB cable
@@ -403,6 +408,9 @@
     package = pkgs.nix-serve-ng;
     secretKeyFile = config.sops.secrets."nix-serve".path;
   };
+  networking.firewall.interfaces."ponkila" = {
+    allowedTCPPorts = [ 5000 ];
+  };
 
   services.printing = {
     enable = false;
@@ -416,10 +424,7 @@
     openFirewall = true;
   };
 
-  networking.firewall.interfaces."ponkila" = {
-    allowedTCPPorts = [ 5000 ];
-  };
-
   system.stateVersion = "24.05";
+
 
 }
