@@ -324,6 +324,16 @@
 
       wantedBy = [ "multi-user.target" ];
     }
+    {
+      enable = true;
+
+      what = "/dev/disk/by-label/bakhal";
+      where = "/var/lib/ipfs";
+      type = "btrfs";
+      options = "noatime,subvolid=267";
+
+      wantedBy = [ "multi-user.target" ];
+    }
   ];
 
   virtualisation.podman.enable = true;
@@ -508,6 +518,19 @@
       "-A /var/log/smartd/"
       "--interval=600"
     ];
+  };
+
+  services.kubo = {
+    enable = true;
+    localDiscovery = true;
+    settings = {
+      Peering = {
+        Peers = [{
+          ID = "12D3KooWLiaVwjwrgGbxbQ8Zk7qMNMUHhhU5KQyTh93pf1kYnXxU";
+          Addrs = [ "/ip4/192.168.76.4/tcp/4001" ];
+        }];
+      };
+    };
   };
 
   system.stateVersion = "23.11";
