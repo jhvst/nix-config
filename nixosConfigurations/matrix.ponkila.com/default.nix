@@ -28,7 +28,7 @@
   };
   services.openssh = {
     enable = true;
-    passwordAuthentication = false;
+    settings.PasswordAuthentication = false;
   };
   networking.firewall.enable = false;
 
@@ -59,5 +59,7 @@
       }
     '';
   };
+
+  system.stateVersion = "24.05";
 
 }

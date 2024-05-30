@@ -41,7 +41,7 @@
       gitsigns.enable = true;
       indent-blankline = {
         enable = true;
-        scope = {
+        settings.scope = {
           enabled = true;
           showStart = true;
         };
