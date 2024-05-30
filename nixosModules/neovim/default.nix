@@ -43,7 +43,7 @@
         enable = true;
         settings.scope = {
           enabled = true;
-          showStart = true;
+          show_start = true;
         };
       };
       telescope = {
