@@ -334,6 +334,12 @@
         Access-Control-Allow-Origin = [ "http://127.0.0.1:5001" "https://webui.ipfs.io" ];
         Access-Control-Allow-Methods = [ "PUT" "POST" ];
       };
+      Ipns = {
+        RepublishPeriod = "1h";
+        RecordLifetime = "48h";
+        ResolveCacheSize = 128;
+        MaxCacheTTL = "1m";
+      };
       Peering = {
         Peers = [{
           ID = "12D3KooWPpN7WoKZyBsYBVfwUDBtFaU22PJ5PgSaQRBx6gvn4Fg7";
