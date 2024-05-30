@@ -13,8 +13,6 @@
   ];
 
   boot.kernelPackages =
-    let base_kernel = pkgs.linuxPackages_4_9.override;
-    in
     pkgs.linuxPackagesFor (pkgs.linuxKernel.manualConfig {
       inherit (pkgs) stdenv lib;
       version = "4.9.309";

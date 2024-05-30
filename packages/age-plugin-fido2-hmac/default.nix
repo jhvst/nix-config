@@ -12,7 +12,7 @@ in
   ];
 
   deps = { nixpkgs, ... }: {
-    fetchFromGitHub = nixpkgs.fetchFromGitHub;
+    inherit (nixpkgs) fetchFromGitHub;
     python = nixpkgs.python3;
   };
 

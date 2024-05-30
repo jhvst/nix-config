@@ -57,7 +57,7 @@
     vlc
   ];
 
-  boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_latest);
+  boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
 
   boot.kernelPatches = [
     {

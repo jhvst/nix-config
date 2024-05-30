@@ -25,6 +25,7 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
+    homestakeros-base.url = "github:ponkila/homestakeros?dir=nixosModules/base";
     nixpkgs-stable-patched.url = "github:majbacka-labs/nixpkgs/patch-init1sh";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
@@ -35,6 +36,8 @@
     sops-nix.url = "github:Mic92/sops-nix";
     sounds.inputs.nixpkgs.follows = "nixpkgs";
     sounds.url = "github:jhvst/nix-config?dir=packages/sounds";
+    treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
+    treefmt-nix.url = "github:numtide/treefmt-nix";
     wayland.inputs.nixpkgs.follows = "nixpkgs";
     wayland.url = "github:nix-community/nixpkgs-wayland";
   };
@@ -46,11 +49,13 @@
     , darwin
     , flake-parts
     , home-manager
+    , homestakeros-base
     , nixpkgs
     , nixpkgs-stable-patched
     , nixvim
     , ponkila
     , sops-nix
+    , treefmt-nix
     , wayland
     , ...
     }@inputs:
@@ -60,9 +65,10 @@
       systems = nixpkgs.lib.systems.flakeExposed;
       imports = [
         inputs.flake-parts.flakeModules.easyOverlay
+        inputs.treefmt-nix.flakeModule
       ];
 
-      perSystem = { pkgs, lib, config, system, ... }: {
+      perSystem = { pkgs, config, system, ... }: {
 
         _module.args.pkgs = import inputs.nixpkgs {
           inherit system;
@@ -81,7 +87,17 @@
             notmuch-vim;
         };
 
-        formatter = nixpkgs.legacyPackages.${system}.nixpkgs-fmt;
+        treefmt.config = {
+          projectRootFile = "flake.nix";
+          flakeFormatter = true;
+          flakeCheck = true;
+          programs = {
+            nixpkgs-fmt.enable = true;
+            deadnix.enable = true;
+            statix.enable = true;
+          };
+          settings.global.excludes = [ "*/flake.nix" ];
+        };
 
         devShells = {
           default = pkgs.mkShell {
@@ -132,10 +148,9 @@
               ./home-manager/programs/neovim
               ./nixosConfigurations/muro
               ./nix-settings.nix
-              ./system/ramdisk.nix
-              ./system/netboot.nix
-              ponkila.nixosModules.muro
               home-manager.nixosModules.home-manager
+              homestakeros-base.nixosModules.kexecTree
+              ponkila.nixosModules.muro
               sops-nix.nixosModules.sops
               {
                 home-manager.sharedModules = [
@@ -154,9 +169,8 @@
               ./home-manager/programs/neovim
               ./nixosConfigurations/starlabs
               ./nix-settings.nix
-              ./system/ramdisk.nix
-              ./system/netboot.nix
               home-manager.nixosModules.home-manager
+              homestakeros-base.nixosModules.kexecTree
               sops-nix.nixosModules.sops
               {
                 home-manager.sharedModules = [
@@ -173,8 +187,7 @@
             modules = [
               ./nixosConfigurations/kotikone
               ./nix-settings.nix
-              ./system/netboot.nix
-              ./system/ramdisk.nix
+              homestakeros-base.nixosModules.kexecTree
               {
                 nixpkgs.overlays = [
                   wayland.overlay
@@ -216,10 +229,9 @@
             system = "x86_64-linux";
             modules = [
               ./nixosConfigurations/matrix.ponkila.com
-              ./system/netboot.nix
-              ./system/ramdisk.nix
               ./home-manager/core.nix
               home-manager.nixosModules.home-manager
+              homestakeros-base.nixosModules.kexecTree
               {
                 home-manager.useGlobalPkgs = true;
               }

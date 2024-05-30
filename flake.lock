@@ -343,6 +343,26 @@
         "type": "github"
       }
     },
+    "homestakeros-base": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_2"
+      },
+      "locked": {
+        "dir": "nixosModules/base",
+        "lastModified": 1712443924,
+        "narHash": "sha256-y76r62FlaD5HPy6+aiqJRYfrqzF5uKhYokhqejaNw60=",
+        "owner": "ponkila",
+        "repo": "homestakeros",
+        "rev": "d7a349f391749664bcb32aa586666f8bae47aa11",
+        "type": "github"
+      },
+      "original": {
+        "dir": "nixosModules/base",
+        "owner": "ponkila",
+        "repo": "homestakeros",
+        "type": "github"
+      }
+    },
     "lib-aggregate": {
       "inputs": {
         "flake-utils": "flake-utils_3",
@@ -387,8 +407,8 @@
       "inputs": {
         "flake-parts": "flake-parts_4",
         "nix-github-actions": "nix-github-actions",
-        "nixpkgs": "nixpkgs_3",
-        "treefmt-nix": "treefmt-nix"
+        "nixpkgs": "nixpkgs_4",
+        "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
         "lastModified": 1705242886,
@@ -527,6 +547,22 @@
     },
     "nixpkgs_2": {
       "locked": {
+        "lastModified": 1712163089,
+        "narHash": "sha256-Um+8kTIrC19vD4/lUCN9/cU9kcOsD1O1m+axJqQPyMM=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "fd281bd6b7d3e32ddfa399853946f782553163b5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_3": {
+      "locked": {
         "lastModified": 1711703276,
         "narHash": "sha256-iMUFArF0WCatKK6RzfUJknjem0H9m4KgorO/p3Dopkk=",
         "owner": "NixOS",
@@ -541,7 +577,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_3": {
+    "nixpkgs_4": {
       "locked": {
         "lastModified": 1703134684,
         "narHash": "sha256-SQmng1EnBFLzS7WSRyPM9HgmZP2kLJcPAz+Ug/nug6o=",
@@ -677,12 +713,14 @@
         "darwin": "darwin",
         "flake-parts": "flake-parts",
         "home-manager": "home-manager",
-        "nixpkgs": "nixpkgs_2",
+        "homestakeros-base": "homestakeros-base",
+        "nixpkgs": "nixpkgs_3",
         "nixpkgs-stable-patched": "nixpkgs-stable-patched",
         "nixvim": "nixvim",
         "ponkila": "ponkila",
         "sops-nix": "sops-nix",
         "sounds": "sounds",
+        "treefmt-nix": "treefmt-nix",
         "wayland": "wayland"
       }
     },
@@ -800,6 +838,26 @@
       }
     },
     "treefmt-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1711963903,
+        "narHash": "sha256-N3QDhoaX+paWXHbEXZapqd1r95mdshxToGowtjtYkGI=",
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "rev": "49dc4a92b02b8e68798abd99184f228243b6e3ac",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "treefmt-nix_2": {
       "inputs": {
         "nixpkgs": [
           "wayland",

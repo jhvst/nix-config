@@ -1,4 +1,4 @@
-{ inputs, outputs, config, lib, pkgs, ... }: {
+{ pkgs, ... }: {
   environment.systemPackages = with pkgs; [
     git
     htop

@@ -1,5 +1,4 @@
-{ self
-, config
+{ config
 , lib
 , pkgs
 , ...
@@ -130,7 +129,7 @@
       '';
     }
   ];
-  boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_latest);
+  boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
 
   users = {
     users = {
@@ -479,23 +478,23 @@
     secrets."frigate/piha" = { };
     secrets."mbsync/ponkila" = {
       owner = juuso.name;
-      group = juuso.group;
+      inherit (juuso) group;
     };
     secrets."mbsync/mail.com" = {
       owner = juuso.name;
-      group = juuso.group;
+      inherit (juuso) group;
     };
     secrets."mbsync/gmail" = {
       owner = juuso.name;
-      group = juuso.group;
+      inherit (juuso) group;
     };
     secrets."mbsync/oxford" = {
       owner = juuso.name;
-      group = juuso.group;
+      inherit (juuso) group;
     };
     secrets."davmail/oxford" = {
       owner = juuso.name;
-      group = juuso.group;
+      inherit (juuso) group;
     };
     secrets."netdata/health_alarm_notify.conf" = {
       owner = "netdata";
@@ -525,7 +524,12 @@
     enable = true;
     localDiscovery = true;
     settings = {
-      Addresses.API = "/ip4/127.0.0.1/tcp/5001";
+      Addresses.API = [
+        "/ip4/127.0.0.1/tcp/5001"
+      ];
+      Addresses.Gateway = [
+        "/ip4/0.0.0.0/tcp/4737"
+      ];
       API.HTTPHeaders = {
         Access-Control-Allow-Origin = [ "http://127.0.0.1:5001" "https://webui.ipfs.io" ];
         Access-Control-Allow-Methods = [ "PUT" "POST" ];

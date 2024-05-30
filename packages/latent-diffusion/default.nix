@@ -1,8 +1,6 @@
-{ callPackage
-, lib
+{ lib
 , stdenv
 , fetchFromGitHub
-, testers
 , pkgs
 }:
 

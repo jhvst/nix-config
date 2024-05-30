@@ -1,4 +1,4 @@
-{ inputs, outputs, config, lib, pkgs, ... }: {
+{ config, pkgs, ... }: {
 
   services.nix-daemon.enable = true;
 

@@ -1,4 +1,4 @@
-{ inputs, outputs, nixpkgs, config, lib, pkgs, ... }: {
+{ config, pkgs, ... }: {
 
   home-manager.users.juuso.programs.nixvim = let neovim = (import ../../../nixosModules/neovim) { inherit config pkgs; }; in with neovim.config; {
     inherit colorschemes extraConfigVim extraConfigLua extraPackages plugins extraPlugins;

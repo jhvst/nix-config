@@ -1,4 +1,4 @@
-{ inputs, outputs, pkgs, config, lib, ... }:
+{ pkgs, config, ... }:
 {
 
   boot = {
@@ -10,7 +10,7 @@
     kernelParams = [
       "boot.shell_on_fail"
     ];
-    kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_latest);
+    kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
   };
 
   xdg.portal = {
@@ -392,23 +392,23 @@
     secrets."ipfs/PrivKey" = { }; # cannot be used in derivation, but here for backup
     secrets."mbsync/ponkila" = {
       owner = juuso.name;
-      group = juuso.group;
+      inherit (juuso) group;
     };
     secrets."mbsync/mail.com" = {
       owner = juuso.name;
-      group = juuso.group;
+      inherit (juuso) group;
     };
     secrets."mbsync/gmail" = {
       owner = juuso.name;
-      group = juuso.group;
+      inherit (juuso) group;
     };
     secrets."mbsync/oxford" = {
       owner = juuso.name;
-      group = juuso.group;
+      inherit (juuso) group;
     };
     secrets."davmail/oxford" = {
       owner = juuso.name;
-      group = juuso.group;
+      inherit (juuso) group;
     };
     secrets."nix-serve" = { };
   };

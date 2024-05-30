@@ -1,5 +1,4 @@
-{ lib
-, pkgs
+{ pkgs
 }:
 pkgs.symlinkJoin rec {
   script = (pkgs.writeScriptBin "alsa-hwid" (builtins.readFile ./alsa-hwid.sh)).overrideAttrs (old: {

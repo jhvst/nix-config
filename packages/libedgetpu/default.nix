@@ -1,6 +1,5 @@
 # https://github.com/NixOS/nixpkgs/issues/188719
 { stdenv
-, lib
 , fetchFromGitHub
 , libusb1
 , abseil-cpp
