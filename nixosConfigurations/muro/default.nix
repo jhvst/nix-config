@@ -187,9 +187,9 @@
   networking.firewall.enable = false;
 
   ## Gaming start
-  programs.steam.enable = true;
+  programs.steam.enable = false;
   programs.gamemode = {
-    enable = true;
+    enable = false;
     settings = {
       general = {
         renice = 10;
@@ -276,18 +276,6 @@
       what = "/dev/disk/by-label/bakhal";
       where = "/var/mnt/bakhal";
       options = "compress=zstd:2,noatime";
-      type = "btrfs";
-
-      wantedBy = [ "multi-user.target" ];
-    }
-    {
-      enable = true;
-
-      description = "steamlibrary storage";
-
-      what = "/dev/disk/by-label/SteamLibrary";
-      where = "/var/mnt/SteamLibrary";
-      options = "noatime";
       type = "btrfs";
 
       wantedBy = [ "multi-user.target" ];
