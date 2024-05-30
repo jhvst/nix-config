@@ -30,8 +30,6 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
     nixvim.url = "github:nix-community/nixvim";
-    ponkila.inputs.nixpkgs.follows = "nixpkgs";
-    ponkila.url = "git+ssh://git@github.com/jhvst/ponkila";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
     sops-nix.url = "github:Mic92/sops-nix";
     sounds.inputs.nixpkgs.follows = "nixpkgs";
@@ -53,7 +51,6 @@
     , nixpkgs
     , nixpkgs-stable-patched
     , nixvim
-    , ponkila
     , sops-nix
     , treefmt-nix
     , wayland
@@ -150,7 +147,6 @@
               ./nix-settings.nix
               home-manager.nixosModules.home-manager
               homestakeros-base.nixosModules.kexecTree
-              ponkila.nixosModules.muro
               sops-nix.nixosModules.sops
               {
                 home-manager.sharedModules = [

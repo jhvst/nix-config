@@ -639,26 +639,6 @@
         "type": "github"
       }
     },
-    "ponkila": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1711886878,
-        "narHash": "sha256-vFV114sMua40oyIOZIObHkVyjC+zrfCA/9ADpjpkJu8=",
-        "ref": "refs/heads/main",
-        "rev": "d85be72c94461dabb6461acf5267bde724842de4",
-        "revCount": 65,
-        "type": "git",
-        "url": "ssh://git@github.com/jhvst/ponkila"
-      },
-      "original": {
-        "type": "git",
-        "url": "ssh://git@github.com/jhvst/ponkila"
-      }
-    },
     "purescript-overlay": {
       "inputs": {
         "nixpkgs": [
@@ -709,7 +689,6 @@
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-stable-patched": "nixpkgs-stable-patched",
         "nixvim": "nixvim",
-        "ponkila": "ponkila",
         "sops-nix": "sops-nix",
         "sounds": "sounds",
         "treefmt-nix": "treefmt-nix_2",
