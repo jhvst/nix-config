@@ -422,16 +422,6 @@
       owner = juuso.name;
       inherit (juuso) group;
     };
-    secrets."nix-serve" = { };
-  };
-
-  services.nix-serve = {
-    enable = true;
-    package = pkgs.nix-serve-ng;
-    secretKeyFile = config.sops.secrets."nix-serve".path;
-  };
-  networking.firewall.interfaces."ponkila" = {
-    allowedTCPPorts = [ 5000 ];
   };
 
   services.printing = {
