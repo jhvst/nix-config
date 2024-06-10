@@ -206,62 +206,13 @@
   environment.systemPackages = with pkgs; [
     fuse-overlayfs
     btrfs-progs
-    lm_sensors
-
-    # a Steam dependancy
-    libblockdev
-    # discord
-    # Install and Update Proton-GE
-    # https://github.com/GloriousEggroll/proton-ge-custom
-    # README: https://github.com/AUNaseef/protonup
-    # protonup --download
-    protonup
-    # A Vulkan and OpenGL overlay for monitoring FPS, temperatures, CPU/GPU load and more.
-    # https://github.com/flightlessmango/MangoHud
-    # To enable: MANGOHUD=1 MANGOHUD_CONFIG=full steam
-    mangohud
-    # debug utils for graphics
-    glxinfo
-    vulkan-tools
-    # Upscaler
-    # pkgs.vkBasalt
-    # Mixer and audio control
-    easyeffects
-    helvum
-    # pkgs.lutris
-    # https://github.com/Plagman/gamescope
-    gamescope
   ];
 
-  hardware.opengl = {
-    ## radv: an open-source Vulkan driver from freedesktop
-    driSupport = true;
-    driSupport32Bit = true;
-
-    ## amdvlk: an open-source Vulkan driver from AMD
-    extraPackages = [ pkgs.amdvlk ];
-    extraPackages32 = [ pkgs.driversi686Linux.amdvlk ];
-  };
-  hardware.steam-hardware.enable = true;
-  hardware.xpadneo.enable = true;
   hardware.bluetooth.enable = true;
-  security.rtkit.enable = true;
 
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
-
-  ### System APIs
-  services.dbus.enable = true;
+  services.pipewire.enable = true;
 
   ## Window manager
-  programs.sway.enable = true;
-  environment.loginShellInit = ''
-    [[ "$(tty)" == /dev/tty1 ]] && sway
-  '';
   services.getty.autologinUser = "juuso";
 
   ## Firmware blobs
