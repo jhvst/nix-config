@@ -17,14 +17,20 @@
     "@wheel"
   ];
 
-  networking.nat = {
-    enable = true;
-    internalInterfaces = [ "ve-+" ];
-    externalInterface = "enp5s0";
-    # Lazy IPv6 connectivity for the container
-    enableIPv6 = true;
+  networking = {
+    hostName = "muro";
+    nat = {
+      enable = true;
+      internalInterfaces = [ "ve-+" ];
+      externalInterface = "enp5s0";
+      # Lazy IPv6 connectivity for the container
+      enableIPv6 = true;
+    };
+    firewall.enable = false;
+    wg-quick.interfaces = {
+      ponkila.configFile = config.sops.secrets."wireguard/ponkila".path;
+    };
   };
-  networking.hostName = "muro";
   time.timeZone = "Europe/Helsinki";
 
   boot.kernelParams = [
@@ -54,7 +60,7 @@
         isNormalUser = true;
         uid = 1000;
         group = "juuso";
-        extraGroups = [ "wheel" "networkmanager" "video" "input" ];
+        extraGroups = [ "wheel" "networkmanager" "video" "input" "acme" ];
         openssh.authorizedKeys.keys = [
           "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNMKgTTpGSvPG4p8pRUWg1kqnP9zPKybTHQ0+Q/noY5+M6uOxkLy7FqUIEFUT9ZS/fflLlC/AlJsFBU212UzobA= ssh@secretive.sandbox.local"
           "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJdbU8l66hVUAqk900GmEme5uhWcs05JMUQv2eD0j7MI juuso@starlabs"
@@ -82,10 +88,21 @@
   environment.shells = [ pkgs.fish ];
   programs.fish.enable = true;
 
-  security.sudo = {
-    enable = lib.mkDefault true;
-    wheelNeedsPassword = lib.mkForce false;
+  security = {
+    acme = {
+      acceptTerms = true;
+      defaults.email = "juuso@ponkila.com";
+      certs."matrix.ponkila.com" = {
+        dnsProvider = "cloudflare";
+        environmentFile = config.sops.secrets."domain/cloudflare".path;
+      };
+    };
+    sudo = {
+      enable = true;
+      wheelNeedsPassword = lib.mkForce false;
+    };
   };
+
   services.openssh = {
     enable = true;
     hostKeys = [{
@@ -97,7 +114,6 @@
       KbdInteractiveAuthentication = false;
     };
   };
-  networking.firewall.enable = false;
 
   ## Gaming start
   programs.steam.enable = false;
@@ -175,7 +191,24 @@
 
       wantedBy = [ "multi-user.target" ];
     }
+    {
+      enable = true;
+
+      what = "/dev/disk/by-label/bakhal";
+      where = "/var/lib/acme";
+      type = "btrfs";
+      options = "noatime,subvolid=283";
+
+      wantedBy = [ "multi-user.target" ];
+    }
   ];
+
+  services.plex = {
+    enable = true;
+    group = "juuso";
+    user = "juuso";
+    dataDir = "/var/mnt/bakhal/Plex/.config/Library/Application Support";
+  };
 
   virtualisation.podman.enable = true;
   virtualisation.podman.defaultNetwork.settings.dns_enabled = true;
@@ -185,7 +218,7 @@
   virtualisation.containers.containersConf.cniPlugins = [ pkgs.cni-plugin-flannel ];
 
   services.frigate = {
-    enable = true;
+    enable = false;
     package = pkgs.frigate;
     hostname = "muro.ponkila.intra";
     settings = {
@@ -195,21 +228,16 @@
           device = "usb";
         };
       };
-      cameras = {
-        piha.ffmpeg.inputs = [{
-          path = "";
-          roles = [ "detect" ];
-        }];
-      };
+      cameras = { };
     };
   };
   # https://github.com/NixOS/nixpkgs/issues/188719#issuecomment-1774169734
   #systemd.services.frigate.environment.LD_LIBRARY_PATH = "${pkgs.libedgetpu}/lib";
-  systemd.services.frigate.serviceConfig = {
-    SupplementaryGroups = "plugdev";
-  };
+  #systemd.services.frigate.serviceConfig = {
+  #  SupplementaryGroups = "plugdev";
+  #};
   #services.udev.packages = [ pkgs.libedgetpu ];
-  users.groups.plugdev = { };
+  #users.groups.plugdev = { };
 
   services.photoprism = {
     enable = false;
@@ -303,10 +331,12 @@
 
   sops = with config.users.users; {
     defaultSopsFile = ./secrets/default.yaml;
+    secrets."domain/cloudflare" = { };
     secrets."ipfs/PrivKey" = { };
     secrets."users/juuso" = { };
     secrets."users/sean" = { };
     secrets."frigate/piha" = { };
+    secrets."wireguard/ponkila" = { };
     secrets."mbsync/ponkila" = {
       owner = juuso.name;
       inherit (juuso) group;
