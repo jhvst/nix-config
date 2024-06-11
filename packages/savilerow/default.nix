@@ -8,13 +8,13 @@ with pkgs; stdenv.mkDerivation {
     then
       fetchTarball
         {
-          url = "https://savilerow.cs.st-andrews.ac.uk/savilerow-1.9.1-mac.tgz";
+          url = "https://www-users.york.ac.uk/peter.nightingale/savilerow/savilerow-1.9.1-mac.tgz";
           sha256 = "1v36aapnvc0lz2fcl8yn7hvn346mp8xl3zw1xmlvh8sq72a8xywb";
         }
     else
       fetchTarball
         {
-          url = "https://savilerow.cs.st-andrews.ac.uk/savilerow-1.9.1-linux.tgz";
+          url = "https://www-users.york.ac.uk/peter.nightingale/savilerow/savilerow-1.9.1-linux.tgz";
           sha256 = "14vy3iy9i7f0zb9w86qmg3i3z6lvl9bpsammbdmhf547lwr23kf1";
         };
 

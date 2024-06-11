@@ -38,26 +38,11 @@
     wayland.url = "github:nix-community/nixpkgs-wayland";
   };
 
-  # add the inputs declared above to the argument attribute set
-  outputs =
-    { self
-    , age-plugin-fido2-hmac
-    , darwin
-    , flake-parts
-    , home-manager
-    , homestakeros-base
-    , nixpkgs
-    , nixpkgs-stable-patched
-    , nixvim
-    , sops-nix
-    , treefmt-nix
-    , wayland
-    , ...
-    }@inputs:
+  outputs = { self, ... }@inputs:
 
-    flake-parts.lib.mkFlake { inherit inputs; } rec {
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } rec {
 
-      systems = nixpkgs.lib.systems.flakeExposed;
+      systems = inputs.nixpkgs.lib.systems.flakeExposed;
       imports = [
         inputs.flake-parts.flakeModules.easyOverlay
         inputs.treefmt-nix.flakeModule
@@ -110,13 +95,13 @@
           };
         };
 
-        packages = with flake.nixosConfigurations; {
+        packages = {
           "age-plugin-fido2-hmac" = inputs.age-plugin-fido2-hmac.packages.${system}.default;
           "alsa-hwid" = pkgs.callPackage ./packages/alsa-hwid { };
           "savilerow" = pkgs.callPackage ./packages/savilerow { };
           "sounds" = inputs.sounds.packages.${system}.default;
-          "himalaya" = nixpkgs.legacyPackages.${system}.himalaya.override { buildFeatures = [ "notmuch" ]; };
-          "neovim" = nixvim.legacyPackages.${system}.makeNixvimWithModule {
+          "himalaya" = inputs.nixpkgs.legacyPackages.${system}.himalaya.override { buildFeatures = [ "notmuch" ]; };
+          "neovim" = inputs.nixvim.legacyPackages.${system}.makeNixvimWithModule {
             inherit pkgs;
             module = {
               imports = [ self.nixosModules.neovim ];
@@ -124,10 +109,10 @@
           };
           "libedgetpu" = pkgs.callPackage ./packages/libedgetpu { };
 
-          "kotikone" = kotikone.config.system.build.squashfs;
-          "matrix-ponkila-com" = matrix-ponkila-com.config.system.build.kexecTree;
-          "muro" = muro.config.system.build.kexecTree;
-          "starlabs" = starlabs.config.system.build.kexecTree;
+          "kotikone" = flake.nixosConfigurations.kotikone.config.system.build.squashfs;
+          "matrix-ponkila-com" = flake.nixosConfigurations.matrix-ponkila-com.config.system.build.kexecTree;
+          "muro" = flake.nixosConfigurations.muro.config.system.build.kexecTree;
+          "starlabs" = flake.nixosConfigurations.starlabs.config.system.build.kexecTree;
         };
       };
 
@@ -143,12 +128,12 @@
               ./home-manager/programs/neovim
               ./nixosConfigurations/muro
               ./nix-settings.nix
-              home-manager.nixosModules.home-manager
-              homestakeros-base.nixosModules.kexecTree
-              sops-nix.nixosModules.sops
+              inputs.home-manager.nixosModules.home-manager
+              inputs.homestakeros-base.nixosModules.kexecTree
+              inputs.sops-nix.nixosModules.sops
               {
                 home-manager.sharedModules = [
-                  nixvim.homeManagerModules.nixvim
+                  inputs.nixvim.homeManagerModules.nixvim
                 ];
                 home-manager.useGlobalPkgs = true;
               }
@@ -163,12 +148,12 @@
               ./home-manager/programs/neovim
               ./nixosConfigurations/starlabs
               ./nix-settings.nix
-              home-manager.nixosModules.home-manager
-              homestakeros-base.nixosModules.kexecTree
-              sops-nix.nixosModules.sops
+              inputs.home-manager.nixosModules.home-manager
+              inputs.homestakeros-base.nixosModules.kexecTree
+              inputs.sops-nix.nixosModules.sops
               {
                 home-manager.sharedModules = [
-                  nixvim.homeManagerModules.nixvim
+                  inputs.nixvim.homeManagerModules.nixvim
                 ];
                 home-manager.useGlobalPkgs = true;
               }
@@ -181,10 +166,10 @@
             modules = [
               ./nixosConfigurations/kotikone
               ./nix-settings.nix
-              homestakeros-base.nixosModules.kexecTree
+              inputs.homestakeros-base.nixosModules.kexecTree
               {
                 nixpkgs.overlays = [
-                  wayland.overlay
+                  inputs.wayland.overlay
                 ];
               }
             ];
@@ -207,11 +192,11 @@
               ./home-manager/programs/neovim
               ./darwinConfigurations/sandbox
               ./nix-settings.nix
-              home-manager.darwinModules.home-manager
+              inputs.home-manager.darwinModules.home-manager
               {
                 home-manager.sharedModules = [
-                  nixvim.homeManagerModules.nixvim
-                  sops-nix.homeManagerModules.sops
+                  inputs.nixvim.homeManagerModules.nixvim
+                  inputs.sops-nix.homeManagerModules.sops
                 ];
                 home-manager.useGlobalPkgs = true;
               }
@@ -224,8 +209,8 @@
             modules = [
               ./nixosConfigurations/matrix.ponkila.com
               ./home-manager/core.nix
-              home-manager.nixosModules.home-manager
-              homestakeros-base.nixosModules.kexecTree
+              inputs.home-manager.nixosModules.home-manager
+              inputs.homestakeros-base.nixosModules.kexecTree
               {
                 home-manager.useGlobalPkgs = true;
               }
@@ -235,15 +220,15 @@
         in
         {
 
-          nixosConfigurations = with nixpkgs.lib; {
+          nixosConfigurations = with inputs.nixpkgs.lib; {
             "matrix-ponkila-com" = nixosSystem matrix-ponkila-com;
             "muro" = nixosSystem muro;
             "starlabs" = nixosSystem starlabs;
-          } // (with nixpkgs-stable-patched.lib; {
+          } // (with inputs.nixpkgs-stable-patched.lib; {
             "kotikone" = nixosSystem kotikone;
           });
 
-          darwinConfigurations = with darwin.lib; {
+          darwinConfigurations = with inputs.darwin.lib; {
             "epsilon" = darwinSystem epsilon;
             "sandbox" = darwinSystem sandbox;
           };
