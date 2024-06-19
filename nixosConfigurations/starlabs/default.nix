@@ -372,18 +372,6 @@
     ];
   };
 
-  services.openssh = {
-    enable = true;
-    hostKeys = [{
-      path = "/home/juuso/.ssh/id_ed25519";
-      type = "ed25519";
-    }];
-    settings = {
-      PasswordAuthentication = false;
-      KbdInteractiveAuthentication = false;
-    };
-  };
-
   # programs to enable also for root
   programs = {
     fish.enable = true;
@@ -400,6 +388,7 @@
   services.getty.autologinUser = "juuso";
 
   sops = with config.users.users; {
+    age.keyFile = "${juuso.home}/.ssh/age";
     defaultSopsFile = ./secrets/default.yaml;
     secrets."ipfs/PrivKey" = { }; # cannot be used in derivation, but here for backup
     secrets."mbsync/ponkila" = {
