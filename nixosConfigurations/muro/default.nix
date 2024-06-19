@@ -60,7 +60,7 @@
         isNormalUser = true;
         uid = 1000;
         group = "juuso";
-        extraGroups = [ "wheel" "networkmanager" "video" "input" "acme" ];
+        extraGroups = [ "wheel" "networkmanager" "video" "input" "acme" "aria2" ];
         openssh.authorizedKeys.keys = [
           "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNMKgTTpGSvPG4p8pRUWg1kqnP9zPKybTHQ0+Q/noY5+M6uOxkLy7FqUIEFUT9ZS/fflLlC/AlJsFBU212UzobA= ssh@secretive.sandbox.local"
           "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJdbU8l66hVUAqk900GmEme5uhWcs05JMUQv2eD0j7MI juuso@starlabs"
@@ -202,6 +202,16 @@
 
       wantedBy = [ "multi-user.target" ];
     }
+    {
+      enable = true;
+
+      what = "/dev/disk/by-label/bakhal";
+      where = "/var/lib/aria2";
+      type = "btrfs";
+      options = "noatime,subvolid=284,compress=zstd";
+
+      wantedBy = [ "multi-user.target" ];
+    }
   ];
 
   services.plex = {
@@ -211,6 +221,16 @@
     dataDir = "/var/mnt/bakhal/Plex/.config/Library/Application Support";
   };
 
+  services.aria2 = {
+    enable = true;
+    rpcSecretFile = config.sops.secrets."aria2/rpc".path;
+    listenPortRange = [{
+      from = 6881;
+      to = 6999;
+    }];
+    rpcListenPort = 6800;
+    extraArguments = "--max-concurrent-downloads=100 --seed-ratio=3.0 --remote-time=true --console-log-level=warn";
+  };
 
   virtualisation.containers.enable = true;
   virtualisation.containers.containersConf.cniPlugins = [ pkgs.cni-plugin-flannel ];
@@ -329,6 +349,10 @@
 
   sops = with config.users.users; {
     defaultSopsFile = ./secrets/default.yaml;
+    secrets."aria2/rpc" = {
+      owner = aria2.name;
+      inherit (aria2) group;
+    };
     secrets."domain/cloudflare" = { };
     secrets."ipfs/PrivKey" = { };
     secrets."users/juuso" = { };
