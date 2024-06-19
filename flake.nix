@@ -62,7 +62,6 @@
           inherit (config.packages)
             age-plugin-fido2-hmac
             alsa-hwid
-            himalaya
             libedgetpu
             notmuch-vim;
         };
@@ -100,7 +99,6 @@
           "alsa-hwid" = pkgs.callPackage ./packages/alsa-hwid { };
           "savilerow" = pkgs.callPackage ./packages/savilerow { };
           "sounds" = inputs.sounds.packages.${system}.default;
-          "himalaya" = inputs.nixpkgs.legacyPackages.${system}.himalaya.override { buildFeatures = [ "notmuch" ]; };
           "neovim" = inputs.nixvim.legacyPackages.${system}.makeNixvimWithModule {
             inherit pkgs;
             module = {

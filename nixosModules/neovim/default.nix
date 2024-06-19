@@ -15,9 +15,6 @@
 
       let mapleader="\<SPACE>"
 
-      let g:himalaya_folder_picker = 'telescope'
-      let g:himalaya_folder_picker_telescope_preview = 1
-
       nnoremap <leader>ff :Telescope find_files<CR>
     '';
     extraConfigLua = '''';
@@ -125,7 +122,6 @@
     };
     extraPlugins = with pkgs.vimPlugins; [
       editorconfig-vim
-      himalaya-vim
     ];
   };
 }

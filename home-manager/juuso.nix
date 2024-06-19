@@ -68,23 +68,11 @@
     accounts.email.accounts = with config.home-manager.users.juuso; {
       "ponkila" = {
         primary = true;
-        himalaya = {
-          enable = true;
-          settings = {
-            notmuch = {
-              database-path = "${home.homeDirectory}/Maildir";
-            };
-            message.send.backend = "smtp";
-
-            folder.alias = {
-              inbox = "tag:inbox";
-            };
-          };
-        };
         mbsync = {
           enable = true;
           create = "maildir";
         };
+        neomutt.enable = true;
         notmuch.enable = true;
         address = "juuso@ponkila.com";
         userName = "juuso@ponkila.com";
@@ -108,25 +96,13 @@
         };
       };
       "mail.com" = {
-        himalaya = {
-          enable = true;
-          settings = {
-            notmuch = {
-              database-path = "${home.homeDirectory}/Maildir";
-            };
-            message.send.backend = "smtp";
-
-            folder.alias = {
-              inbox = "tag:inbox";
-            };
-          };
-        };
         mbsync = {
           enable = true;
           create = "both";
           expunge = "both";
           remove = "both";
         };
+        neomutt.enable = true;
         notmuch.enable = true;
         address = "juuso@mail.com";
         userName = "juuso@mail.com";
@@ -150,25 +126,13 @@
         };
       };
       "gmail" = {
-        himalaya = {
-          enable = true;
-          settings = {
-            notmuch = {
-              database-path = "${home.homeDirectory}/Maildir";
-            };
-            message.send.backend = "smtp";
-
-            folder.alias = {
-              inbox = "tag:inbox";
-            };
-          };
-        };
         mbsync = {
           enable = true;
           create = "both";
           expunge = "both";
           remove = "both";
         };
+        neomutt.enable = true;
         notmuch.enable = true;
         address = "haavijuu@gmail.com";
         userName = "haavijuu@gmail.com";
@@ -179,19 +143,6 @@
         flavor = "gmail.com";
       };
       "oxford" = {
-        himalaya = {
-          enable = true;
-          settings = {
-            notmuch = {
-              database-path = "${home.homeDirectory}/Maildir";
-            };
-            message.send.backend = "smtp";
-
-            folder.alias = {
-              inbox = "tag:inbox";
-            };
-          };
-        };
         mbsync = {
           enable = true;
           create = "maildir";
@@ -199,6 +150,7 @@
             CertificateFile = "${config.sops.secrets."davmail/oxford".path}";
           };
         };
+        neomutt.enable = true;
         notmuch.enable = true;
         address = "juuso.haavisto@reuben.ox.ac.uk";
         userName = "reub0117@OX.AC.UK";
@@ -224,11 +176,16 @@
 
     };
 
+    programs.alot.enable = true;
+    programs.neomutt = {
+      enable = true;
+      sidebar.enable = true;
+      vimKeys = true;
+    };
     programs.notmuch = {
       enable = true;
     };
     programs.mbsync.enable = true;
-    programs.himalaya.enable = true;
     programs.qcal = {
       enable = true;
       timezone = config.time.timeZone;

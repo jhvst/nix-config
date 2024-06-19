@@ -134,6 +134,7 @@
 
   environment.systemPackages = with pkgs; [
     fuse-overlayfs
+    w3m
     btrfs-progs
   ];
 
