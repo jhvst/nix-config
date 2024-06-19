@@ -211,9 +211,6 @@
     dataDir = "/var/mnt/bakhal/Plex/.config/Library/Application Support";
   };
 
-  virtualisation.podman.enable = true;
-  virtualisation.podman.defaultNetwork.settings.dns_enabled = true;
-  virtualisation.podman.extraPackages = [ pkgs.cni-plugin-flannel ];
 
   virtualisation.containers.enable = true;
   virtualisation.containers.containersConf.cniPlugins = [ pkgs.cni-plugin-flannel ];
