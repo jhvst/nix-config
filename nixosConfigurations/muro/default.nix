@@ -224,12 +224,15 @@
   services.aria2 = {
     enable = true;
     rpcSecretFile = config.sops.secrets."aria2/rpc".path;
-    listenPortRange = [{
-      from = 6881;
-      to = 6999;
-    }];
-    rpcListenPort = 6800;
-    extraArguments = "--max-concurrent-downloads=100 --seed-ratio=3.0 --remote-time=true --console-log-level=warn";
+    settings = {
+      console-log-level = "warn";
+      listen-port = [{ from = 6881; to = 6999; }];
+      max-concurrent-downloads = 100;
+      openPorts = true;
+      remote-time = true;
+      rpc-listen-port = 6800;
+      seed-ratio = 3.0;
+    };
   };
 
   virtualisation.containers.enable = true;
@@ -426,5 +429,5 @@
     };
   };
 
-  system.stateVersion = "23.11";
+  system.stateVersion = "24.05";
 }
