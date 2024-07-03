@@ -291,21 +291,11 @@
   hardware = {
     # enables WiFi and GPU drivers
     enableRedistributableFirmware = true;
-    opengl = {
-      # radv: an open-source Vulkan driver from freedesktop
-      driSupport = true;
-      driSupport32Bit = true;
-
-      setLdLibraryPath = true;
-
-      # amdvlk: an open-source driver from AMD
-      # for some reason integrated GPUs are not detected without amdvlk, and it is seemingly impossible to disable radv
-      extraPackages = [
-        pkgs.amdvlk
-      ];
-      extraPackages32 = [
-        pkgs.driversi686Linux.amdvlk
-      ];
+    graphics = {
+      enable = true; # radv: an open-source Vulkan driver from freedesktop
+      extraPackages = [ pkgs.amdvlk ]; # amdvlk: an open-source driver from AMD
+      # https://github.com/NixOS/nixpkgs/pull/320228
+      # setLdLibraryPath = true;
     };
 
     ##
