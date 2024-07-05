@@ -102,26 +102,142 @@
 
   };
 
-  networking = {
-    hostName = "starlabs";
-    nameservers = [
-      "1.1.1.1"
-      "1.0.0.1"
-      "2606:4700:4700::1111"
-      "2606:4700:4700::1001"
-      "192.168.17.1"
-      "2001:470:27:6a9:8000::1"
-    ];
-    useDHCP = true;
-    wireless.iwd.enable = true;
-    stevenblack.enable = true;
-
-    wg-quick.interfaces = {
-      "ponkila".configFile = "/etc/wireguard/ponkila.conf";
-      "dinar".configFile = "/etc/wireguard/dinar.conf";
-      "rut0".configFile = "/etc/wireguard/rut0.conf";
+  systemd.network = {
+    enable = true;
+    wait-online.anyInterface = true;
+    netdevs = {
+      "99-ath0" = {
+        netdevConfig = {
+          Kind = "wireguard";
+          Name = "ath0";
+        };
+        wireguardConfig.PrivateKeyFile = config.sops.secrets."wireguard/ath0".path;
+        wireguardPeers = [{
+          PublicKey = "TCLvI4LY2KfU5eXdbcFYC+PCX1OzrB8JX2hOdtfZ8WE=";
+          AllowedIPs = [
+            "192.168.17.0/24"
+            "192.168.76.0/24"
+            "2001:470:28:6a9:8000::0/65"
+          ];
+          Endpoint = "ath0.ponkila.intra:51820";
+        }];
+      };
+      "99-dinar" = {
+        netdevConfig = {
+          Kind = "wireguard";
+          Name = "dinar";
+        };
+        wireguardConfig.PrivateKeyFile = config.sops.secrets."wireguard/dinar".path;
+        wireguardPeers = [{
+          PublicKey = "s7XsWWxjl8zi6DTx4KkhjmI1jVseV9KVlc+cInFNyzE=";
+          AllowedIPs = [ "192.168.100.0/24" ];
+          Endpoint = [ "dinar.majbacka.intra:51820" ];
+          PersistentKeepalive = 25;
+        }];
+      };
+      "99-qmi0" = {
+        netdevConfig = {
+          Kind = "wireguard";
+          Name = "qmi0";
+        };
+        wireguardConfig.PrivateKeyFile = config.sops.secrets."wireguard/qmi0".path;
+        wireguardPeers = [{
+          PublicKey = "EuwxoYfYJaHX37CdjJgGpYTBCwUee/vZLZdn38M1imc=";
+          AllowedIPs = [ "192.168.77.0/24" "192.168.18.0/24" ];
+          Endpoint = "qmi0.ponkila.intra:51820";
+          PersistentKeepalive = 25;
+        }];
+      };
+    };
+    networks = {
+      "10-wan" = {
+        matchConfig.Name = "wlan0";
+        networkConfig = {
+          DHCP = "ipv4";
+          IPv6AcceptRA = true;
+        };
+        dns = [ "127.0.0.1:1053" ];
+        linkConfig.RequiredForOnline = "routable";
+      };
+      "99-ath0" = {
+        matchConfig.Name = "ath0";
+        address = [ "192.168.76.4/32" "2001:470:28:6a9:8000::4/128" ];
+        dns = [ "192.168.76.1" "2001:470:28:6a9:8000::1" ];
+        domains = [ "ponkila.periferia" ];
+        linkConfig.ActivationPolicy = "manual";
+        routes = [
+          {
+            Gateway = "192.168.76.1";
+            GatewayOnLink = true;
+            Destination = "192.168.76.0/24";
+          }
+          {
+            Gateway = "192.168.76.1";
+            GatewayOnLink = true;
+            Destination = "192.168.17.0/24";
+          }
+          {
+            Gateway = "2001:470:28:6a9:8000::1";
+            GatewayOnLink = true;
+            Destination = "2001:470:28:6a9:8000::0/65";
+          }
+        ];
+      };
+      "99-dinar" = {
+        matchConfig.Name = "dinar";
+        address = [ "192.168.100.101/32" ];
+        linkConfig.ActivationPolicy = "manual";
+        routes = [{
+          Gateway = "192.168.100.1";
+          GatewayOnLink = true;
+          Destination = "192.168.100.0/24";
+        }];
+      };
+      "99-qmi0" = {
+        matchConfig.Name = "qmi0";
+        address = [ "192.168.77.200/32" ];
+        linkConfig.ActivationPolicy = "manual";
+        routes = [
+          {
+            Gateway = "192.168.77.1";
+            GatewayOnLink = true;
+            Destination = "192.168.77.0/24";
+          }
+          {
+            Gateway = "192.168.77.1";
+            GatewayOnLink = true;
+            Destination = "192.168.18.0/24";
+          }
+        ];
+      };
     };
   };
+  networking = {
+    domain = "juuso.dev";
+    firewall.interfaces."ath0".allowedTCPPorts = [ 4001 ];
+    hostName = "starlabs";
+    nameservers = [ "127.0.0.1:1053#starlabs.juuso.dev" ];
+    nftables.enable = true;
+    stevenblack.enable = true;
+    useDHCP = false;
+    wireless.iwd.enable = true;
+  };
+  services.resolved.dnsovertls = "true";
+  services.coredns = {
+    enable = true;
+    config = ''
+      tls://.:1053 {
+        tls /var/lib/acme/starlabs.juuso.dev/cert.pem /var/lib/acme/starlabs.juuso.dev/key.pem
+        import ../../run/secrets/coredns/rewrites
+        forward . tls://1.1.1.1 {
+          tls_servername cloudflare-dns.com
+          health_check 5s
+        }
+        cache 30
+      }
+    '';
+  };
+  systemd.services."coredns".serviceConfig.Group = "acme";
 
   time.timeZone = "Europe/London";
 
@@ -131,7 +247,7 @@
       isNormalUser = true;
       uid = 1000;
       group = "juuso";
-      extraGroups = [ "wheel" "networkmanager" "video" "input" "pipewire" "ipfs" ];
+      extraGroups = [ "wheel" "video" "input" "pipewire" "ipfs" "acme" ];
       openssh.authorizedKeys.keys = [
         "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNMKgTTpGSvPG4p8pRUWg1kqnP9zPKybTHQ0+Q/noY5+M6uOxkLy7FqUIEFUT9ZS/fflLlC/AlJsFBU212UzobA= ssh@secretive.sandbox.local"
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHDq7kUCTPNw8SPNbGsNslECroKNljRGZk9fIBIEzrvI epsilon"
@@ -144,6 +260,14 @@
   };
 
   security = {
+    acme = {
+      acceptTerms = true;
+      defaults.email = "juuso@ponkila.com";
+      certs."starlabs.juuso.dev" = {
+        dnsProvider = "cloudflare";
+        environmentFile = config.sops.secrets."domain/cloudflare/juuso.dev".path;
+      };
+    };
     sudo.enable = true;
     pam.services = {
       login.u2fAuth = true;
@@ -286,6 +410,15 @@
 
       wantedBy = [ "multi-user.target" ];
     }
+    {
+      enable = true;
+      what = "/dev/sda2";
+      where = "/var/lib/acme";
+      options = "subvolid=282";
+      type = "btrfs";
+
+      wantedBy = [ "multi-user.target" ];
+    }
   ];
 
   hardware = {
@@ -380,6 +513,12 @@
   sops = with config.users.users; {
     age.keyFile = "${juuso.home}/.ssh/age";
     defaultSopsFile = ./secrets/default.yaml;
+    secrets."coredns/rewrites" = {
+      owner = acme.name;
+      inherit (acme) group;
+      mode = "0440";
+    };
+    secrets."domain/cloudflare/juuso.dev" = { };
     secrets."ipfs/PrivKey" = { }; # cannot be used in derivation, but here for backup
     secrets."mbsync/ponkila" = {
       owner = juuso.name;
@@ -400,6 +539,18 @@
     secrets."davmail/oxford" = {
       owner = juuso.name;
       inherit (juuso) group;
+    };
+    secrets."wireguard/ath0" = {
+      owner = systemd-network.name;
+      inherit (systemd-network) group;
+    };
+    secrets."wireguard/qmi0" = {
+      owner = systemd-network.name;
+      inherit (systemd-network) group;
+    };
+    secrets."wireguard/dinar" = {
+      owner = systemd-network.name;
+      inherit (systemd-network) group;
     };
   };
 
