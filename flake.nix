@@ -17,7 +17,6 @@
   };
 
   inputs = {
-    age-plugin-fido2-hmac.url = "github:jhvst/nix-config?dir=packages/age-plugin-fido2-hmac";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     darwin.url = "github:lnl7/nix-darwin";
     flake-parts.url = "github:hercules-ci/flake-parts";
@@ -60,7 +59,6 @@
 
         overlayAttrs = {
           inherit (config.packages)
-            age-plugin-fido2-hmac
             alsa-hwid
             libedgetpu
             notmuch-vim;
@@ -95,7 +93,6 @@
         };
 
         packages = {
-          "age-plugin-fido2-hmac" = inputs.age-plugin-fido2-hmac.packages.${system}.default;
           "alsa-hwid" = pkgs.callPackage ./packages/alsa-hwid { };
           "savilerow" = pkgs.callPackage ./packages/savilerow { };
           "sounds" = inputs.sounds.packages.${system}.default;
