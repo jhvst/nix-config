@@ -46,10 +46,12 @@
         main = {
           term = "xterm-256color";
           font = "BlexMono Nerd Font Mono:size=11";
-          dpi-aware = "yes";
         };
         mouse = {
           hide-when-typing = "yes";
+        };
+        url = {
+          launch = "${pkgs.nix} run nixpkgs#firefox -- ";
         };
       };
     };
@@ -407,7 +409,7 @@
       isNormalUser = true;
       uid = 1000;
       group = "juuso";
-      extraGroups = [ "wheel" "video" "input" "pipewire" "ipfs" "acme" ];
+      extraGroups = [ "wheel" "video" "input" "ipfs" "acme" ];
       openssh.authorizedKeys.keys = [
         "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNMKgTTpGSvPG4p8pRUWg1kqnP9zPKybTHQ0+Q/noY5+M6uOxkLy7FqUIEFUT9ZS/fflLlC/AlJsFBU212UzobA= ssh@secretive.sandbox.local"
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHDq7kUCTPNw8SPNbGsNslECroKNljRGZk9fIBIEzrvI epsilon"
@@ -441,18 +443,24 @@
     shells = [ pkgs.fish ];
     systemPackages = with pkgs; [
       age-plugin-fido2-hmac
+      beeper
       btrfs-progs
       cryptsetup
+      file
       gnupg
       iamb # matrix client
-      nix-output-monitor
-      nix-update
       passage
-      pinentry
+      pinentry-curses
       sioyek
       sops
+      trezor-agent
+      trezorctl
+      waypipe
       wl-clipboard
       xdg-utils # open command
+      xorg.xkbcomp
+      yazi
+      yubikey-manager
     ];
   };
 
@@ -602,11 +610,11 @@
     ##  [bluetooth] # connect [hex-address]
     ## https://gitlab.freedesktop.org/pipewire/pipewire/-/wikis/LE-Audio-+-LC3-support
     bluetooth.enable = true;
-    # Xbox controller
-    xpadneo.enable = true;
   };
 
   services.fprintd.enable = true;
+
+  services.dictd.enable = true;
 
   services.kubo = {
     enable = true;
@@ -643,11 +651,8 @@
   services.pipewire = {
     enable = true;
     alsa.enable = true;
-    alsa.support32Bit = true;
     pulse.enable = true;
   };
-
-  ### System APIs
   services.dbus.enable = true;
 
   services.timesyncd.enable = false;
@@ -663,15 +668,14 @@
   # programs to enable also for root
   programs = {
     fish.enable = true;
+    gamemode.enable = false;
     git.enable = true;
     gnupg.agent.pinentryPackage = pkgs.pinentry-curses;
+    light.enable = true;
+    steam.enable = false;
     sway.enable = true;
     vim.defaultEditor = true;
-    steam.enable = false;
   };
-
-  # usbmuxd makes the iPhone pairable via USB cable
-  services.usbmuxd.enable = true;
 
   services.getty.autologinUser = "juuso";
 
@@ -731,7 +735,6 @@
     openFirewall = true;
   };
 
-  services.power-profiles-daemon.enable = true;
 
   system.stateVersion = "24.05";
 
