@@ -59,8 +59,7 @@
 
         overlayAttrs = {
           inherit (config.packages)
-            libedgetpu
-            notmuch-vim;
+            libedgetpu;
         };
 
         treefmt.config = {
