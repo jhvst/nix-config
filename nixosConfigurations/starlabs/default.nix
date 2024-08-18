@@ -105,6 +105,15 @@
   systemd.network = {
     enable = true;
     wait-online.anyInterface = true;
+    links = {
+      "20-iwd" = {
+        matchConfig.Type = "wlan";
+        linkConfig = {
+          Name = "wlan0";
+          MACAddressPolicy = "random";
+        };
+      };
+    };
     netdevs = {
       "99-ath0" = {
         netdevConfig = {
@@ -152,8 +161,10 @@
     networks = {
       "10-wan" = {
         matchConfig.Name = "wlan0";
+        dhcpV4Config.Anonymize = true;
         networkConfig = {
           DHCP = "ipv4";
+          DNSOverTLS = true;
           IPv6AcceptRA = true;
         };
         dns = [ "127.0.0.1:1053" ];
@@ -222,7 +233,7 @@
     useDHCP = false;
     wireless.iwd.enable = true;
   };
-  services.resolved.dnsovertls = "true";
+  services.resolved.dnsovertls = "opportunistic";
   services.coredns = {
     enable = true;
     config = ''
