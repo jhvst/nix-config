@@ -1,6 +1,0 @@
-
-xlify:
-  cjxl IMG_1147.JPG IMG_1147.jxl
-
-copy-exif:
-  exiftool -TagsFromFile IMG_1147.JPG IMG_1147.jxl
