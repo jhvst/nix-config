@@ -54,7 +54,156 @@
       };
     };
 
-    programs.waybar.enable = true;
+    programs.yambar = {
+      enable = true;
+      settings =
+        let
+          green = "2ecc71ff";
+          red = "dd5555ff";
+        in
+        {
+          bar = {
+            location = "top";
+            height = 26;
+            background = "00000066";
+
+            left = [
+              {
+                i3 = rec {
+                  right-spacing = 6;
+                  persistent = [ "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" ];
+                  content =
+                    let
+                      workspace = n: {
+                        name = n;
+                        value = let s = { text = if n == "10" then "0" else n; margin = 8; }; in {
+                          map = {
+                            default.string = s;
+                            conditions = {
+                              empty.string = s // {
+                                foreground = "ffffff77";
+                              };
+                              focused.string = s // {
+                                deco.underline = {
+                                  size = 2;
+                                  color = "ffffffff";
+                                };
+                              };
+                              urgent.string = s // {
+                                deco.background.color = "dd5555ff";
+                              };
+                            };
+                          };
+                        };
+                      };
+                    in
+                    builtins.listToAttrs (map workspace persistent);
+                };
+              }
+            ];
+            center = [
+              {
+                label = {
+                  content = [{
+                    string.text = config.networking.hostName;
+                  }];
+                };
+              }
+            ];
+            right = [
+              {
+                script = {
+                  path = pkgs.writeScript "test.sh" ''
+                    #!${pkgs.stdenv.shell}
+                    STATUS=$(${pkgs.curl}/bin/curl -s -m 3 http://192.168.100.10:5052/eth/v1/node/syncing | ${pkgs.jq}/bin/jq '.data.is_optimistic')
+                    echo "test|string|$STATUS"
+                    echo ""
+                  '';
+                  poll-interval = 11000;
+                  args = [ ];
+                  content = [{
+                    map = let host = "Pα"; in {
+                      default.string = {
+                        deco.background.color = red;
+                        text = host;
+                      };
+                      conditions = {
+                        "test == false" = {
+                          string = {
+                            deco.background.color = green;
+                            text = host;
+                          };
+                        };
+                      };
+                    };
+                  }];
+                };
+              }
+              {
+                script = {
+                  path = pkgs.writeScript "test.sh" ''
+                    #!${pkgs.stdenv.shell}
+                    STATUS=$(${pkgs.curl}/bin/curl -s -m 3 http://192.168.100.33:5052/eth/v1/node/syncing | ${pkgs.jq}/bin/jq '.data.is_optimistic')
+                    echo "test|string|$STATUS"
+                    echo ""
+                  '';
+                  poll-interval = 11000;
+                  args = [ ];
+                  content = [{
+                    map = let host = "Dα"; in {
+                      default.string = {
+                        deco.background.color = red;
+                        text = host;
+                      };
+                      conditions = {
+                        "test == false" = {
+                          string = {
+                            deco.background.color = green;
+                            text = host;
+                          };
+                        };
+                      };
+                    };
+                  }];
+                };
+              }
+              {
+                mem = {
+                  poll-interval = 2500;
+                  content = [{
+                    string.text = "{free:mb}MB";
+                  }];
+                };
+              }
+              {
+                battery = {
+                  name = "BAT0";
+                  poll-interval = 30000;
+                  content = [
+                    {
+                      string.text = "{capacity}%";
+                    }
+                  ];
+                };
+              }
+              {
+                clock = {
+                  time-format = "%H:%M:%S";
+                  date-format = "%A %-d of %b %Y %z";
+                  content = [
+                    {
+                      string.text = "{date}";
+                    }
+                    {
+                      string.text = "{time}";
+                    }
+                  ];
+                };
+              }
+            ];
+          };
+        };
+    };
     programs.swaylock.enable = true;
 
     wayland.windowManager.sway = {
@@ -62,7 +211,7 @@
       config = {
         terminal = "foot";
         bars = [{
-          command = "${pkgs.waybar}/bin/waybar";
+          command = "${pkgs.yambar}/bin/yambar";
           fonts = {
             names = [ "BlexMono Nerd Font Mono" ];
             size = 11.0;
