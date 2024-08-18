@@ -24,6 +24,17 @@
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       ];
 
+      # Enables local builds, but remote targets
+      # Suppose we run the following on `starlabs`:
+      # $ nixos-rebuild test --flake .#muro --target-host juuso@192.168.76.40 --use-remote-sudo
+      # This:
+      # 1. builds the host muro on our local computer
+      # 2. transfers the derivations to muro
+      # 3. activates the updates configuration on muro
+      # You can change the `test` into `build` to do only 1 and 2.
+      # To just do the step 1, run:
+      # $ nix build .#muro
+      trusted-users = [ "root" "@wheel" ];
     };
 
     buildMachines = [ ];

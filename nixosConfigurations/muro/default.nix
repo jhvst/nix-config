@@ -11,11 +11,6 @@
     neededForBoot = true;
   };
 
-  # Allows this server to be used as a remote builder
-  nix.settings.trusted-users = [
-    "root"
-    "@wheel"
-  ];
 
   networking = {
     hostName = "muro";
