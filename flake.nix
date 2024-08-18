@@ -235,14 +235,12 @@
             specialArgs = { inherit inputs outputs; };
             system = "x86_64-linux";
             modules = [
+              ./nix-settings.nix
               ./nixosConfigurations/matrix.ponkila.com
-              ./home-manager/core.nix
-              inputs.home-manager.nixosModules.home-manager
               inputs.agenix-rekey.nixosModules.default
               inputs.agenix.nixosModules.default
               inputs.homestakeros-base.nixosModules.kexecTree
               {
-                home-manager.useGlobalPkgs = true;
                 age.rekey = {
                   localStorageDir = ./nixosConfigurations/matrix.ponkila.com/secrets/agenix-rekey;
                   masterIdentities = [{
