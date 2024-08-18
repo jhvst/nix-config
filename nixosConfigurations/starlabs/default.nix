@@ -587,6 +587,15 @@
 
       wantedBy = [ "multi-user.target" ];
     }
+    {
+      enable = true;
+      what = "/dev/sda2";
+      where = "/home/juuso/.local/share/sioyek";
+      options = "subvolid=283";
+      type = "btrfs";
+
+      wantedBy = [ "multi-user.target" ];
+    }
   ];
 
   hardware = {
