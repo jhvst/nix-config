@@ -624,10 +624,15 @@
         MaxCacheTTL = "1m";
       };
       Peering = {
-        Peers = [{
-          ID = "12D3KooWPpN7WoKZyBsYBVfwUDBtFaU22PJ5PgSaQRBx6gvn4Fg7";
-          Addrs = [ "/ip4/192.168.76.40/tcp/4001" ];
-        }];
+        Peers = [
+          {
+            ID = "12D3KooWPpN7WoKZyBsYBVfwUDBtFaU22PJ5PgSaQRBx6gvn4Fg7";
+            Addrs = [ "/ip4/192.168.76.40/tcp/4001" ];
+          }
+          {
+            ID = "12D3KooWHfTqpJGCEDDetg9h75dx7b9X4cUdLbi9z1899wFrWYeh";
+          }
+        ];
       };
     };
   };
