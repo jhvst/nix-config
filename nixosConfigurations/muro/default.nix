@@ -12,6 +12,18 @@
   };
 
 
+  systemd.network = {
+    enable = true;
+    networks = {
+      "10-wan" = {
+        linkConfig.RequiredForOnline = "routable";
+        matchConfig.Name = "enp5s0";
+        networkConfig = {
+          DHCP = "ipv4";
+        };
+      };
+    };
+  };
   networking = {
     hostName = "muro";
     nat = {
@@ -25,6 +37,7 @@
     wg-quick.interfaces = {
       ponkila.configFile = config.sops.secrets."wireguard/ponkila".path;
     };
+    useDHCP = false;
   };
   time.timeZone = "Europe/Helsinki";
 

@@ -30,7 +30,29 @@
     enable = true;
     settings.PasswordAuthentication = false;
   };
-  networking.firewall.enable = false;
+
+  systemd.network = {
+    enable = true;
+    networks = {
+      "10-wan" = {
+        address = [ "2a01:4f9:c012:ac5b::1/64" ];
+        linkConfig.RequiredForOnline = "routable";
+        matchConfig.Name = "enp1s0";
+        networkConfig = {
+          DHCP = "ipv4";
+        };
+        routes = [
+          {
+            Gateway = "fe80::1";
+          }
+        ];
+      };
+    };
+  };
+  networking = {
+    firewall.enable = false;
+    useDHCP = false;
+  };
 
   services.nginx = {
     enable = true;
