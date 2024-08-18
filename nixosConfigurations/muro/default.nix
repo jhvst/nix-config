@@ -133,15 +133,10 @@
     btrfs-progs
   ];
 
-  hardware.bluetooth.enable = true;
-
-  services.pipewire.enable = true;
-
-  ## Window manager
+  hardware.bluetooth.enable = false;
+  services.pipewire.enable = false;
+  hardware.enableRedistributableFirmware = false;
   services.getty.autologinUser = "juuso";
-
-  ## Firmware blobs
-  hardware.enableRedistributableFirmware = true;
 
   systemd.mounts = [
     {
