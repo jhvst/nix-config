@@ -59,7 +59,6 @@
 
         overlayAttrs = {
           inherit (config.packages)
-            alsa-hwid
             libedgetpu
             notmuch-vim;
         };
@@ -93,7 +92,6 @@
         };
 
         packages = {
-          "alsa-hwid" = pkgs.callPackage ./packages/alsa-hwid { };
           "savilerow" = pkgs.callPackage ./packages/savilerow { };
           "sounds" = inputs.sounds.packages.${system}.default;
           "neovim" = inputs.nixvim.legacyPackages.${system}.makeNixvimWithModule {
