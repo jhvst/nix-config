@@ -72,7 +72,6 @@
           enable = true;
           create = "maildir";
         };
-        neomutt.enable = true;
         notmuch.enable = true;
         address = "juuso@ponkila.com";
         userName = "juuso@ponkila.com";
@@ -102,7 +101,6 @@
           expunge = "both";
           remove = "both";
         };
-        neomutt.enable = true;
         notmuch.enable = true;
         address = "juuso@mail.com";
         userName = "juuso@mail.com";
@@ -132,7 +130,6 @@
           expunge = "both";
           remove = "both";
         };
-        neomutt.enable = true;
         notmuch.enable = true;
         address = "haavijuu@gmail.com";
         userName = "haavijuu@gmail.com";
@@ -150,7 +147,6 @@
             CertificateFile = "${config.sops.secrets."davmail/oxford".path}";
           };
         };
-        neomutt.enable = true;
         notmuch.enable = true;
         address = "juuso.haavisto@reuben.ox.ac.uk";
         userName = "reub0117@OX.AC.UK";
@@ -177,11 +173,6 @@
     };
 
     programs.alot.enable = true;
-    programs.neomutt = {
-      enable = true;
-      sidebar.enable = true;
-      vimKeys = true;
-    };
     programs.notmuch = {
       enable = true;
     };
