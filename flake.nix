@@ -17,6 +17,9 @@
   };
 
   inputs = {
+    agenix-rekey.inputs.nixpkgs.follows = "nixpkgs";
+    agenix-rekey.url = "github:oddlama/agenix-rekey";
+    agenix.url = "github:ryantm/agenix";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     darwin.url = "github:lnl7/nix-darwin";
     flake-parts.url = "github:hercules-ci/flake-parts";
@@ -35,6 +38,7 @@
     treefmt-nix.url = "github:numtide/treefmt-nix";
     wayland.inputs.nixpkgs.follows = "nixpkgs";
     wayland.url = "github:nix-community/nixpkgs-wayland";
+    wirenix.url = "sourcehut:~msalerno/wirenix";
   };
 
   outputs = { self, ... }@inputs:
@@ -43,6 +47,7 @@
 
       systems = inputs.nixpkgs.lib.systems.flakeExposed;
       imports = [
+        inputs.agenix-rekey.flakeModule
         inputs.flake-parts.flakeModules.easyOverlay
         inputs.treefmt-nix.flakeModule
       ];
@@ -77,6 +82,7 @@
         devShells = {
           default = pkgs.mkShell {
             nativeBuildInputs = with pkgs; [
+              config.agenix-rekey.package
               cpio
               git
               jq
@@ -123,7 +129,17 @@
               inputs.home-manager.nixosModules.home-manager
               inputs.homestakeros-base.nixosModules.kexecTree
               inputs.sops-nix.nixosModules.sops
+              inputs.agenix-rekey.nixosModules.default
+              inputs.agenix.nixosModules.default
               {
+                age.rekey = {
+                  localStorageDir = ./nixosConfigurations/muro/secrets/agenix-rekey;
+                  masterIdentities = [{
+                    identity = ./nixosModules/agenix-rekey/masterIdentities/juuso.hmac;
+                    pubkey = "age12lz3jyd2weej5c4mgmwlwsl0zmk2tdgvtflctgryx6gjcaf3yfsqgt7rnz";
+                  }];
+                  storageMode = "local";
+                };
                 home-manager.sharedModules = [
                   inputs.nixvim.homeManagerModules.nixvim
                 ];
@@ -143,7 +159,17 @@
               inputs.home-manager.nixosModules.home-manager
               inputs.homestakeros-base.nixosModules.kexecTree
               inputs.sops-nix.nixosModules.sops
+              inputs.agenix-rekey.nixosModules.default
+              inputs.agenix.nixosModules.default
               {
+                age.rekey = {
+                  localStorageDir = ./nixosConfigurations/starlabs/secrets/agenix-rekey;
+                  masterIdentities = [{
+                    identity = ./nixosModules/agenix-rekey/masterIdentities/juuso.hmac;
+                    pubkey = "age12lz3jyd2weej5c4mgmwlwsl0zmk2tdgvtflctgryx6gjcaf3yfsqgt7rnz";
+                  }];
+                  storageMode = "local";
+                };
                 home-manager.sharedModules = [
                   inputs.nixvim.homeManagerModules.nixvim
                 ];
@@ -156,10 +182,20 @@
             system = "x86_64-linux";
             specialArgs = { inherit inputs outputs; };
             modules = [
-              ./nixosConfigurations/kotikone
               ./nix-settings.nix
+              ./nixosConfigurations/kotikone
+              inputs.agenix.nixosModules.default
+              inputs.agenix-rekey.nixosModules.default
               inputs.homestakeros-base.nixosModules.kexecTree
               {
+                age.rekey = {
+                  localStorageDir = ./nixosConfigurations/kotikone/secrets/agenix-rekey;
+                  masterIdentities = [{
+                    identity = ./nixosModules/agenix-rekey/masterIdentities/juuso.hmac;
+                    pubkey = "age12lz3jyd2weej5c4mgmwlwsl0zmk2tdgvtflctgryx6gjcaf3yfsqgt7rnz";
+                  }];
+                  storageMode = "local";
+                };
                 nixpkgs.overlays = [
                   inputs.wayland.overlay
                 ];
@@ -202,9 +238,19 @@
               ./nixosConfigurations/matrix.ponkila.com
               ./home-manager/core.nix
               inputs.home-manager.nixosModules.home-manager
+              inputs.agenix-rekey.nixosModules.default
+              inputs.agenix.nixosModules.default
               inputs.homestakeros-base.nixosModules.kexecTree
               {
                 home-manager.useGlobalPkgs = true;
+                age.rekey = {
+                  localStorageDir = ./nixosConfigurations/matrix.ponkila.com/secrets/agenix-rekey;
+                  masterIdentities = [{
+                    identity = ./nixosModules/agenix-rekey/masterIdentities/juuso.hmac;
+                    pubkey = "age12lz3jyd2weej5c4mgmwlwsl0zmk2tdgvtflctgryx6gjcaf3yfsqgt7rnz";
+                  }];
+                  storageMode = "local";
+                };
               }
             ];
           };

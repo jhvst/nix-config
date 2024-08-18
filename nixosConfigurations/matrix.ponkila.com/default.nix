@@ -1,5 +1,12 @@
 { config, pkgs, lib, ... }: with lib; {
 
+  age = {
+    rekey = {
+      agePlugins = [ pkgs.age-plugin-fido2-hmac ];
+      hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKaz4+XGF+ivhE1gD6tMe9oStYR4d4rPsIgDDEQ/uElM";
+    };
+  };
+
   users.users.juuso = {
     isNormalUser = true;
     group = "juuso";
