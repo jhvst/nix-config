@@ -57,36 +57,72 @@
     };
   };
   networking = {
-    firewall.enable = false;
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ 22 443 8448 ];
+    };
     useDHCP = false;
   };
 
-  services.nginx = {
+  services.traefik = {
     enable = true;
-    config = ''
-      events {
-        worker_connections 1024;
-      }
+    staticConfigOptions = {
+      entryPoints = {
+        matrix_clients = {
+          address = ":443";
+        };
+        matrix_servers = {
+          address = ":8448";
+        };
+        metrics = {
+          address = ":8082";
+        };
+      };
+      metrics = {
+        prometheus = {
+          entryPoint = "metrics";
+        };
+      };
+    };
+    dynamicConfigOptions = {
+      tcp = {
+        routers = {
+          router1 = {
+            rule = "HostSNI(`matrix.ponkila.com`)";
+            service = "service1";
+            tls = {
+              passthrough = true;
+            };
+          };
+        };
+        services = {
+          service1 = {
+            loadBalancer = {
+              servers = [
+                {
+                  address = "muro.hetzner:8008";
+                }
+              ];
+            };
+          };
+        };
+      };
+    };
+  };
 
-      stream {
-        upstream muro {
-          server muro.ponkila.periferia:8008;
-        }
+  services.netdata = {
+    enable = true;
+    configDir = {
+      "go.d/prometheus.conf" = pkgs.writeText "go.d/prometheus.conf" ''
+        jobs:
+          - name: traefik
+            url: http://localhost:8082/metrics
+      '';
+    };
+  };
 
-        map $ssl_preread_server_name $upstream {
-          hostnames;
-          default muro;
-        }
+  services.getty.autologinUser = "juuso";
 
-        server {
-          listen 0.0.0.0:443;
-          listen 0.0.0.0:8448;
-
-          ssl_preread on;
-          proxy_pass $upstream;
-        }
-      }
-    '';
   };
 
   system.stateVersion = "24.05";
