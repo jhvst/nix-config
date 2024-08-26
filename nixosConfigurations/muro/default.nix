@@ -27,6 +27,7 @@
         networkConfig = {
           DHCP = "ipv4";
         };
+        dns = [ "127.0.0.1:1053" ];
       };
     };
   };
@@ -39,6 +40,7 @@
       # Lazy IPv6 connectivity for the container
       enableIPv6 = true;
     };
+    nameservers = [ "127.0.0.1:1053" ];
     firewall.enable = false;
     wg-quick.interfaces = {
       ponkila.configFile = config.sops.secrets."wireguard/ponkila".path;
@@ -46,6 +48,17 @@
     useDHCP = false;
   };
   time.timeZone = "Europe/Helsinki";
+  services.coredns = {
+    enable = true;
+    config = ''
+      .:1053 {
+        forward . 1.1.1.1 {
+          health_check 5s
+        }
+        cache 30
+      }
+    '';
+  };
 
   boot.kernelParams = [
     "boot.shell_on_fail"
