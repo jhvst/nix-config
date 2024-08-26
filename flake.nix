@@ -122,6 +122,7 @@
             system = "x86_64-linux";
             specialArgs = { inherit inputs outputs; };
             modules = [
+              ./home-manager/email.nix
               ./home-manager/juuso.nix
               ./home-manager/programs/neovim
               ./nixosConfigurations/muro
