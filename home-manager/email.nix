@@ -1,11 +1,10 @@
 { config
-, lib
 , ...
 }:
 {
 
-  home-manager.users.juuso = { pkgs, ... }: {
-    
+  home-manager.users.juuso = _: {
+
     accounts.email.accounts = with config.home-manager.users.juuso; {
       "ponkila" = {
         primary = true;
@@ -110,7 +109,6 @@
           };
         };
       };
-
     };
 
     programs.alot.enable = true;
@@ -118,5 +116,7 @@
       enable = true;
     };
     programs.mbsync.enable = true;
-   
+
+  };
+
 }

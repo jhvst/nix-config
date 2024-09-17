@@ -344,17 +344,16 @@
 
   services.samba = {
     enable = true;
-    securityType = "user";
-    extraConfig = ''
-      workgroup = WORKGROUP
-      server string = muro
-      netbios name = muro
-      security = user
-      hosts allow = 0.0.0.0/0
-      guest account = nobody
-      map to guest = bad user
-    '';
-    shares = {
+    settings = {
+      global = {
+        "workgroup" = "WORKGROUP";
+        "server string" = "muro";
+        "netbios name" = "muro";
+        "hosts allow" = "0.0.0.0/0";
+        "guest account" = "nobody";
+        "map to guest" = "bad user";
+        security = "user";
+      };
       sean = {
         path = "/var/mnt/bakhal/samba/mount/sean";
         browseable = "yes";
