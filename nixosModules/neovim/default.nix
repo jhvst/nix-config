@@ -49,7 +49,9 @@
       };
       treesitter = {
         enable = true;
-        indent = true;
+        settings = {
+          indent.enable = true;
+        };
         nixvimInjections = true;
         grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
           bash
@@ -99,25 +101,30 @@
       };
       lualine = {
         enable = true;
-        theme = "base16";
-        iconsEnabled = false;
-        sections = {
-          lualine_a = [ "" ];
-          lualine_b = [ "" ];
-          lualine_c = [ "location" { name = "filename"; extraConfig.path = 1; } "filetype" ];
-          lualine_x = [ "diagonostics" ];
-          lualine_y = [ "" ];
-          lualine_z = [ "mode" ];
-        };
-        componentSeparators = {
-          left = "";
-          right = "";
-        };
-        sectionSeparators = {
-          left = "";
-          right = "";
+        settings = {
+          options = {
+            theme = "base16";
+            iconsEnabled = false;
+          };
+          sections = {
+            lualine_a = [ "" ];
+            lualine_b = [ "" ];
+            lualine_c = [ "location" { __unkeyed-1 = "filename"; path = 1; } "filetype" ];
+            lualine_x = [ "diagonostics" ];
+            lualine_y = [ "" ];
+            lualine_z = [ "mode" ];
+          };
+          componentSeparators = {
+            left = "";
+            right = "";
+          };
+          sectionSeparators = {
+            left = "";
+            right = "";
+          };
         };
       };
+      web-devicons.enable = true;
 
     };
     extraPlugins = with pkgs.vimPlugins; [
