@@ -124,8 +124,11 @@
     programs.git = {
       enable = true;
       package = pkgs.gitFull;
-      signing.key = "8F84B8738E67A3453F05D29BC2DC6A67CB7F891F";
-      signing.signByDefault = true;
+      signing = with config.home-manager.users.juuso; {
+        format = "ssh";
+        key = "${home.homeDirectory}/.ssh/id_ed25519_sk_rk_starlabs"; 
+        signByDefault = true;
+      };
       userEmail = "juuso@ponkila.com";
       userName = "Juuso Haavisto";
       ignores = [
