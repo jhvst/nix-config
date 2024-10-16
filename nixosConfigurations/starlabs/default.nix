@@ -673,16 +673,8 @@
     pulse.enable = true;
   };
   services.dbus.enable = true;
-
-  services.timesyncd.enable = false;
-  services.chrony = {
-    enable = true;
-    servers = [
-      "ntp1.hetzner.de"
-      "ntp2.hetzner.com"
-      "ntp3.hetzner.net"
-    ];
-  };
+  services.timesyncd.enable = true;
+  services.timesyncd.servers = [ "time.cloudflare.com" ];
 
   # programs to enable also for root
   programs = {
