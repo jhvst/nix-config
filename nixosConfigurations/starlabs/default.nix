@@ -664,9 +664,9 @@
     };
   };
 
+  services.netdata.enable = true;
   services.yubikey-agent.enable = true;
   services.trezord.enable = true;
-
   services.pipewire = {
     enable = true;
     alsa.enable = true;
