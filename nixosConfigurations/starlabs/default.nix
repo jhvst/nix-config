@@ -747,11 +747,15 @@
   };
 
   systemd.tmpfiles.rules = [
-    "d /home/juuso/.config 0755 juuso juuso -"
-    "d /home/juuso/.gnupg 0755 juuso juuso -"
-    "d /home/juuso/.local 0755 juuso juuso -"
-    "d /home/juuso/.local/share 0755 juuso juuso -"
+    "d /var/log/smartd 0755 netdata netdata -"
   ];
+  services.smartd = {
+    enable = true;
+    extraOptions = [
+      "-A /var/log/smartd/"
+      "--interval=600"
+    ];
+  };
 
   system.stateVersion = "24.05";
 
