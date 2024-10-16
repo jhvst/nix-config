@@ -331,6 +331,15 @@
         dns = [ "127.0.0.1:1053" ];
         linkConfig.RequiredForOnline = "routable";
       };
+      "20-usb" = {
+        matchConfig.Name = "enp2s0f4u2u2";
+        networkConfig = {
+          DHCP = "ipv4";
+          IPMasquerade = "ipv4";
+        };
+        dns = [ "1.1.1.1" ];
+        linkConfig.ActivationPolicy = "manual";
+      };
       "99-ath0" = {
         matchConfig.Name = "ath0";
         address = [ "192.168.76.4/32" "2001:470:28:6a9:8000::4/128" ];
