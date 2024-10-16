@@ -505,15 +505,6 @@
     {
       enable = true;
       what = "/dev/sda2";
-      where = "/etc/wireguard";
-      options = "subvolid=263";
-      type = "btrfs";
-
-      wantedBy = [ "multi-user.target" ];
-    }
-    {
-      enable = true;
-      what = "/dev/sda2";
       where = "/var/lib/fprint";
       options = "subvolid=270";
       type = "btrfs";
