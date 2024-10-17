@@ -20,17 +20,19 @@
           ''cat ${config.sops.secrets."mbsync/ponkila".path}''
         ];
         imap = {
-          host = "mail.gandi.net";
-          port = 993;
+          host = "mail.your-server.de";
+          port = 143;
           tls = {
             enable = true;
+            useStartTls = true;
           };
         };
         smtp = {
-          host = "mail.gandi.net";
-          port = 465;
+          host = "mail.your-server.de";
+          port = 110;
           tls = {
             enable = true;
+            useStartTls = true;
           };
         };
       };
