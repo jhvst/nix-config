@@ -25,7 +25,7 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:Prince213/home-manager/feat-git-sign";
-    homestakeros-base.url = "github:ponkila/homestakeros?dir=nixosModules/base";
+    homestakeros-base.url = "github:ponkila/homestakeros/nixos-unstable?dir=nixosModules/base";
     nixpkgs-stable-patched.url = "github:majbacka-labs/nixpkgs/patch-init1sh";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
