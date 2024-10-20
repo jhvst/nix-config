@@ -263,6 +263,8 @@
 
   };
 
+  system.etc.overlay.mutable = false;
+
   systemd.network = {
     enable = true;
     wait-online.anyInterface = true;
