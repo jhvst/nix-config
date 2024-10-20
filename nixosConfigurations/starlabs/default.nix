@@ -30,6 +30,7 @@
     fontDir.enable = true;
     packages = with pkgs; [
       (nerdfonts.override { fonts = [ "IBMPlexMono" ]; })
+      departure-mono
     ];
   };
 
@@ -65,6 +66,7 @@
         in
         {
           bar = {
+            font = "Departure Mono:style=Regular";
             location = "top";
             height = 26;
             background = "00000066";
@@ -215,7 +217,7 @@
         bars = [{
           command = "${pkgs.yambar}/bin/yambar";
           fonts = {
-            names = [ "BlexMono Nerd Font Mono" ];
+            names = [ "Departure Mono" ];
             size = 11.0;
           };
         }];
@@ -256,7 +258,7 @@
       hashKnownHosts = true;
       matchBlocks = {
         "*" = {
-            identityFile = "~/.ssh/id_ed25519_sk_rk_starlabs";
+          identityFile = "~/.ssh/id_ed25519_sk_rk_starlabs";
         };
       };
     };
