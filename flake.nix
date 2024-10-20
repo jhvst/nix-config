@@ -64,6 +64,7 @@
 
         overlayAttrs = {
           inherit (config.packages)
+            seaweedfs
             libedgetpu;
         };
 
@@ -106,6 +107,9 @@
             };
           };
           "libedgetpu" = pkgs.callPackage ./packages/libedgetpu { };
+          "seaweedfs" = pkgs.seaweedfs.overrideAttrs (oldAttrs: {
+            tags = oldAttrs.tags ++ [ "rclone" ];
+          });
 
           "kotikone" = flake.nixosConfigurations.kotikone.config.system.build.squashfs;
           "matrix-ponkila-com" = flake.nixosConfigurations.matrix-ponkila-com.config.system.build.kexecTree;

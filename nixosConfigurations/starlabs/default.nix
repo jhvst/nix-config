@@ -480,6 +480,7 @@
       xorg.xkbcomp
       yazi
       yubikey-manager
+      seaweedfs
     ];
   };
 
