@@ -606,6 +606,15 @@
 
       wantedBy = [ "multi-user.target" ];
     }
+    {
+      enable = true;
+      what = "/dev/sda2";
+      where = "/home/juuso/.config/rclone";
+      options = "subvolid=284";
+      type = "btrfs";
+
+      wantedBy = [ "multi-user.target" ];
+    }
   ];
 
   hardware = {
