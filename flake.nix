@@ -136,6 +136,7 @@
               inputs.sops-nix.nixosModules.sops
               inputs.agenix-rekey.nixosModules.default
               inputs.agenix.nixosModules.default
+              inputs.wirenix.nixosModules.default
               {
                 age.rekey = {
                   localStorageDir = ./nixosConfigurations/muro/secrets/agenix-rekey;
@@ -245,6 +246,7 @@
               inputs.agenix-rekey.nixosModules.default
               inputs.agenix.nixosModules.default
               inputs.homestakeros-base.nixosModules.kexecTree
+              inputs.wirenix.nixosModules.default
               {
                 age.rekey = {
                   localStorageDir = ./nixosConfigurations/matrix.ponkila.com/secrets/agenix-rekey;

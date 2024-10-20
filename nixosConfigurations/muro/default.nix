@@ -447,5 +447,13 @@
     };
   };
 
+  wirenix = {
+    enable = true;
+    configurer = "networkd"; # defaults to "static", could also be "networkd"
+    keyProviders = [ "agenix-rekey" ]; # could also be ["agenix-rekey"] or ["acl" "agenix-rekey"]
+    secretsDir = ../../nixosModules/wirenix/agenix; # only if you're using agenix-rekey
+    aclConfig = import ../../nixosModules/wirenix/acl.nix;
+  };
+
   system.stateVersion = "24.05";
 }
