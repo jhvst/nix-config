@@ -4,6 +4,7 @@
 }:
 {
 
+  home-manager.backupFileExtension = "backup";
   home-manager.users.juuso = { pkgs, ... }: {
 
     home.stateVersion = config.system.stateVersion;
