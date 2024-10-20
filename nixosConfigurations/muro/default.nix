@@ -91,6 +91,7 @@
         openssh.authorizedKeys.keys = [
           "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNMKgTTpGSvPG4p8pRUWg1kqnP9zPKybTHQ0+Q/noY5+M6uOxkLy7FqUIEFUT9ZS/fflLlC/AlJsFBU212UzobA= ssh@secretive.sandbox.local"
           "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJdbU8l66hVUAqk900GmEme5uhWcs05JMUQv2eD0j7MI juuso@starlabs"
+          "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAILn/9IHTGC1sLxnPnLbtJpvF7HgXQ8xNkRwSLq8ay8eJAAAADHNzaDpzdGFybGFicw== ssh:starlabs"
         ];
         shell = pkgs.fish;
         linger = true;
@@ -160,7 +161,6 @@
   };
 
   environment.systemPackages = with pkgs; [
-    fuse-overlayfs
     w3m
     btrfs-progs
   ];
@@ -256,9 +256,6 @@
       seed-ratio = 3.0;
     };
   };
-
-  virtualisation.containers.enable = true;
-  virtualisation.containers.containersConf.cniPlugins = [ pkgs.cni-plugin-flannel ];
 
   services.frigate = {
     enable = false;

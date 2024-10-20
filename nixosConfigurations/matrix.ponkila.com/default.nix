@@ -3,7 +3,7 @@
   age = {
     rekey = {
       agePlugins = [ pkgs.age-plugin-fido2-hmac ];
-      hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKaz4+XGF+ivhE1gD6tMe9oStYR4d4rPsIgDDEQ/uElM";
+      hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGpEmY1YpmQephSTMBUanU54F3pT8+cclp0kaugtle7r";
     };
   };
 
@@ -13,6 +13,8 @@
     extraGroups = [ "wheel" ];
     openssh.authorizedKeys.keys = [
       "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNMKgTTpGSvPG4p8pRUWg1kqnP9zPKybTHQ0+Q/noY5+M6uOxkLy7FqUIEFUT9ZS/fflLlC/AlJsFBU212UzobA= ssh@secretive.sandbox.local"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJdbU8l66hVUAqk900GmEme5uhWcs05JMUQv2eD0j7MI juuso@starlabs"
+      "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAILn/9IHTGC1sLxnPnLbtJpvF7HgXQ8xNkRwSLq8ay8eJAAAADHNzaDpzdGFybGFicw== ssh:starlabs"
     ];
     shell = pkgs.fish;
   };
@@ -26,6 +28,7 @@
 
   environment.systemPackages = with pkgs; [
     kexec-tools
+    rsync
   ];
 
   ## Allow passwordless sudo from nixos user
