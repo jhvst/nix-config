@@ -701,7 +701,7 @@
   services.getty.autologinUser = "juuso";
 
   sops = with config.users.users; {
-    age.keyFile = "${juuso.home}/.ssh/age";
+    age.sshKeyPaths = [ "${juuso.home}/.ssh/id_ed25519" ];
     defaultSopsFile = ./secrets/default.yaml;
     secrets."coredns/rewrites" = {
       owner = acme.name;
