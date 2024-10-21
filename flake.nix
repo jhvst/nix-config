@@ -64,8 +64,9 @@
 
         overlayAttrs = {
           inherit (config.packages)
-            seaweedfs
-            libedgetpu;
+            libedgetpu
+            passage
+            seaweedfs;
         };
 
         treefmt.config = {
@@ -109,6 +110,14 @@
           "libedgetpu" = pkgs.callPackage ./packages/libedgetpu { };
           "seaweedfs" = pkgs.seaweedfs.overrideAttrs (oldAttrs: {
             tags = oldAttrs.tags ++ [ "rclone" ];
+          });
+          "passage" = pkgs.passage.overrideAttrs (_oldAttrs: {
+            src = pkgs.fetchFromGitHub {
+              owner = "remko";
+              repo = "passage";
+              rev = "fba940f9e9ffbad7b746f26b8d6323ef6f746187";
+              hash = "sha256-1jQCEMeovDjjKukVHaK4xZiBPgZpNQwjvVbrbdeAXrE=";
+            };
           });
 
           "kotikone" = flake.nixosConfigurations.kotikone.config.system.build.squashfs;

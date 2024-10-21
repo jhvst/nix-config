@@ -245,11 +245,14 @@
       };
     };
 
-    programs.password-store = with config.home-manager.users.juuso; {
+    programs.password-store = {
       enable = true;
+      package = pkgs.passage;
       settings = {
-        PASSWORD_STORE_DIR = "${home.homeDirectory}/.pass";
-        PASSWORD_STORE_KEY = "8F84B8738E67A3453F05D29BC2DC6A67CB7F891F";
+        PASSAGE_DIR = "/run/media/juuso/passage";
+        PASSAGE_IDENTITIES_FILE = "/run/secrets/passage";
+        PASSAGE_RECIPIENTS = "age1ef70t0zmlcvpe4ppwfdza7qpv2uakq9c9ldrv0y9zfnvdka7acnsxkkmzl age12lz3jyd2weej5c4mgmwlwsl0zmk2tdgvtflctgryx6gjcaf3yfsqgt7rnz";
+        PASSWORD_STORE_CLIP_TIME = "60";
       };
     };
 
@@ -472,7 +475,6 @@
       file
       gnupg
       iamb # matrix client
-      passage
       pinentry-curses
       sioyek
       sops
@@ -528,15 +530,6 @@
     {
       enable = true;
       what = "/dev/sda2";
-      where = "/home/juuso/.pass";
-      options = "subvolid=271";
-      type = "btrfs";
-
-      wantedBy = [ "multi-user.target" ];
-    }
-    {
-      enable = true;
-      what = "/dev/sda2";
       where = "/home/juuso/.papis";
       options = "subvolid=272";
       type = "btrfs";
@@ -569,16 +562,6 @@
       what = "/dev/sda2";
       where = "/home/juuso/.config/Yubico";
       options = "subvolid=275";
-      type = "btrfs";
-
-      wantedBy = [ "multi-user.target" ];
-    }
-    {
-      enable = true;
-
-      what = "/dev/sda2";
-      where = "/home/juuso/.passage";
-      options = "subvolid=279";
       type = "btrfs";
 
       wantedBy = [ "multi-user.target" ];
@@ -746,6 +729,14 @@
       owner = systemd-network.name;
       inherit (systemd-network) group;
     };
+    secrets."passage/trezor.age" = {
+      owner = juuso.name;
+      inherit (juuso) group;
+    };
+    secrets."passage/starlabs.age" = {
+      owner = juuso.name;
+      inherit (juuso) group;
+    };
   };
 
   services.printing = {
@@ -762,6 +753,7 @@
 
   systemd.tmpfiles.rules = [
     "d /var/log/smartd 0755 netdata netdata -"
+    "d /run/secrets/passage 0755 juuso juuso -"
   ];
   services.smartd = {
     enable = true;
