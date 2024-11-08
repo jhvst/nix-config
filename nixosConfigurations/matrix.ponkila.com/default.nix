@@ -126,8 +126,6 @@
 
   services.getty.autologinUser = "juuso";
 
-  };
-
   system.stateVersion = "24.05";
 
 }
