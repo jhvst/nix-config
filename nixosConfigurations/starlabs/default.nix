@@ -428,6 +428,11 @@
   systemd.services."coredns".serviceConfig.Group = "acme";
 
   time.timeZone = "Europe/London";
+  location = {
+    provider = "manual";
+    latitude = 51.7520;
+    longitude = 1.2577;
+  };
 
   users = {
     mutableUsers = false;
@@ -476,17 +481,18 @@
       gnupg
       iamb # matrix client
       pinentry-curses
+      seaweedfs
       sioyek
       sops
       trezor-agent
       trezorctl
       waypipe
       wl-clipboard
+      wlsunset
       xdg-utils # open command
       xorg.xkbcomp
       yazi
       yubikey-manager
-      seaweedfs
     ];
   };
 
