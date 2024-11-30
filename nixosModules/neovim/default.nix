@@ -21,7 +21,6 @@
     extraPackages = with pkgs; [
       fd
       gcc
-      nixpkgs-fmt
       ripgrep
       shellcheck
     ];
@@ -125,7 +124,10 @@
         };
       };
       web-devicons.enable = true;
-
+      none-ls = {
+        enable = true;
+        sources.formatting.nixpkgs_fmt.enable = true;
+      };
     };
     extraPlugins = with pkgs.vimPlugins; [
       editorconfig-vim
