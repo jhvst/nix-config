@@ -64,6 +64,7 @@
 
         overlayAttrs = {
           inherit (config.packages)
+            fstar-vscode-assistant
             libedgetpu
             passage
             seaweedfs;
@@ -99,6 +100,7 @@
         };
 
         packages = {
+          "fstar-vscode-assistant" = pkgs.callPackage ./packages/fstar-vscode-assistant { };
           "savilerow" = pkgs.callPackage ./packages/savilerow { };
           "sounds" = inputs.sounds.packages.${system}.default;
           "neovim" = inputs.nixvim.legacyPackages.${system}.makeNixvimWithModule {
