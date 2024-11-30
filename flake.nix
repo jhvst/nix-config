@@ -24,7 +24,7 @@
     darwin.url = "github:lnl7/nix-darwin";
     flake-parts.url = "github:hercules-ci/flake-parts";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    home-manager.url = "github:Prince213/home-manager/feat-git-sign";
+    home-manager.url = "github:nix-community/home-manager";
     homestakeros-base.url = "github:ponkila/homestakeros/nixos-unstable?dir=nixosModules/base";
     nixpkgs-stable-patched.url = "github:majbacka-labs/nixpkgs/patch-init1sh";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -177,6 +177,7 @@
               inputs.sops-nix.nixosModules.sops
               inputs.agenix-rekey.nixosModules.default
               inputs.agenix.nixosModules.default
+              self.nixosModules.juuso
               {
                 age.rekey = {
                   localStorageDir = ./nixosConfigurations/starlabs/secrets/agenix-rekey;
@@ -286,9 +287,8 @@
           };
 
           nixosModules = {
-            neovim = {
-              imports = [ ./nixosModules/neovim ];
-            };
+            juuso = { imports = [ ./nixosModules/juuso ]; };
+            neovim = { imports = [ ./nixosModules/neovim ]; };
           };
         };
     };

@@ -424,16 +424,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1725778678,
-        "narHash": "sha256-+1xrdBc5EMY6PpUXHyJmd5dkOywe9GBMi/vU4JQS7pQ=",
-        "owner": "Prince213",
+        "lastModified": 1732884235,
+        "narHash": "sha256-r8j6R3nrvwbT1aUp4EPQ1KC7gm0pu9VcV1aNaB+XG6Q=",
+        "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "04e7c6254277fe31b5ddd2f9990c5d1ffdaef8dd",
+        "rev": "819f682269f4e002884702b87e445c82840c68f2",
         "type": "github"
       },
       "original": {
-        "owner": "Prince213",
-        "ref": "feat-git-sign",
+        "owner": "nix-community",
         "repo": "home-manager",
         "type": "github"
       }

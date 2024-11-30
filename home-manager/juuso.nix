@@ -124,14 +124,6 @@
 
     programs.git = {
       enable = true;
-      signing = with config.home-manager.users.juuso; {
-        format = "ssh";
-        key = "${home.homeDirectory}/.ssh/id_ed25519_sk_rk_starlabs";
-        signByDefault = true;
-      };
-      lfs.enable = true;
-      userEmail = "juuso@ponkila.com";
-      userName = "Juuso Haavisto";
       ignores = [
         ".DS_Store"
         ".direnv"
@@ -139,13 +131,6 @@
         "result"
         ".devenv"
       ];
-      extraConfig = {
-        push.autoSetupRemote = true;
-        http = {
-          # https://stackoverflow.com/questions/22369200/git-pull-push-error-rpc-failed-result-22-http-code-408
-          postBuffer = "524288000";
-        };
-      };
     };
   };
 
