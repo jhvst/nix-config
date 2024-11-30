@@ -124,7 +124,6 @@
 
     programs.git = {
       enable = true;
-      package = pkgs.gitFull;
       signing = with config.home-manager.users.juuso; {
         format = "ssh";
         key = "${home.homeDirectory}/.ssh/id_ed25519_sk_rk_starlabs";
