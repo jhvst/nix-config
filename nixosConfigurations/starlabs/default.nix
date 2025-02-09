@@ -481,7 +481,6 @@
       gnupg
       iamb # matrix client
       pinentry-curses
-      seaweedfs
       sioyek
       sops
       trezor-agent

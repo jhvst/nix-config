@@ -110,9 +110,6 @@
             };
           };
           "libedgetpu" = pkgs.callPackage ./packages/libedgetpu { };
-          "seaweedfs" = pkgs.seaweedfs.overrideAttrs (oldAttrs: {
-            tags = oldAttrs.tags ++ [ "rclone" ];
-          });
           "passage" = pkgs.passage.overrideAttrs (_oldAttrs: {
             src = pkgs.fetchFromGitHub {
               owner = "remko";
