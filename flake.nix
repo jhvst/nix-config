@@ -69,8 +69,7 @@
           inherit (config.packages)
             fstar-vscode-assistant
             libedgetpu
-            passage
-            seaweedfs;
+            passage;
         };
 
         treefmt.config = {
@@ -89,15 +88,10 @@
           default = pkgs.mkShell {
             nativeBuildInputs = with pkgs; [
               config.agenix-rekey.package
-              cpio
-              git
-              jq
-              nix
-              ripgrep
-              rsync
+              nix-tree
               sops
               ssh-to-age
-              zstd
+              tomb
             ];
           };
         };
@@ -142,11 +136,11 @@
               ./home-manager/programs/neovim
               ./nixosConfigurations/muro
               ./nix-settings.nix
-              inputs.homestakeros-base.nixosModules.kexecTree
-              inputs.sops-nix.nixosModules.sops
               inputs.agenix-rekey.nixosModules.default
               inputs.agenix.nixosModules.default
               inputs.home-manager-stable.nixosModules.home-manager
+              inputs.homestakeros-base.nixosModules.kexecTree
+              inputs.sops-nix.nixosModules.sops
               self.nixosModules.wayland
               {
                 age.rekey = {
@@ -173,11 +167,11 @@
               ./home-manager/programs/neovim
               ./nixosConfigurations/starlabs
               ./nix-settings.nix
+              inputs.agenix-rekey.nixosModules.default
+              inputs.agenix.nixosModules.default
               inputs.home-manager.nixosModules.home-manager
               inputs.homestakeros-base.nixosModules.kexecTree
               inputs.sops-nix.nixosModules.sops
-              inputs.agenix-rekey.nixosModules.default
-              inputs.agenix.nixosModules.default
               self.nixosModules.juuso
               {
                 age.rekey = {
