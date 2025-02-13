@@ -23,10 +23,13 @@
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     darwin.url = "github:lnl7/nix-darwin";
     flake-parts.url = "github:hercules-ci/flake-parts";
+    home-manager-stable.inputs.nixpkgs.follows = "nixpkgs-stable";
+    home-manager-stable.url = "github:nix-community/home-manager/release-24.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     homestakeros-base.url = "github:ponkila/homestakeros/nixos-unstable?dir=nixosModules/base";
     nixpkgs-stable-patched.url = "github:majbacka-labs/nixpkgs/patch-init1sh";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-24.11";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
     nixvim.url = "github:nix-community/nixvim";
@@ -139,11 +142,12 @@
               ./home-manager/programs/neovim
               ./nixosConfigurations/muro
               ./nix-settings.nix
-              inputs.home-manager.nixosModules.home-manager
               inputs.homestakeros-base.nixosModules.kexecTree
               inputs.sops-nix.nixosModules.sops
               inputs.agenix-rekey.nixosModules.default
               inputs.agenix.nixosModules.default
+              inputs.home-manager-stable.nixosModules.home-manager
+              self.nixosModules.wayland
               {
                 age.rekey = {
                   localStorageDir = ./nixosConfigurations/muro/secrets/agenix-rekey;
@@ -272,10 +276,11 @@
 
           nixosConfigurations = with inputs.nixpkgs.lib; {
             "matrix-ponkila-com" = nixosSystem matrix-ponkila-com;
-            "muro" = nixosSystem muro;
             "starlabs" = nixosSystem starlabs;
           } // (with inputs.nixpkgs-stable-patched.lib; {
             "kotikone" = nixosSystem kotikone;
+          }) // (with inputs.nixpkgs-stable.lib; {
+            "muro" = nixosSystem muro;
           });
 
           darwinConfigurations = with inputs.darwin.lib; {
@@ -286,6 +291,7 @@
           nixosModules = {
             juuso = { imports = [ ./nixosModules/juuso ]; };
             neovim = { imports = [ ./nixosModules/neovim ]; };
+            wayland = { imports = [ ./nixosModules/wayland ]; };
           };
         };
     };

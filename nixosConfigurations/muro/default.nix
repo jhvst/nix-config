@@ -79,7 +79,6 @@
     "tsx=on"
     "tsx_async_abort=off"
   ];
-  boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
 
   users = {
     users = {
@@ -144,9 +143,13 @@
   };
 
   ## Gaming start
-  programs.steam.enable = false;
+  programs.gamescope.enable = true;
+  programs.steam = {
+    enable = true;
+    gamescopeSession.enable = true;
+  };
   programs.gamemode = {
-    enable = false;
+    enable = true;
     settings = {
       general = {
         renice = 10;
@@ -166,8 +169,8 @@
   ];
 
   hardware.bluetooth.enable = false;
-  services.pipewire.enable = false;
-  hardware.enableRedistributableFirmware = false;
+  services.pipewire.enable = true;
+  hardware.amdgpu.amdvlk.enable = false;
   services.getty.autologinUser = "juuso";
 
   systemd.mounts = [
@@ -231,6 +234,16 @@
       where = "/var/lib/aria2";
       type = "btrfs";
       options = "noatime,subvolid=284,compress=zstd";
+
+      wantedBy = [ "multi-user.target" ];
+    }
+    {
+      enable = true;
+
+      what = "/dev/disk/by-id/ata-Samsung_SSD_870_QVO_8TB_S5SSNF0R201250K";
+      where = "/var/mnt/SteamLibrary";
+      type = "btrfs";
+      options = "noatime";
 
       wantedBy = [ "multi-user.target" ];
     }
@@ -447,5 +460,5 @@
     };
   };
 
-  system.stateVersion = "24.05";
+  system.stateVersion = "24.11";
 }

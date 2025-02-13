@@ -5,6 +5,8 @@
 
   home-manager.users.juuso = _: {
 
+    home.stateVersion = config.system.stateVersion;
+
     accounts.email.accounts = with config.home-manager.users.juuso; {
       "ponkila" = {
         primary = true;
