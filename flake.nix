@@ -275,11 +275,11 @@
         {
 
           nixosConfigurations = with inputs.nixpkgs.lib; {
-            "matrix-ponkila-com" = nixosSystem matrix-ponkila-com;
             "starlabs" = nixosSystem starlabs;
           } // (with inputs.nixpkgs-stable-patched.lib; {
             "kotikone" = nixosSystem kotikone;
           }) // (with inputs.nixpkgs-stable.lib; {
+            "matrix-ponkila-com" = nixosSystem matrix-ponkila-com;
             "muro" = nixosSystem muro;
           });
 
