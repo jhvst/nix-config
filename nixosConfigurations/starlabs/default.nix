@@ -294,7 +294,7 @@
           AllowedIPs = [
             "192.168.17.0/24"
             "192.168.76.0/24"
-            "2001:470:28:6a9:8000::0/65"
+            "::/0"
           ];
           Endpoint = "ath0.ponkila.intra:51820";
         }];
@@ -367,7 +367,8 @@
           {
             Gateway = "2001:470:28:6a9:8000::1";
             GatewayOnLink = true;
-            Destination = "2001:470:28:6a9:8000::0/65";
+            Destination = "::/0";
+            Metric = 2048; # makes this a "fallback" ipv6 global route
           }
         ];
       };
@@ -404,7 +405,7 @@
     domain = "juuso.dev";
     firewall.interfaces."ath0".allowedTCPPorts = [ 4001 ];
     hostName = "starlabs";
-    nameservers = [ "127.0.0.1:1053#starlabs.juuso.dev" ];
+    nameservers = [ "localhost:1053#starlabs.juuso.dev" ];
     nftables.enable = true;
     stevenblack.enable = true;
     useDHCP = false;
@@ -417,8 +418,8 @@
       tls://.:1053 {
         tls /var/lib/acme/starlabs.juuso.dev/cert.pem /var/lib/acme/starlabs.juuso.dev/key.pem
         import ../../run/secrets/coredns/rewrites
-        forward . tls://1.1.1.1 {
-          tls_servername cloudflare-dns.com
+        forward . tls://1.1.1.2 tls://2606:4700:4700::1112 {
+          tls_servername security.cloudflare-dns.com
           health_check 5s
         }
         cache 30
