@@ -86,11 +86,13 @@
         devShells = {
           default = pkgs.mkShell {
             nativeBuildInputs = with pkgs; [
+              cobang
               config.agenix-rekey.package
               nix-tree
               sops
               ssh-to-age
               tomb
+              yubioath-flutter
             ];
           };
         };
