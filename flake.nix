@@ -28,7 +28,6 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     homestakeros-base.url = "github:ponkila/homestakeros/nixos-unstable?dir=nixosModules/base";
-    nixpkgs-stable-patched.url = "github:majbacka-labs/nixpkgs/patch-init1sh";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-24.11";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
@@ -116,7 +115,6 @@
             };
           });
 
-          "kotikone" = flake.nixosConfigurations.kotikone.config.system.build.squashfs;
           "matrix-ponkila-com" = flake.nixosConfigurations.matrix-ponkila-com.config.system.build.kexecTree;
           "muro" = flake.nixosConfigurations.muro.config.system.build.kexecTree;
           "starlabs" = flake.nixosConfigurations.starlabs.config.system.build.kexecTree;
@@ -190,31 +188,6 @@
             ];
           };
 
-          kotikone = {
-            system = "x86_64-linux";
-            specialArgs = { inherit inputs outputs; };
-            modules = [
-              ./nix-settings.nix
-              ./nixosConfigurations/kotikone
-              inputs.agenix.nixosModules.default
-              inputs.agenix-rekey.nixosModules.default
-              inputs.homestakeros-base.nixosModules.kexecTree
-              {
-                age.rekey = {
-                  localStorageDir = ./nixosConfigurations/kotikone/secrets/agenix-rekey;
-                  masterIdentities = [{
-                    identity = ./nixosModules/agenix-rekey/masterIdentities/juuso.hmac;
-                    pubkey = "age12lz3jyd2weej5c4mgmwlwsl0zmk2tdgvtflctgryx6gjcaf3yfsqgt7rnz";
-                  }];
-                  storageMode = "local";
-                };
-                nixpkgs.overlays = [
-                  inputs.wayland.overlay
-                ];
-              }
-            ];
-          };
-
           epsilon = {
             specialArgs = { inherit inputs outputs; };
             system = "x86_64-darwin";
@@ -270,9 +243,7 @@
 
           nixosConfigurations = with inputs.nixpkgs.lib; {
             "starlabs" = nixosSystem starlabs;
-          } // (with inputs.nixpkgs-stable-patched.lib; {
-            "kotikone" = nixosSystem kotikone;
-          }) // (with inputs.nixpkgs-stable.lib; {
+          } // (with inputs.nixpkgs-stable.lib; {
             "matrix-ponkila-com" = nixosSystem matrix-ponkila-com;
             "muro" = nixosSystem muro;
           });

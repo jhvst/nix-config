@@ -700,29 +700,13 @@
         "type": "github"
       }
     },
-    "nixpkgs-stable-patched": {
-      "locked": {
-        "lastModified": 1730820200,
-        "narHash": "sha256-p9H7FX0dFb98VS1olYqLp9qIL5eAWlvKy0Laa6CGbHk=",
-        "owner": "majbacka-labs",
-        "repo": "nixpkgs",
-        "rev": "5dd5221c97e01aa5f6618e694ba6b1e4a341e54b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "majbacka-labs",
-        "ref": "patch-init1sh",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs-stable_2": {
       "locked": {
-        "lastModified": 1734083684,
-        "narHash": "sha256-5fNndbndxSx5d+C/D0p/VF32xDiJCJzyOqorOYW4JEo=",
+        "lastModified": 1739357830,
+        "narHash": "sha256-9xim3nJJUFbVbJCz48UP4fGRStVW5nv4VdbimbKxJ3I=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "314e12ba369ccdb9b352a4db26ff419f7c49fa84",
+        "rev": "0ff09db9d034a04acd4e8908820ba0b410d7a33a",
         "type": "github"
       },
       "original": {
@@ -878,7 +862,6 @@
         "homestakeros-base": "homestakeros-base",
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-stable": "nixpkgs-stable_2",
-        "nixpkgs-stable-patched": "nixpkgs-stable-patched",
         "nixvim": "nixvim",
         "sops-nix": "sops-nix",
         "sounds": "sounds",
