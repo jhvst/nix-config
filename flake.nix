@@ -7,12 +7,10 @@
     extra-substituters = [
       "https://cache.nixos.org"
       "https://nix-community.cachix.org"
-      "https://nixpkgs-wayland.cachix.org"
     ];
     extra-trusted-public-keys = [
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
     ];
   };
 
@@ -27,7 +25,7 @@
     home-manager-stable.url = "github:nix-community/home-manager/release-24.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
-    homestakeros-base.url = "github:ponkila/homestakeros/nixos-unstable?dir=nixosModules/base";
+    homestakeros-base.url = "github:ponkila/homestakeros?dir=nixosModules/base";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-24.11";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
@@ -38,8 +36,6 @@
     sounds.url = "github:jhvst/nix-config?dir=packages/sounds";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
     treefmt-nix.url = "github:numtide/treefmt-nix";
-    wayland.inputs.nixpkgs.follows = "nixpkgs";
-    wayland.url = "github:nix-community/nixpkgs-wayland";
     wirenix.url = "sourcehut:~msalerno/wirenix";
   };
 
