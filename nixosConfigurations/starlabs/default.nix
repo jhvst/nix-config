@@ -117,6 +117,62 @@
             right = [
               {
                 script = {
+                  path = pkgs.writeScript "uptime.sh" ''
+                    #!${pkgs.stdenv.shell}
+                    STATUS=$(${pkgs.curl}/bin/curl -s -m 3 http://192.168.100.40:9601/metrics | ${pkgs.gnused}/bin/sed -n '13p' | ${pkgs.gawk}/bin/awk '{print $2}')
+                    echo "test|string|$STATUS"
+                    echo ""
+                  '';
+                  poll-interval = 11000;
+                  args = [ ];
+                  content = [{
+                    map = let host = "HaE"; in {
+                      default.string = {
+                        deco.background.color = red;
+                        text = host;
+                      };
+                      conditions = {
+                        "test == 1" = {
+                          string = {
+                            deco.background.color = green;
+                            text = host;
+                          };
+                        };
+                      };
+                    };
+                  }];
+                };
+              }
+              {
+                script = {
+                  path = pkgs.writeScript "uptime.sh" ''
+                    #!${pkgs.stdenv.shell}
+                    STATUS=$(${pkgs.curl}/bin/curl -s -m 3 http://192.168.100.40:9601/metrics | ${pkgs.gnused}/bin/sed -n '2p' | ${pkgs.gawk}/bin/awk '{print $2}')
+                    echo "test|string|$STATUS"
+                    echo ""
+                  '';
+                  poll-interval = 11000;
+                  args = [ ];
+                  content = [{
+                    map = let host = "HaB"; in {
+                      default.string = {
+                        deco.background.color = red;
+                        text = host;
+                      };
+                      conditions = {
+                        "test == 1" = {
+                          string = {
+                            deco.background.color = green;
+                            text = host;
+                          };
+                        };
+                      };
+                    };
+                  }];
+                };
+              }
+              {
+                script = {
                   path = pkgs.writeScript "test.sh" ''
                     #!${pkgs.stdenv.shell}
                     STATUS=$(${pkgs.curl}/bin/curl -s -m 3 http://192.168.100.10:5052/eth/v1/node/syncing | ${pkgs.jq}/bin/jq '.data.is_optimistic')
@@ -147,14 +203,14 @@
                 script = {
                   path = pkgs.writeScript "test.sh" ''
                     #!${pkgs.stdenv.shell}
-                    STATUS=$(${pkgs.curl}/bin/curl -s -m 3 http://192.168.100.33:5052/eth/v1/node/syncing | ${pkgs.jq}/bin/jq '.data.is_optimistic')
+                    STATUS=$(${pkgs.curl}/bin/curl -s -m 3 http://192.168.100.50:5052/eth/v1/node/syncing | ${pkgs.jq}/bin/jq '.data.is_optimistic')
                     echo "test|string|$STATUS"
                     echo ""
                   '';
                   poll-interval = 11000;
                   args = [ ];
                   content = [{
-                    map = let host = "Dα"; in {
+                    map = let host = "Kα"; in {
                       default.string = {
                         deco.background.color = red;
                         text = host;
