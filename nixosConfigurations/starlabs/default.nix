@@ -34,7 +34,7 @@
   fonts = {
     fontDir.enable = true;
     packages = with pkgs; [
-      (nerdfonts.override { fonts = [ "IBMPlexMono" ]; })
+      nerd-fonts.blex-mono
       departure-mono
     ];
   };
@@ -603,25 +603,12 @@
   ];
 
   hardware = {
-    # enables WiFi and GPU drivers
-    enableRedistributableFirmware = true;
+    enableRedistributableFirmware = true; # enables WiFi and GPU drivers
     graphics = {
       enable = true; # radv: an open-source Vulkan driver from freedesktop
-      extraPackages = [ pkgs.amdvlk ]; # amdvlk: an open-source driver from AMD
-      # https://github.com/NixOS/nixpkgs/pull/320228
-      # setLdLibraryPath = true;
+      enable32Bit = true;
     };
-
-    ##
-    ##  $ bluetoothctl
-    ##  [bluetooth] # power on
-    ##  [bluetooth] # agent on
-    ##  [bluetooth] # default-agent
-    ##  [bluetooth] # scan on
-    ##  ...put device in pairing mode and wait [hex-address] to appear here...
-    ##  [bluetooth] # pair [hex-address]
-    ##  [bluetooth] # connect [hex-address]
-    ## https://gitlab.freedesktop.org/pipewire/pipewire/-/wikis/LE-Audio-+-LC3-support
+    # https://gitlab.freedesktop.org/pipewire/pipewire/-/wikis/LE-Audio-+-LC3-support
     bluetooth.enable = true;
   };
 
@@ -761,6 +748,6 @@
     ];
   };
 
-  system.stateVersion = "24.05";
+  system.stateVersion = "25.05";
 
 }
