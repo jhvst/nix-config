@@ -338,20 +338,27 @@
         dns = [ "127.0.0.1:1053" ];
         linkConfig.RequiredForOnline = "routable";
       };
-      "20-usb" = {
-        matchConfig.Name = "enp2s0f4u2u2";
+      "10-usbc" = {
+        matchConfig.Name = "enp2s0f4u2u4c2";
         networkConfig = {
           DHCP = "ipv4";
-          IPMasquerade = "ipv4";
+          IPv6AcceptRA = true;
         };
-        dns = [ "1.1.1.1" ];
+        linkConfig.ActivationPolicy = "manual";
+      };
+      "20-remarkable" = {
+        matchConfig.Name = "enp2s0f4u2";
+        networkConfig = {
+          DHCP = "ipv4";
+          IPv6AcceptRA = true;
+        };
         linkConfig.ActivationPolicy = "manual";
       };
       "99-ath0" = {
         matchConfig.Name = "ath0";
         address = [ "192.168.76.4/32" "2001:470:28:6a9:8000::4/128" ];
         dns = [ "192.168.76.1" "2001:470:28:6a9:8000::1" ];
-        domains = [ "ponkila.periferia" ];
+        domains = [ "ponkila.periferia" "ponkila.intra" ];
         linkConfig.ActivationPolicy = "manual";
         routes = [
           {
@@ -487,6 +494,7 @@
       trezor-agent
       trezorctl
       waypipe
+      wireguard-tools
       wl-clipboard
       wlsunset
       xdg-utils # open command
