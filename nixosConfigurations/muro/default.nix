@@ -26,8 +26,10 @@
         matchConfig.Name = "enp5s0";
         networkConfig = {
           DHCP = "ipv4";
+          IPv6AcceptRA = true;
         };
         dns = [ "127.0.0.1:1053" ];
+        address = [ "192.168.17.10/24" ]; # static IP
       };
     };
   };
