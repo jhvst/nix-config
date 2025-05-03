@@ -17,7 +17,11 @@
 
       nnoremap <leader>ff :Telescope find_files<CR>
     '';
-    extraConfigLua = '''';
+    extraConfigLua = ''
+      -- https://git.sr.ht/~whynothugo/lsp_lines.nvim#setup
+      vim.diagnostic.config({ virtual_text = false })
+      vim.diagnostic.config({ virtual_lines = true })
+    '';
     extraPackages = with pkgs; [
       fd
       gcc
@@ -130,6 +134,7 @@
         enable = true;
         sources.formatting.nixpkgs_fmt.enable = true;
       };
+      lsp-lines.enable = true;
     };
     extraPlugins = with pkgs.vimPlugins; [
       editorconfig-vim
