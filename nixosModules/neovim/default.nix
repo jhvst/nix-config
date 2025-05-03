@@ -51,6 +51,7 @@
         settings = {
           indent.enable = true;
         };
+        folding = true;
         nixvimInjections = true;
         grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
           bash
@@ -78,6 +79,7 @@
           yaml
         ];
       };
+      treesitter-context.enable = true;
       fugitive.enable = true;
       noice.enable = true;
       notify.enable = true;
