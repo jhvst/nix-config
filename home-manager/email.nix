@@ -31,7 +31,7 @@
         };
         smtp = {
           host = "mail.your-server.de";
-          port = 110;
+          port = 587;
           tls = {
             enable = true;
             useStartTls = true;
