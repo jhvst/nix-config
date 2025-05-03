@@ -11,7 +11,6 @@
     extraModprobeConfig = ''
       options v4l2loopback devices=1 video_nr=1 card_label="OBS Cam" exclusive_caps=1
     '';
-    kernel.sysctl."net.ipv4.tcp_mtu_probing" = 1; # Ubisoft Connect fix: https://www.protondb.com/app/2225070#5tJ0kpnj43
     kernelParams = [
       "boot.shell_on_fail"
     ];
@@ -724,12 +723,9 @@
   # programs to enable also for root
   programs = {
     fish.enable = true;
-    gamemode.enable = false;
     git.enable = true;
     gnupg.agent.pinentryPackage = pkgs.pinentry-curses;
     light.enable = true;
-    obs-studio = { enable = true; plugins = [ pkgs.obs-studio-plugins.wlrobs ]; };
-    steam.enable = false;
     sway.enable = true;
     vim.defaultEditor = true;
   };

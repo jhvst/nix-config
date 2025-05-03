@@ -30,6 +30,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
     nixvim.url = "github:nix-community/nixvim";
+    runtime-modules.url = "github:tupakkatapa/nixos-runtime-modules";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
     sops-nix.url = "github:Mic92/sops-nix";
     sounds.inputs.nixpkgs.follows = "nixpkgs";
@@ -167,6 +168,7 @@
               inputs.agenix.nixosModules.default
               inputs.home-manager.nixosModules.home-manager
               inputs.homestakeros-base.nixosModules.kexecTree
+              inputs.runtime-modules.nixosModules.runtimeModules
               inputs.sops-nix.nixosModules.sops
               self.nixosModules.juuso
               {
@@ -182,6 +184,16 @@
                   inputs.nixvim.homeManagerModules.nixvim
                 ];
                 home-manager.useGlobalPkgs = true;
+                services.runtimeModules = {
+                  enable = true;
+                  flakeUrl = "path:${self.outPath}";
+                  modules = [
+                    {
+                      name = "gaming";
+                      path = ./runtimeModules/gaming.nix;
+                    }
+                  ];
+                };
               }
             ];
           };
