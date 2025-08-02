@@ -352,11 +352,19 @@
         "read only" = "no";
       };
       juuso = {
-        path = "/var/mnt/bakhal/samba/mount/juuso";
-        browseable = "yes";
-        "force user" = "juuso";
         "force group" = "juuso";
+        "force user" = "juuso";
+        "fruit:delete_empty_adfiles" = "yes";
+        "fruit:metadata" = "stream";
+        "fruit:model" = "MacSamba";
+        "fruit:nfs_aces" = "no";
+        "fruit:posix_rename" = "yes";
+        "fruit:veto_appledouble" = "no";
+        "fruit:wipe_intentionally_left_blank_rfork" = "yes";
         "read only" = "no";
+        "vfs objects" = "fruit streams_xattr";
+        browseable = "yes";
+        path = "/var/mnt/bakhal/samba/mount/juuso";
       };
     };
   };
