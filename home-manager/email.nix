@@ -7,8 +7,9 @@
 
     home.stateVersion = config.system.stateVersion;
 
-    accounts.email.accounts = with config.home-manager.users.juuso; {
+    accounts.email.accounts = {
       "ponkila" = {
+        thunderbird.enable = true;
         primary = true;
         mbsync = {
           enable = true;
@@ -39,6 +40,7 @@
         };
       };
       "mail.com" = {
+        thunderbird.enable = true;
         mbsync = {
           enable = true;
           create = "both";
@@ -68,6 +70,7 @@
         };
       };
       "gmail" = {
+        thunderbird.enable = true;
         mbsync = {
           enable = true;
           create = "both";
@@ -84,6 +87,7 @@
         flavor = "gmail.com";
       };
       "oxford" = {
+        thunderbird.enable = true;
         mbsync = {
           enable = true;
           create = "maildir";
@@ -120,6 +124,12 @@
       enable = true;
     };
     programs.mbsync.enable = true;
+    programs.thunderbird = {
+      enable = true;
+      profiles = {
+        ponkila.isDefault = true;
+      };
+    };
 
   };
 

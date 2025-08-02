@@ -663,6 +663,15 @@
 
       wantedBy = [ "multi-user.target" ];
     }
+    {
+      enable = true;
+      what = "/dev/sda2";
+      where = "/home/juuso/.thunderbird";
+      options = "subvol=thunderbird";
+      type = "btrfs";
+
+      wantedBy = [ "multi-user.target" ];
+    }
   ];
 
   hardware = {
