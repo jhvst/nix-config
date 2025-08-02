@@ -363,7 +363,7 @@
         wireguardPeers = [{
           PublicKey = "s7XsWWxjl8zi6DTx4KkhjmI1jVseV9KVlc+cInFNyzE=";
           AllowedIPs = [ "192.168.100.0/24" ];
-          Endpoint = [ "dinar.majbacka.intra:51820" ];
+          Endpoint = [ "dinar.ponkila.nix:51820" ];
           PersistentKeepalive = 25;
         }];
       };
@@ -480,6 +480,9 @@
       tls://.:1053 {
         tls /var/lib/acme/starlabs.juuso.dev/cert.pem /var/lib/acme/starlabs.juuso.dev/key.pem
         import ../../run/secrets/coredns/rewrites
+        hosts ../../run/agenix/hosts ponkila.nix {
+          fallthrough
+        }
         forward . tls://1.1.1.2 tls://2606:4700:4700::1112 {
           tls_servername security.cloudflare-dns.com
           health_check 5s
@@ -790,6 +793,21 @@
     secrets."passage/starlabs.age" = {
       owner = juuso.name;
       inherit (juuso) group;
+    };
+  };
+  age = with config.users.users; {
+    identityPaths = [
+      "${juuso.home}/.ssh/id_ed25519"
+    ];
+    rekey = {
+      agePlugins = [ pkgs.age-plugin-fido2-hmac ];
+      hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJdbU8l66hVUAqk900GmEme5uhWcs05JMUQv2eD0j7MI juuso@starlabs";
+    };
+    secrets.hosts = {
+      rekeyFile = ./secrets/agenix/hosts.age;
+      owner = acme.name;
+      inherit (acme) group;
+      mode = "0440";
     };
   };
 
