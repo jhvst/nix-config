@@ -11,13 +11,6 @@
     neededForBoot = true;
   };
 
-  age = {
-    rekey = {
-      agePlugins = [ pkgs.age-plugin-fido2-hmac ];
-      hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINcjTjYiwE4wU2LzIu8xM+roOnmR4RDWZkAIFJcP4Nld";
-    };
-  };
-
   systemd.network = {
     enable = true;
     networks = {

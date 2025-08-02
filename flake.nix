@@ -130,21 +130,11 @@
               ./home-manager/programs/neovim
               ./nixosConfigurations/muro
               ./nix-settings.nix
-              inputs.agenix-rekey.nixosModules.default
-              inputs.agenix.nixosModules.default
               inputs.home-manager.nixosModules.home-manager
               inputs.homestakeros-base.nixosModules.kexecTree
               inputs.sops-nix.nixosModules.sops
               self.nixosModules.wayland
               {
-                age.rekey = {
-                  localStorageDir = ./nixosConfigurations/muro/secrets/agenix-rekey;
-                  masterIdentities = [{
-                    identity = ./nixosModules/agenix-rekey/masterIdentities/juuso.hmac;
-                    pubkey = "age12lz3jyd2weej5c4mgmwlwsl0zmk2tdgvtflctgryx6gjcaf3yfsqgt7rnz";
-                  }];
-                  storageMode = "local";
-                };
                 home-manager.sharedModules = [
                   inputs.nixvim.homeManagerModules.nixvim
                 ];
