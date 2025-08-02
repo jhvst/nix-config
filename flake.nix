@@ -17,6 +17,8 @@
   inputs = {
     agenix-rekey.inputs.nixpkgs.follows = "nixpkgs";
     agenix-rekey.url = "github:oddlama/agenix-rekey";
+    # optionally choose not to download darwin deps (saves some resources on Linux)
+    agenix.inputs.darwin.follows = "";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     agenix.url = "github:ryantm/agenix";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
