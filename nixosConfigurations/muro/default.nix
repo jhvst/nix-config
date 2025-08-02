@@ -299,28 +299,6 @@
     originalsPath = "/var/mnt/bakhal/Photos";
   };
 
-  systemd.services.synapse = {
-    enable = true;
-
-    description = "Matrix homeserver";
-    requires = [ "network-online.target" ];
-    after = [ "network-online.target" ];
-
-    serviceConfig = {
-      Restart = "always";
-      RestartSec = "5s";
-      User = "juuso";
-      Group = "juuso";
-      Type = "simple";
-    };
-
-    script = ''${pkgs.matrix-synapse}/bin/synapse_homeserver \
-      -c /var/mnt/bakhal/matrix/ponkila.com/ponkila.yaml
-    '';
-
-    wantedBy = [ "multi-user.target" ];
-  };
-
   systemd.user.services.yarr = {
     enable = true;
 

@@ -114,7 +114,6 @@
             };
           });
 
-          "matrix-ponkila-com" = flake.nixosConfigurations.matrix-ponkila-com.config.system.build.kexecTree;
           "muro" = flake.nixosConfigurations.muro.config.system.build.kexecTree;
           "starlabs" = flake.nixosConfigurations.starlabs.config.system.build.kexecTree;
         };
@@ -226,35 +225,12 @@
             ];
           };
 
-          matrix-ponkila-com = {
-            specialArgs = { inherit inputs outputs; };
-            system = "x86_64-linux";
-            modules = [
-              ./nix-settings.nix
-              ./nixosConfigurations/matrix.ponkila.com
-              inputs.agenix-rekey.nixosModules.default
-              inputs.agenix.nixosModules.default
-              inputs.homestakeros-base.nixosModules.kexecTree
-              {
-                age.rekey = {
-                  localStorageDir = ./nixosConfigurations/matrix.ponkila.com/secrets/agenix-rekey;
-                  masterIdentities = [{
-                    identity = ./nixosModules/agenix-rekey/masterIdentities/juuso.hmac;
-                    pubkey = "age12lz3jyd2weej5c4mgmwlwsl0zmk2tdgvtflctgryx6gjcaf3yfsqgt7rnz";
-                  }];
-                  storageMode = "local";
-                };
-              }
-            ];
-          };
-
         in
         {
 
           nixosConfigurations = with inputs.nixpkgs.lib; {
             "starlabs" = nixosSystem starlabs;
           } // (with inputs.nixpkgs-stable.lib; {
-            "matrix-ponkila-com" = nixosSystem matrix-ponkila-com;
             "muro" = nixosSystem muro;
           });
 
