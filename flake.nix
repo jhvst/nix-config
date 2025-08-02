@@ -17,6 +17,7 @@
   inputs = {
     agenix-rekey.inputs.nixpkgs.follows = "nixpkgs";
     agenix-rekey.url = "github:oddlama/agenix-rekey";
+    agenix.inputs.nixpkgs.follows = "nixpkgs";
     agenix.url = "github:ryantm/agenix";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     darwin.url = "github:lnl7/nix-darwin";
@@ -240,6 +241,8 @@
             neovim = { imports = [ ./nixosModules/neovim ]; };
             wayland = { imports = [ ./nixosModules/wayland ]; };
           };
+
+          homeConfigurations = {};
         };
     };
 }
