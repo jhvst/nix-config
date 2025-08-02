@@ -1,4 +1,4 @@
-{ config, pkgs, ... }: {
+{ pkgs, ... }: {
 
   boot.kernel.sysctl."net.ipv4.tcp_mtu_probing" = 1; # Ubisoft Connect fix: https://www.protondb.com/app/2225070#5tJ0kpnj43
 

@@ -242,7 +242,7 @@
             wayland = { imports = [ ./nixosModules/wayland ]; };
           };
 
-          homeConfigurations = {};
+          homeConfigurations = { };
         };
     };
 }
