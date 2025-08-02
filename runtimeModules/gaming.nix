@@ -5,6 +5,8 @@
   programs = {
     obs-studio = { enable = true; plugins = [ pkgs.obs-studio-plugins.wlrobs ]; };
     steam.enable = true;
+    gamescope.enable = true;
+    gamemode.enable = true;
   };
 
   environment.systemPackages = with pkgs; [

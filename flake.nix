@@ -134,6 +134,7 @@
               ./nix-settings.nix
               inputs.home-manager.nixosModules.home-manager
               inputs.homestakeros-base.nixosModules.kexecTree
+              inputs.runtime-modules.nixosModules.runtimeModules
               inputs.sops-nix.nixosModules.sops
               self.nixosModules.wayland
               {
@@ -141,6 +142,16 @@
                   inputs.nixvim.homeManagerModules.nixvim
                 ];
                 home-manager.useGlobalPkgs = true;
+                services.runtimeModules = {
+                  enable = true;
+                  flakeUrl = "path:${self.outPath}";
+                  modules = [
+                    {
+                      name = "gaming";
+                      path = ./runtimeModules/gaming.nix;
+                    }
+                  ];
+                };
               }
             ];
           };
