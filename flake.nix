@@ -21,12 +21,9 @@
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     darwin.url = "github:lnl7/nix-darwin";
     flake-parts.url = "github:hercules-ci/flake-parts";
-    home-manager-stable.inputs.nixpkgs.follows = "nixpkgs-stable";
-    home-manager-stable.url = "github:nix-community/home-manager/release-24.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     homestakeros-base.url = "github:ponkila/homestakeros?dir=nixosModules/base";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-24.11";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
     nixvim.url = "github:nix-community/nixvim";
@@ -134,7 +131,7 @@
               ./nix-settings.nix
               inputs.agenix-rekey.nixosModules.default
               inputs.agenix.nixosModules.default
-              inputs.home-manager-stable.nixosModules.home-manager
+              inputs.home-manager.nixosModules.home-manager
               inputs.homestakeros-base.nixosModules.kexecTree
               inputs.sops-nix.nixosModules.sops
               self.nixosModules.wayland
@@ -229,10 +226,9 @@
         {
 
           nixosConfigurations = with inputs.nixpkgs.lib; {
-            "starlabs" = nixosSystem starlabs;
-          } // (with inputs.nixpkgs-stable.lib; {
             "muro" = nixosSystem muro;
-          });
+            "starlabs" = nixosSystem starlabs;
+          };
 
           darwinConfigurations = with inputs.darwin.lib; {
             "epsilon" = darwinSystem epsilon;
