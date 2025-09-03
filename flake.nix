@@ -246,6 +246,11 @@
           };
 
           homeConfigurations = { };
+
+          templates."musl" = {
+            path = ./templates/musl;
+            description = "Flake template showing musl cross compilation";
+          };
         };
     };
 }
