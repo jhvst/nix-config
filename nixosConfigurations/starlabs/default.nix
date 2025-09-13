@@ -612,16 +612,6 @@
       enable = true;
 
       what = "/dev/sda2";
-      where = "/home/juuso/.config/iamb";
-      options = "subvolid=274";
-      type = "btrfs";
-
-      wantedBy = [ "multi-user.target" ];
-    }
-    {
-      enable = true;
-
-      what = "/dev/sda2";
       where = "/home/juuso/.config/Yubico";
       options = "subvolid=275";
       type = "btrfs";
@@ -652,15 +642,6 @@
       what = "/dev/sda2";
       where = "/home/juuso/.local/share/sioyek";
       options = "subvolid=283";
-      type = "btrfs";
-
-      wantedBy = [ "multi-user.target" ];
-    }
-    {
-      enable = true;
-      what = "/dev/sda2";
-      where = "/home/juuso/.config/rclone";
-      options = "subvolid=284";
       type = "btrfs";
 
       wantedBy = [ "multi-user.target" ];
