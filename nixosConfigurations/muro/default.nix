@@ -150,9 +150,12 @@
     w3m
   ];
 
-  hardware.bluetooth.enable = false;
-  services.pipewire.enable = true;
-  hardware.amdgpu.amdvlk.enable = false;
+  hardware.bluetooth.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    pulse.enable = true;
+  };
   services.getty.autologinUser = "juuso";
 
   systemd.mounts = [
