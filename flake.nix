@@ -199,15 +199,6 @@
             ];
           };
 
-          epsilon = {
-            specialArgs = { inherit inputs outputs; };
-            system = "x86_64-darwin";
-            modules = [
-              ./darwinConfigurations/epsilon
-              ./nix-settings.nix
-            ];
-          };
-
           sandbox = {
             specialArgs = { inherit inputs outputs; };
             system = "aarch64-darwin";
@@ -236,7 +227,6 @@
           };
 
           darwinConfigurations = with inputs.darwin.lib; {
-            "epsilon" = darwinSystem epsilon;
             "sandbox" = darwinSystem sandbox;
           };
 
