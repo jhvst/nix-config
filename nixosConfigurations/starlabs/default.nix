@@ -719,7 +719,10 @@
     gnupg.agent.pinentryPackage = pkgs.pinentry-curses;
     light.enable = true;
     sway.enable = true;
-    vim.defaultEditor = true;
+    vim = {
+      enable = true;
+      defaultEditor = true;
+    };
   };
 
   services.getty.autologinUser = "juuso";
