@@ -232,6 +232,16 @@
 
       wantedBy = [ "multi-user.target" ];
     }
+    {
+      enable = true;
+
+      what = "/dev/disk/by-id/ata-Samsung_SSD_870_QVO_8TB_S5SSNF0R201250K";
+      where = "/home/juuso/My Games";
+      type = "btrfs";
+      options = "subvol=GameSaves/Firaxis";
+
+      wantedBy = [ "multi-user.target" ];
+    }
   ];
 
   services.plex = {
