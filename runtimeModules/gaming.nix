@@ -5,12 +5,29 @@
   programs = {
     obs-studio = { enable = true; plugins = [ pkgs.obs-studio-plugins.wlrobs ]; };
     steam.enable = true;
+    steam = {
+      enable = true;
+      gamescopeSession = {
+        enable = true;
+        args = [
+          "--hdr-enabled"
+          "--mangoapp"
+          "--rt"
+          "--steam"
+        ];
+        env = {
+          MANGOHUD = "1";
+          MANGOHUD_CONFIG = "full";
+        };
+      };
+    };
     gamescope.enable = true;
     gamemode.enable = true;
   };
 
   environment.systemPackages = with pkgs; [
     discord
+    mangohud
   ];
 
 }
