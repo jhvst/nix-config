@@ -137,6 +137,7 @@
               inputs.runtime-modules.nixosModules.runtimeModules
               inputs.sops-nix.nixosModules.sops
               self.nixosModules.wayland
+              self.nixosModules.juuso
               {
                 home-manager.sharedModules = [
                   inputs.nixvim.homeManagerModules.nixvim

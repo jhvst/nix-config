@@ -5,6 +5,43 @@
 {
   options = { };
   config = {
+    boot = {
+      kernelModules = [
+        "v4l2loopback"
+      ];
+      extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
+      extraModprobeConfig = ''
+        options v4l2loopback devices=1 video_nr=1 card_label="OBS Cam" exclusive_caps=1
+      '';
+    };
+    environment = {
+      shells = [ pkgs.fish ];
+      systemPackages = with pkgs; [
+        age-plugin-fido2-hmac
+        binwalk
+        btrfs-progs
+        cifs-utils
+        cryptsetup
+        file
+        gnupg
+        isd
+        nix-output-monitor
+        pinentry-curses
+        sioyek
+        sops
+        trezor-agent
+        trezorctl
+        wireguard-tools
+        wl-clipboard
+        wlsunset
+        xdg-utils # open command
+        xfsprogs
+        xorg.xkbcomp
+        xwayland-satellite
+        yazi
+        yubikey-manager
+      ];
+    };
     programs.git = {
       enable = true;
       lfs.enable = true;
@@ -38,6 +75,9 @@
         user.name = "Juuso Haavisto";
         user.signingkey = "/home/juuso/.ssh/id_ed25519_sk_rk_starlabs";
       };
+    };
+    services = {
+      yubikey-agent.enable = true;
     };
   };
 }
