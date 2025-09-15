@@ -236,7 +236,7 @@
             wayland = { imports = [ ./nixosModules/wayland ]; };
           };
 
-          homeConfigurations = { };
+          homeModules = { };
 
           templates."musl" = {
             path = ./templates/musl;
