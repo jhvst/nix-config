@@ -321,6 +321,8 @@
       };
     };
 
+    services.mako.enable = true;
+
   };
 
   system.etc.overlay.mutable = false;
