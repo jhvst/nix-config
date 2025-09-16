@@ -35,6 +35,8 @@
       # To just do the step 1, run:
       # $ nix build .#muro
       trusted-users = [ "root" "@wheel" ];
+      connect-timeout = 5; # default is 300s
+      warn-dirty = false;
     };
 
     buildMachines = [ ];
