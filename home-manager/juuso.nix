@@ -9,6 +9,22 @@
 
     home.stateVersion = config.system.stateVersion;
 
+    programs.awscli = {
+      enable = true;
+      # https://l-lin.github.io/devops/cloud/aws/AWS-CLI-with-Unix-password-manager
+      credentials = {
+        "default" = {
+          "credential_process" = "${pkgs.passage}/bin/passage show garage/nix";
+        };
+      };
+      settings = {
+        "default" = {
+          region = "garage";
+          endpoint_url = "http://nix-cache.s3.muro.ponkila.nix:3900";
+        };
+      };
+    };
+
     accounts.calendar = {
       accounts = {
         "ponkila" = {
