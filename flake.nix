@@ -115,6 +115,7 @@
           });
 
           "muro" = flake.nixosConfigurations.muro.config.system.build.kexecTree;
+          "halo" = flake.nixosConfigurations.halo.config.system.build.kexecTree;
           "starlabs" = flake.nixosConfigurations.starlabs.config.system.build.kexecTree;
         };
       };
@@ -122,6 +123,17 @@
       flake =
         let
           inherit (self) outputs;
+
+          halo = {
+            system = "x86_64-linux";
+            specialArgs = { inherit inputs outputs; };
+            modules = [
+              ./nixosModules/halo3
+              ./nix-settings.nix
+              ./runtimeModules/gaming.nix
+              inputs.homestakeros-base.nixosModules.kexecTree
+            ];
+          };
 
           muro = {
             system = "x86_64-linux";
@@ -224,6 +236,7 @@
           nixosConfigurations = with inputs.nixpkgs.lib; {
             "muro" = nixosSystem muro;
             "starlabs" = nixosSystem starlabs;
+            "halo" = nixosSystem halo;
           };
 
           darwinConfigurations = with inputs.darwin.lib; {

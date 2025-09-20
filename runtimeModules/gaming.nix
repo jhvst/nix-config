@@ -6,7 +6,7 @@
     obs-studio = {
       enable = true;
       plugins = with pkgs.obs-studio-plugins; [
-        distroav
+        #distroav
         wlrobs
       ];
     };
@@ -25,6 +25,7 @@
           MANGOHUD_CONFIG = "full";
         };
       };
+      localNetworkGameTransfers.openFirewall = true;
     };
     gamescope.enable = true;
     gamemode.enable = true;
