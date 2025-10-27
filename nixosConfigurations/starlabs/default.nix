@@ -485,12 +485,7 @@
   };
   systemd.services."coredns".serviceConfig.Group = "acme";
 
-  time.timeZone = "Europe/London";
-  location = {
-    provider = "manual";
-    latitude = 51.7520;
-    longitude = 1.2577;
-  };
+  time.timeZone = "Europe/Helsinki";
 
   users = {
     mutableUsers = false;
@@ -787,17 +782,6 @@
     };
   };
 
-  services.printing = {
-    enable = false;
-    clientConf = ''
-      ServerName cups.cs.ox.ac.uk
-    '';
-  };
-  services.avahi = {
-    enable = false;
-    nssmdns4 = true;
-    openFirewall = true;
-  };
 
   systemd.tmpfiles.rules = [
     "d /var/log/smartd 0755 netdata netdata -"
