@@ -152,7 +152,10 @@
     w3m
   ];
 
-  hardware.bluetooth.enable = true;
+  hardware = {
+    bluetooth.enable = true;
+    xpadneo.enable = true;
+  };
   services.pipewire = {
     enable = true;
     alsa.enable = true;

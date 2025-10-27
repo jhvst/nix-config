@@ -665,6 +665,7 @@
     };
     # https://gitlab.freedesktop.org/pipewire/pipewire/-/wikis/LE-Audio-+-LC3-support
     bluetooth.enable = true;
+    xpadneo.enable = true;
   };
 
   services.fprintd.enable = true;
