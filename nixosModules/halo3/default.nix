@@ -16,6 +16,7 @@
       ntfs3g
       rsync
       yazi
+      foot
     ];
 
     hardware = {

@@ -27,6 +27,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     homestakeros-base.url = "github:ponkila/homestakeros?dir=nixosModules/base";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.05";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
     nixvim.url = "github:nix-community/nixvim";
@@ -235,10 +236,10 @@
         in
         {
 
-          nixosConfigurations = with inputs.nixpkgs.lib; {
-            "muro" = nixosSystem muro;
-            "starlabs" = nixosSystem starlabs;
-            "halo" = nixosSystem halo;
+          nixosConfigurations = {
+            "muro" = inputs.nixpkgs.lib.nixosSystem muro;
+            "starlabs" = inputs.nixpkgs.lib.nixosSystem starlabs;
+            "halo" = inputs.nixpkgs-stable.lib.nixosSystem halo;
           };
 
           darwinConfigurations = with inputs.darwin.lib; {
