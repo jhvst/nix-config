@@ -1,8 +1,8 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  go,
-  lib,
+{ buildGoModule
+, fetchFromGitHub
+, go
+, lib
+,
 }:
 buildGoModule rec {
   pname = "es-node";
@@ -31,7 +31,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Golang implementation of the EthStorage node.";
     homepage = "https://github.com/ethstorage/es-node";
-    license = with licenses; [bsl11];
+    license = with licenses; [ bsl11 ];
     mainProgram = "es-node";
     inherit (go.meta) platforms;
   };

@@ -1,4 +1,4 @@
-{ config, pkgs, ... }: {
+{ pkgs, ... }: {
   options = { };
   config = {
     colorschemes.base16 = {
