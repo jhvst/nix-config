@@ -4,9 +4,6 @@
 {
 
   home-manager.users.juuso = _: {
-
-    home.stateVersion = config.system.stateVersion;
-
     accounts.email.accounts = {
       "ponkila" = {
         thunderbird.enable = true;

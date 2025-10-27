@@ -148,8 +148,9 @@
               inputs.homestakeros-base.nixosModules.kexecTree
               inputs.runtime-modules.nixosModules.runtimeModules
               inputs.sops-nix.nixosModules.sops
-              self.nixosModules.wayland
+              self.homeModules.default
               self.nixosModules.juuso
+              self.nixosModules.wayland
               {
                 home-manager.sharedModules = [
                   inputs.nixvim.homeManagerModules.nixvim
@@ -184,6 +185,7 @@
               inputs.runtime-modules.nixosModules.runtimeModules
               inputs.sops-nix.nixosModules.sops
               self.nixosModules.juuso
+              self.homeModules.default
               {
                 age.rekey = {
                   localStorageDir = ./nixosConfigurations/starlabs/secrets/agenix-rekey;
@@ -249,7 +251,9 @@
             wayland = { imports = [ ./nixosModules/wayland ]; };
           };
 
-          homeModules = { };
+          homeModules = {
+            default = { imports = [ ./homeModules ]; };
+          };
 
           templates."musl" = {
             path = ./templates/musl;
