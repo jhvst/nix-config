@@ -393,16 +393,8 @@
         dns = [ "127.0.0.1:1053" ];
         linkConfig.RequiredForOnline = "routable";
       };
-      "10-usbc" = {
-        matchConfig.Name = "enp2s0f4u2u4c2";
-        networkConfig = {
-          DHCP = "ipv4";
-          IPv6AcceptRA = true;
-        };
-        linkConfig.ActivationPolicy = "manual";
-      };
-      "20-remarkable" = {
-        matchConfig.Name = "enp2s0f4u2";
+      "10-usb" = {
+        matchConfig.Name = "enp2s0*";
         networkConfig = {
           DHCP = "ipv4";
           IPv6AcceptRA = true;
