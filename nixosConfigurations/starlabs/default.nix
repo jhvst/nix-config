@@ -798,6 +798,10 @@
     ];
   };
 
+  systemd.sleep.extraConfig = ''
+    HibernateOnACPower=no
+  '';
+
   system.stateVersion = "25.11";
 
 }
