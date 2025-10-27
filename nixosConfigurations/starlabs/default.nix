@@ -785,7 +785,10 @@
 
   systemd.tmpfiles.rules = [
     "d /var/log/smartd 0755 netdata netdata -"
-    "d /run/secrets/passage 0755 juuso juuso -"
+    "z /run/secrets/passage - juuso juuso -"
+    "z /home/juuso/.config - juuso juuso -" # z for chown: subvolume mount to subdirectory causes parent to be owned by root
+    "z /home/juuso/.gnupg - juuso juuso -"
+    "z /home/juuso/.local - juuso juuso -"
   ];
   services.smartd = {
     enable = true;
