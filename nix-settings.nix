@@ -16,11 +16,13 @@
       auto-optimise-store = true;
 
       extra-substituters = [
-        "https://cache.nixos.org"
+        "http://nix-cache.web.muro.ponkila.nix:3902"
+        "https://devenv.cachix.org"
         "https://nix-community.cachix.org"
       ];
       extra-trusted-public-keys = [
-        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
+        "nix-cache.web.muro.ponkila.nix-1:9/UckCrpT03YaR3zZkHyeiYV68RHxQInjAKi7RiobjQ="
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       ];
 
@@ -35,7 +37,8 @@
       # To just do the step 1, run:
       # $ nix build .#muro
       trusted-users = [ "root" "@wheel" ];
-      connect-timeout = 5; # default is 300s
+      connect-timeout = 3; # default is 300s
+      download-attempts = 2; # default is 5
       warn-dirty = false;
     };
 

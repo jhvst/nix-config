@@ -10,6 +10,7 @@
     options = [ "subvolid=280" ];
     neededForBoot = true;
   };
+  nix.settings.secret-key-files = [ "/var/mnt/bakhal/garage/cache-priv-key" ];
 
   systemd.network = {
     enable = true;
@@ -147,6 +148,7 @@
   };
 
   environment.systemPackages = with pkgs; [
+    garage_2
     w3m
   ];
 
