@@ -1,4 +1,6 @@
 { config
+, pkgs
+, outputs
 , ...
 }:
 {
@@ -6,7 +8,8 @@
   home-manager.users.juuso = _: {
     accounts.email.accounts = {
       "ponkila" = {
-        thunderbird.enable = true;
+        astroid.enable = true;
+        msmtp.enable = true;
         primary = true;
         mbsync = {
           enable = true;
@@ -17,7 +20,7 @@
         userName = "juuso@ponkila.com";
         realName = "Juuso Haavisto";
         passwordCommand = [
-          ''cat ${config.sops.secrets."mbsync/ponkila".path}''
+          ''${pkgs.coreutils}/bin/cat ${config.sops.secrets."mbsync/ponkila".path}''
         ];
         imap = {
           host = "mail.your-server.de";
@@ -37,7 +40,8 @@
         };
       };
       "mail.com" = {
-        thunderbird.enable = true;
+        astroid.enable = true;
+        msmtp.enable = true;
         mbsync = {
           enable = true;
           create = "both";
@@ -49,7 +53,7 @@
         userName = "juuso@mail.com";
         realName = "Juuso Haavisto";
         passwordCommand = [
-          ''cat ${config.sops.secrets."mbsync/mail.com".path}''
+          ''${pkgs.coreutils}/bin/cat ${config.sops.secrets."mbsync/mail.com".path}''
         ];
         imap = {
           host = "imap.mail.com";
@@ -67,7 +71,8 @@
         };
       };
       "gmail" = {
-        thunderbird.enable = true;
+        msmtp.enable = true;
+        astroid.enable = true;
         mbsync = {
           enable = true;
           create = "both";
@@ -79,17 +84,18 @@
         userName = "haavijuu@gmail.com";
         realName = "Juuso Haavisto";
         passwordCommand = [
-          ''cat ${config.sops.secrets."mbsync/gmail".path}''
+          ''${pkgs.coreutils}/bin/cat ${config.sops.secrets."mbsync/gmail".path}''
         ];
         flavor = "gmail.com";
       };
       "oxford" = {
-        thunderbird.enable = true;
+        astroid.enable = true;
+        msmtp.enable = true;
         mbsync = {
           enable = true;
           create = "maildir";
           extraConfig.account = {
-            CertificateFile = "${config.sops.secrets."davmail/oxford".path}";
+            CertificateFile = "/var/mnt/bakhal/davmail/davmail.crt";
           };
         };
         notmuch.enable = true;
@@ -97,7 +103,7 @@
         userName = "reub0117@OX.AC.UK";
         realName = "Juuso Haavisto";
         passwordCommand = [
-          ''cat ${config.sops.secrets."mbsync/oxford".path}''
+          ''${pkgs.coreutils}/bin/cat ${config.sops.secrets."mbsync/oxford".path}''
         ];
         imap = {
           host = "192.168.76.40";
@@ -115,17 +121,29 @@
         };
       };
     };
-
-    programs.notmuch = {
-      enable = true;
+    programs = {
+      astroid = {
+        enable = true;
+        extraConfig = {
+          editor = {
+            cmd = "${pkgs.foot}/bin/foot ${outputs.packages.x86_64-linux.neovim}/bin/nvim -c 'set ft=mail' '+set fileencoding=utf-8' '+set enc=utf-8' '+set ff=unix' '+set fo+=w' %1";
+            external_editor = true;
+          };
+        };
+        pollScript = "notmuch new";
+      };
+      mbsync.enable = true;
+      msmtp.enable = true;
+      notmuch.enable = true;
     };
-    programs.mbsync.enable = true;
-    programs.thunderbird = {
+    gtk = {
       enable = true;
-      profiles = {
-        ponkila.isDefault = true;
+      iconTheme = {
+        package = pkgs.adwaita-icon-theme;
+        name = "Adwaita";
       };
     };
+    services.mbsync.enable = true;
 
   };
 
