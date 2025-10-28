@@ -247,6 +247,16 @@
 
       wantedBy = [ "multi-user.target" ];
     }
+    {
+      enable = true;
+
+      what = "/dev/disk/by-label/bakhal";
+      where = "/home/juuso/scratchpad";
+      type = "btrfs";
+      options = "noatime,compress=zstd,subvol=scratchpad";
+
+      wantedBy = [ "multi-user.target" ];
+    }
   ];
 
   services.plex = {
