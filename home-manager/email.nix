@@ -116,7 +116,6 @@
       };
     };
 
-    programs.alot.enable = true;
     programs.notmuch = {
       enable = true;
     };

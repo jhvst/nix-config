@@ -54,6 +54,11 @@
   nixpkgs.overlays = [
     outputs.overlays.default
   ];
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = {
+    allowUnfree = true;
+    permittedInsecurePackages = [
+      "python3.13-ecdsa-0.19.1"
+    ];
+  };
 
 }

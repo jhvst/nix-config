@@ -29,8 +29,8 @@
         pinentry-curses
         sioyek
         sops
-        trezor-agent
-        trezorctl
+        #trezor-agent
+        #trezorctl
         wireguard-tools
         wl-clipboard
         wlsunset
