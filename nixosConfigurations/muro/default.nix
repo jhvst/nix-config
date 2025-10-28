@@ -160,6 +160,43 @@
     enable = true;
     alsa.enable = true;
     pulse.enable = true;
+    extraConfig.pipewire = {
+      # https://github.com/JManch/nixos/blob/38cbb86ff3e28dcb6116a05636548dc803e258dc/modules/nixos/system/audio.nix#L127-L159
+      "99-input-denoising.conf" = {
+        "context.modules" = lib.singleton {
+          name = "libpipewire-module-filter-chain";
+          args = {
+            "node.description" = "Noise Canceling source";
+            "media.name" = "Noise Canceling source";
+            "filter.graph" = {
+              nodes = lib.singleton {
+                type = "ladspa";
+                name = "rnnoise";
+                plugin = "${pkgs.rnnoise-plugin}/lib/ladspa/librnnoise_ladspa.so";
+                label = "noise_suppressor_stereo";
+                control = {
+                  "VAD Threshold (%)" = 50.0;
+                  "VAD Grace Period (ms)" = 200;
+                  "Retroactive VAD Grace (ms)" = 0;
+                };
+              };
+            };
+            "capture.props" = {
+              "node.description" = "RNNoise Sink";
+              "node.name" = "capture.rnnoise_sink";
+              "node.passive" = true;
+              "audio.rate" = 48000;
+            };
+            "playback.props" = {
+              "node.description" = "RNNoise Stream";
+              "node.name" = "rnnoise_stream";
+              "media.class" = "Audio/Source";
+              "audio.rate" = 48000;
+            };
+          };
+        };
+      };
+    };
   };
   services.getty.autologinUser = "juuso";
 
