@@ -451,6 +451,13 @@
       group = "netdata";
     };
   };
+  age = {
+    identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+    rekey = {
+      agePlugins = [ pkgs.age-plugin-fido2-hmac ];
+      hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINcjTjYiwE4wU2LzIu8xM+roOnmR4RDWZkAIFJcP4Nld root@muro";
+    };
+  };
 
   services.netdata = {
     enable = true;
