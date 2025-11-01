@@ -82,7 +82,14 @@
         isNormalUser = true;
         uid = 1000;
         group = "juuso";
-        extraGroups = [ "wheel" "video" "input" "acme" "aria2" ];
+        extraGroups = [
+          "acme"
+          "aria2"
+          "input"
+          "syncthing"
+          "video"
+          "wheel"
+        ];
         openssh.authorizedKeys.keys = [
           "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAILn/9IHTGC1sLxnPnLbtJpvF7HgXQ8xNkRwSLq8ay8eJAAAADHNzaDpzdGFybGFicw== ssh:starlabs"
         ];
@@ -294,6 +301,26 @@
 
       wantedBy = [ "multi-user.target" ];
     }
+    {
+      enable = true;
+
+      what = "/dev/disk/by-label/bakhal";
+      where = "/var/lib/syncthing";
+      type = "btrfs";
+      options = "subvol=syncthing";
+
+      wantedBy = [ "multi-user.target" ];
+    }
+    {
+      enable = true;
+
+      what = "/dev/disk/by-label/bakhal";
+      where = "/home/juuso/syncthing";
+      type = "btrfs";
+      options = "subvol=syncthing/data/f6812609-c33a-467e-abee-a350701977d8";
+
+      wantedBy = [ "multi-user.target" ];
+    }
   ];
 
   services.plex = {
@@ -468,6 +495,7 @@
 
   systemd.tmpfiles.rules = [
     "d /var/log/smartd 0755 netdata netdata -"
+    "z /var/lib/syncthing/data/f6812609-c33a-467e-abee-a350701977d8 0775 syncthing syncthing -"
   ];
   services.smartd = {
     enable = true;
@@ -496,6 +524,27 @@
           ID = "12D3KooWLiaVwjwrgGbxbQ8Zk7qMNMUHhhU5KQyTh93pf1kYnXxU";
           Addrs = [ "/ip4/192.168.76.4/tcp/4001" ];
         }];
+      };
+    };
+  };
+
+  services.syncthing = {
+    enable = true;
+    openDefaultPorts = true;
+    configDir = "/var/lib/syncthing/config";
+    databaseDir = "/var/lib/syncthing/db";
+    dataDir = "/var/lib/syncthing/data";
+    settings = {
+      devices = {
+        "starlabs" = { id = "EPDI4WN-2RMZCCY-SINRNKM-IMLPWU7-IBKLEWP-6GI22AU-K6THM3P-AMUQTA2"; };
+      };
+      folders = {
+        "syncthing-persistent-alpha" = rec {
+          type = "sendreceive";
+          id = "f6812609-c33a-467e-abee-a350701977d8";
+          path = "/var/lib/syncthing/data/${id}";
+          devices = [ "starlabs" ];
+        };
       };
     };
   };
