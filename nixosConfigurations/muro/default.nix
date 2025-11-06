@@ -571,9 +571,27 @@
           id = "f6812609-c33a-467e-abee-a350701977d8";
           path = "/var/lib/syncthing/data/${id}";
           devices = [ "starlabs" ];
+          syncOwnership = true;
         };
       };
     };
+  };
+  systemd.services.syncthing.serviceConfig = {
+    MemoryDenyWriteExecute = true;
+    NoNewPrivileges = true;
+    PrivateDevices = lib.mkForce false;
+    PrivateMounts = lib.mkForce false;
+    PrivateTmp = true;
+    PrivateUsers = lib.mkForce false;
+    ProtectControlGroups = lib.mkForce false;
+    ProtectHostname = lib.mkForce false;
+    ProtectKernelModules = lib.mkForce false;
+    ProtectKernelTunables = lib.mkForce false;
+    RestrictNamespaces = lib.mkForce false;
+    RestrictRealtime = lib.mkForce false;
+    AmbientCapabilities = "CAP_CHOWN CAP_FOWNER";
+    CapabilityBoundingSet = lib.mkForce [ ];
+    RestrictSUIDSGID = lib.mkForce false;
   };
 
   services.garage = {
