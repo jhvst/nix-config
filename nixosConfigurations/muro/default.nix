@@ -51,6 +51,9 @@
         forward . 1.1.1.1 {
           health_check 5s
         }
+        hosts {
+          127.0.0.1 muro.ponkila.nix nix-cache.s3.muro.ponkila.nix nix-cache.web.muro.ponkila.nix
+        }
         cache 30
       }
     '';
@@ -103,6 +106,10 @@
         uid = 2000;
         hashedPasswordFile = config.sops.secrets."users/sean".path;
       };
+      garage = {
+        isSystemUser = true;
+        group = "garage";
+      };
     };
     groups = {
       juuso = {
@@ -111,6 +118,7 @@
       sean = {
         gid = 2000;
       };
+      garage = { };
     };
   };
   environment.shells = [ pkgs.fish ];
@@ -321,6 +329,16 @@
 
       wantedBy = [ "multi-user.target" ];
     }
+    {
+      enable = true;
+
+      what = "/dev/disk/by-label/bakhal";
+      where = "/var/lib/garage";
+      type = "btrfs";
+      options = "subvol=garage";
+
+      wantedBy = [ "multi-user.target" ];
+    }
   ];
 
   services.plex = {
@@ -484,6 +502,14 @@
       agePlugins = [ pkgs.age-plugin-fido2-hmac ];
       hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINcjTjYiwE4wU2LzIu8xM+roOnmR4RDWZkAIFJcP4Nld root@muro";
     };
+    secrets = {
+      "garage/environment" = {
+        rekeyFile = ./secrets/agenix/garage/environment.age;
+        owner = "garage";
+        group = "garage";
+        mode = "0440";
+      };
+    };
   };
 
   services.netdata = {
@@ -494,6 +520,7 @@
   };
 
   systemd.tmpfiles.rules = [
+    "Z /var/lib/garage 0640 garage garage -"
     "d /var/log/smartd 0755 netdata netdata -"
     "z /var/lib/syncthing/data/f6812609-c33a-467e-abee-a350701977d8 0775 syncthing syncthing -"
   ];
@@ -547,6 +574,76 @@
         };
       };
     };
+  };
+
+  services.garage = {
+    enable = true;
+    environmentFile = config.age.secrets."garage/environment".path;
+    package = pkgs.garage_2;
+    settings = {
+      data_dir = "/var/lib/garage/data";
+      db_engine = "lmdb";
+      metadata_dir = "/var/lib/garage/metadata";
+      replication_factor = 1;
+      rpc_bind_addr = "[::]:3901";
+      rpc_public_addr = "127.0.0.1:3901";
+      admin = {
+        api_bind_addr = "[::]:3903";
+      };
+      k2v_api = {
+        api_bind_addr = "[::]:3904";
+      };
+      s3_api = {
+        s3_region = "garage";
+        api_bind_addr = "[::]:3900";
+        root_domain = ".s3.muro.ponkila.nix";
+      };
+      s3_web = {
+        bind_addr = "[::]:3902";
+        root_domain = ".web.muro.ponkila.nix";
+        index = "index.html";
+      };
+    };
+  };
+  systemd.services.garage.serviceConfig = {
+    DynamicUser = false;
+    Group = "garage";
+    User = "garage";
+  };
+
+  services.caddy = {
+    enable = true;
+    extraConfig = ''
+      s3.muro.ponkila.nix, *.s3.muro.ponkila.nix {
+        tls internal
+        reverse_proxy localhost:3900 192.168.1.10:3900 {
+          health_uri       /health
+          health_port      3903
+          #health_interval 15s
+          #health_timeout  5s
+        }
+      }
+
+      *.web.muro.ponkila.nix {
+        tls internal
+        reverse_proxy localhost:3902 192.168.1.10:3902 {
+          health_uri       /health
+          health_port      3903
+          #health_interval 15s
+          #health_timeout  5s
+        }
+      }
+
+      admin.muro.ponkila.nix {
+        tls internal
+        reverse_proxy localhost:3903 {
+          health_uri       /health
+          health_port      3903
+          #health_interval 15s
+          #health_timeout  5s
+        }
+      }
+    '';
   };
 
   system.stateVersion = "25.11";
