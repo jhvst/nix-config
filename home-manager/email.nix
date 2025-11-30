@@ -1,24 +1,35 @@
 { config
 , pkgs
 , outputs
+, lib
 , ...
 }:
+let
+  mkMailAccount = name: extra: lib.recursiveUpdate
+    {
+      address = name;
+      astroid = {
+        enable = true;
+        extraConfig = {
+          additional_sent_tags = "sent";
+        };
+      };
+      msmtp.enable = true;
+      notmuch.enable = true;
+      realName = "Juuso Haavisto";
+    }
+    extra;
+in
 {
-
   home-manager.users.juuso = _: {
     accounts.email.accounts = {
-      "ponkila" = {
-        astroid.enable = true;
-        msmtp.enable = true;
+      "ponkila" = mkMailAccount "juuso@ponkila.com" {
         primary = true;
         mbsync = {
           enable = true;
           create = "maildir";
         };
-        notmuch.enable = true;
-        address = "juuso@ponkila.com";
         userName = "juuso@ponkila.com";
-        realName = "Juuso Haavisto";
         passwordCommand = [
           ''${pkgs.coreutils}/bin/cat ${config.sops.secrets."mbsync/ponkila".path}''
         ];
@@ -39,19 +50,14 @@
           };
         };
       };
-      "mail.com" = {
-        astroid.enable = true;
-        msmtp.enable = true;
+      "mail.com" = mkMailAccount "juuso@mail.com" {
         mbsync = {
           enable = true;
           create = "both";
           expunge = "both";
           remove = "both";
         };
-        notmuch.enable = true;
-        address = "juuso@mail.com";
         userName = "juuso@mail.com";
-        realName = "Juuso Haavisto";
         passwordCommand = [
           ''${pkgs.coreutils}/bin/cat ${config.sops.secrets."mbsync/mail.com".path}''
         ];
@@ -70,27 +76,20 @@
           };
         };
       };
-      "gmail" = {
-        msmtp.enable = true;
-        astroid.enable = true;
+      "gmail" = mkMailAccount "haavijuu@gmail.com" {
         mbsync = {
           enable = true;
           create = "both";
           expunge = "both";
           remove = "both";
         };
-        notmuch.enable = true;
-        address = "haavijuu@gmail.com";
         userName = "haavijuu@gmail.com";
-        realName = "Juuso Haavisto";
         passwordCommand = [
           ''${pkgs.coreutils}/bin/cat ${config.sops.secrets."mbsync/gmail".path}''
         ];
         flavor = "gmail.com";
       };
-      "oxford" = {
-        astroid.enable = true;
-        msmtp.enable = true;
+      "oxford" = mkMailAccount "juuso.haavisto@reuben.ox.ac.uk" {
         mbsync = {
           enable = true;
           create = "maildir";
@@ -98,10 +97,7 @@
             CertificateFile = "/var/mnt/bakhal/davmail/davmail.crt";
           };
         };
-        notmuch.enable = true;
-        address = "juuso.haavisto@reuben.ox.ac.uk";
         userName = "reub0117@OX.AC.UK";
-        realName = "Juuso Haavisto";
         passwordCommand = [
           ''${pkgs.coreutils}/bin/cat ${config.sops.secrets."mbsync/oxford".path}''
         ];
@@ -129,6 +125,12 @@
             cmd = "${pkgs.foot}/bin/foot ${outputs.packages.x86_64-linux.neovim}/bin/nvim -c 'set ft=mail' '+set fileencoding=utf-8' '+set enc=utf-8' '+set ff=unix' '+set fo+=w' %1";
             external_editor = true;
           };
+          startup = {
+            queries = {
+              TODO = "tag:flagged";
+              Drafts = "tag:draft";
+            };
+          };
         };
         pollScript = "notmuch new";
       };
@@ -143,8 +145,9 @@
         name = "Adwaita";
       };
     };
-    services.mbsync.enable = true;
-
+    services.mbsync = {
+      enable = true;
+      frequency = "*:0/15";
+    };
   };
-
 }
