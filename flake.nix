@@ -5,8 +5,7 @@
   inputs = {
     agenix-rekey.inputs.nixpkgs.follows = "nixpkgs";
     agenix-rekey.url = "github:oddlama/agenix-rekey";
-    # optionally choose not to download darwin deps (saves some resources on Linux)
-    agenix.inputs.darwin.follows = "";
+    agenix.inputs.darwin.follows = ""; # optionally choose not to download darwin deps (saves some resources on Linux)
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     agenix.url = "github:ryantm/agenix";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
@@ -40,74 +39,92 @@
         inputs.treefmt-nix.flakeModule
       ];
 
-      perSystem = { pkgs, config, system, ... }: {
+      perSystem = { pkgs, config, system, inputs', ... }:
 
-        _module.args.pkgs = import inputs.nixpkgs {
-          inherit system;
-          overlays = [
-            self.overlays.default
-          ];
-          config = { };
-        };
+        let
+          nixpkgs-patched = import
+            ((import inputs.nixpkgs { inherit system; }).applyPatches {
+              name = "nixpkgs-pr-455630";
+              src = inputs.nixpkgs;
+              patches = [ ./packages/trezor/455630.patch ];
+            })
+            { inherit system; };
+        in
+        {
 
-        overlayAttrs = {
-          inherit (config.packages)
-            fstar-vscode-assistant
-            libedgetpu
-            passage;
-        };
-
-        treefmt.config = {
-          projectRootFile = "flake.nix";
-          flakeFormatter = true;
-          flakeCheck = true;
-          programs = {
-            nixpkgs-fmt.enable = true;
-            deadnix.enable = true;
-            statix.enable = true;
-          };
-          settings.global.excludes = [ "*/flake.nix" ];
-        };
-
-        devShells = {
-          default = pkgs.mkShell {
-            nativeBuildInputs = with pkgs; [
-              cobang
-              config.agenix-rekey.package
-              nix-tree
-              sops
-              ssh-to-age
-              tomb
-              yubioath-flutter
+          _module.args.pkgs = import inputs.nixpkgs {
+            inherit system;
+            overlays = [
+              self.overlays.default
             ];
+            config = { };
           };
-        };
 
-        packages = {
-          "fstar-vscode-assistant" = pkgs.callPackage ./packages/fstar-vscode-assistant { };
-          "savilerow" = pkgs.callPackage ./packages/savilerow { };
-          "sounds" = inputs.sounds.packages.${system}.default;
-          "neovim" = inputs.nixvim.legacyPackages.${system}.makeNixvimWithModule {
-            inherit pkgs;
-            module = {
-              imports = [ self.nixosModules.neovim ];
+          overlayAttrs = {
+            inherit (config.packages)
+              fstar-vscode-assistant
+              libedgetpu
+              passage
+              python313
+              ;
+          };
+
+          treefmt.config = {
+            projectRootFile = "flake.nix";
+            flakeFormatter = true;
+            flakeCheck = true;
+            programs = {
+              nixpkgs-fmt.enable = true;
+              deadnix.enable = true;
+              statix.enable = true;
+            };
+            settings.global.excludes = [ "*/flake.nix" ];
+          };
+
+          devShells = {
+            default = pkgs.mkShell {
+              nativeBuildInputs = with pkgs; [
+                cobang
+                config.agenix-rekey.package
+                nix-tree
+                sops
+                ssh-to-age
+                tomb
+                yubioath-flutter
+              ];
             };
           };
-          "libedgetpu" = pkgs.callPackage ./packages/libedgetpu { };
-          "passage" = pkgs.passage.overrideAttrs (_oldAttrs: {
-            src = pkgs.fetchFromGitHub {
-              owner = "remko";
-              repo = "passage";
-              rev = "fba940f9e9ffbad7b746f26b8d6323ef6f746187";
-              hash = "sha256-1jQCEMeovDjjKukVHaK4xZiBPgZpNQwjvVbrbdeAXrE=";
-            };
-          });
 
-          "muro" = flake.nixosConfigurations.muro.config.system.build.kexecTree;
-          "halo" = flake.nixosConfigurations.halo.config.system.build.kexecTree;
-          "starlabs" = flake.nixosConfigurations.starlabs.config.system.build.kexecTree;
+          packages = {
+            "fstar-vscode-assistant" = pkgs.callPackage ./packages/fstar-vscode-assistant { };
+            "savilerow" = pkgs.callPackage ./packages/savilerow { };
+            "sounds" = inputs'.sounds.packages.default;
+            "neovim" = inputs'.nixvim.legacyPackages.makeNixvimWithModule {
+              inherit pkgs;
+              module = {
+                imports = [ self.nixosModules.neovim ];
+              };
+            };
+            "libedgetpu" = pkgs.callPackage ./packages/libedgetpu { };
+            "passage" = pkgs.passage.overrideAttrs (_oldAttrs: {
+              src = pkgs.fetchFromGitHub {
+                owner = "remko";
+                repo = "passage";
+                rev = "fba940f9e9ffbad7b746f26b8d6323ef6f746187";
+                hash = "sha256-1jQCEMeovDjjKukVHaK4xZiBPgZpNQwjvVbrbdeAXrE=";
+              };
+            });
+            "python313" = pkgs.python313.override {
+              packageOverrides = final: prev: {
+                trezor = nixpkgs-patched.python313Packages.trezor;
+              };
+            };
+
+            "muro" = flake.nixosConfigurations.muro.config.system.build.kexecTree;
+            "halo" = flake.nixosConfigurations.halo.config.system.build.kexecTree;
+            "starlabs" = flake.nixosConfigurations.starlabs.config.system.build.kexecTree;
+          };
         };
-      };
 
       flake =
         let

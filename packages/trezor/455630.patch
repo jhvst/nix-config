@@ -1,0 +1,107 @@
+From 82ce2223ea4054847637098d479488a7029279b8 Mon Sep 17 00:00:00 2001
+From: Pavol Rusnak <pavol@rusnak.io>
+Date: Sat, 25 Oct 2025 22:12:02 +0200
+Subject: [PATCH] python3Packages.trezor: 0.13.10 -> 0.20.0.dev0
+
+---
+ .../python-modules/trezor/default.nix         | 35 ++++++++++++++-----
+ pkgs/top-level/all-packages.nix               |  8 ++++-
+ 2 files changed, 34 insertions(+), 9 deletions(-)
+
+diff --git a/pkgs/development/python-modules/trezor/default.nix b/pkgs/development/python-modules/trezor/default.nix
+index 8c62f18b8c6f9..39d534a4f7066 100644
+--- a/pkgs/development/python-modules/trezor/default.nix
++++ b/pkgs/development/python-modules/trezor/default.nix
+@@ -3,6 +3,9 @@
+   lib,
+   buildPythonPackage,
+   fetchPypi,
++  hatchling,
++  pytestCheckHook,
++  # dependencies
+   click,
+   construct,
+   construct-classes,
+@@ -10,26 +13,30 @@
+   ecdsa,
+   libusb1,
+   mnemonic,
++  noiseprotocol,
+   requests,
+-  setuptools,
+   shamir-mnemonic,
+   slip10,
+   typing-extensions,
+-  trezor-udev-rules,
+-  pytestCheckHook,
++  # optional-dependencies
++  bleak,
++  pillow,
++  hidapi,
++  web3,
++  pyqt5,
+ }:
+ 
+ buildPythonPackage rec {
+   pname = "trezor";
+-  version = "0.13.10";
++  version = "0.20.0.dev0";
+   pyproject = true;
+ 
+   src = fetchPypi {
+     inherit pname version;
+-    hash = "sha256-egtq5GKN0MMaXOtRJYkY2bvdOthROIg3IlgmsijuUE8=";
++    hash = "sha256-hU2J5TORWU55zoxjfsFPjk4VtNoxmVsjceDVvTKXKxI=";
+   };
+ 
+-  build-system = [ setuptools ];
++  build-system = [ hatchling ];
+ 
+   dependencies = [
+     click
+@@ -39,12 +46,24 @@ buildPythonPackage rec {
+     ecdsa
+     libusb1
+     mnemonic
++    noiseprotocol
+     requests
+     shamir-mnemonic
+     slip10
+     typing-extensions
+-  ]
+-  ++ lib.optionals stdenv.hostPlatform.isLinux [ trezor-udev-rules ];
++  ];
++
++  optional-dependencies = {
++    # bleak is missing on darwin
++    # https://github.com/NixOS/nixpkgs/issues/456469
++    ble = lib.optionals stdenv.hostPlatform.isLinux [ bleak ];
++    extra = [ pillow ];
++    hidapi = [ hidapi ];
++    ethereum = [ web3 ];
++    qt-widgets = [ pyqt5 ];
++    # stellar = [ stellar-sdk ]; # missing in nixpkgs
++    full = lib.flatten (lib.attrValues (lib.removeAttrs optional-dependencies [ "full" ]));
++  };
+ 
+   nativeCheckInputs = [ pytestCheckHook ];
+ 
+diff --git a/pkgs/top-level/all-packages.nix b/pkgs/top-level/all-packages.nix
+index e474e7028100c..04208ba5cc0b5 100644
+--- a/pkgs/top-level/all-packages.nix
++++ b/pkgs/top-level/all-packages.nix
+@@ -4094,7 +4094,13 @@ with pkgs;
+ 
+   tpmmanager = libsForQt5.callPackage ../applications/misc/tpmmanager { };
+ 
+-  trezorctl = with python3Packages; toPythonApplication trezor;
++  trezorctl =
++    with python3Packages;
++    toPythonApplication (
++      trezor.overridePythonAttrs (oldAttrs: {
++        dependencies = oldAttrs.dependencies ++ oldAttrs.optional-dependencies.full;
++      })
++    );
+ 
+   trezor-agent = with python3Packages; toPythonApplication trezor-agent;
+ 
