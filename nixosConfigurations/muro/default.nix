@@ -23,25 +23,17 @@
           IPv6AcceptRA = true;
         };
         dns = [ "127.0.0.1:1053" ];
-        address = [ "192.168.17.10/24" ]; # static IP
+        address = [ "192.168.1.10/24" ]; # static IP
       };
     };
   };
   networking = {
-    hostName = "muro";
-    nat = {
-      enable = true;
-      internalInterfaces = [ "ve-+" ];
-      externalInterface = "enp5s0";
-      # Lazy IPv6 connectivity for the container
-      enableIPv6 = true;
-    };
-    nameservers = [ "127.0.0.1:1053" ];
     firewall.enable = false;
-    wg-quick.interfaces = {
-      ponkila.configFile = config.sops.secrets."wireguard/ponkila".path;
-    };
+    hostName = "muro";
+    nameservers = [ "127.0.0.1:1053" ];
+    stevenblack.enable = true;
     useDHCP = false;
+    wg-quick.interfaces.ponkila.configFile = config.sops.secrets."wireguard/ponkila".path;
   };
   time.timeZone = "Europe/Helsinki";
   services.coredns = {
