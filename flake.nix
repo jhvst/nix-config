@@ -14,7 +14,6 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     homestakeros-base.url = "github:ponkila/homestakeros?dir=nixosModules/base";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.05";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
     nixvim.url = "github:nix-community/nixvim";
@@ -121,7 +120,6 @@
             };
 
             "muro" = flake.nixosConfigurations.muro.config.system.build.kexecTree;
-            "halo" = flake.nixosConfigurations.halo.config.system.build.kexecTree;
             "starlabs" = flake.nixosConfigurations.starlabs.config.system.build.kexecTree;
           };
         };
@@ -129,17 +127,6 @@
       flake =
         let
           inherit (self) outputs;
-
-          halo = {
-            system = "x86_64-linux";
-            specialArgs = { inherit inputs outputs; };
-            modules = [
-              ./nixosModules/halo3
-              ./nix-settings.nix
-              ./runtimeModules/gaming.nix
-              inputs.homestakeros-base.nixosModules.kexecTree
-            ];
-          };
 
           muro = {
             system = "x86_64-linux";
@@ -260,7 +247,6 @@
           nixosConfigurations = {
             "muro" = inputs.nixpkgs.lib.nixosSystem muro;
             "starlabs" = inputs.nixpkgs.lib.nixosSystem starlabs;
-            "halo" = inputs.nixpkgs-stable.lib.nixosSystem halo;
           };
 
           darwinConfigurations = with inputs.darwin.lib; {
