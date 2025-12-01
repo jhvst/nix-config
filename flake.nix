@@ -19,11 +19,8 @@
     runtime-modules.url = "github:tupakkatapa/nixos-runtime-modules";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
     sops-nix.url = "github:Mic92/sops-nix";
-    sounds.inputs.nixpkgs.follows = "nixpkgs";
-    sounds.url = "github:jhvst/nix-config?dir=packages/sounds";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
     treefmt-nix.url = "github:numtide/treefmt-nix";
-    wirenix.url = "sourcehut:~msalerno/wirenix";
   };
 
   outputs = { self, ... }@inputs:
@@ -157,7 +154,6 @@
           packages = {
             "fstar-vscode-assistant" = pkgs.callPackage ./packages/fstar-vscode-assistant { };
             "savilerow" = pkgs.callPackage ./packages/savilerow { };
-            "sounds" = inputs'.sounds.packages.default;
             "neovim" = inputs'.nixvim.legacyPackages.makeNixvimWithModule {
               inherit pkgs;
               module = {

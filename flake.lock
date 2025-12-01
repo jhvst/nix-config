@@ -311,39 +311,6 @@
         "type": "github"
       }
     },
-    "flake-parts_7": {
-      "inputs": {
-        "nixpkgs-lib": "nixpkgs-lib_3"
-      },
-      "locked": {
-        "lastModified": 1690933134,
-        "narHash": "sha256-ab989mN63fQZBFrkk4Q8bYxQCktuHmBIBqUG1jl6/FQ=",
-        "owner": "hercules-ci",
-        "repo": "flake-parts",
-        "rev": "59cf3f1447cfc75087e7273b04b31e689a8599fb",
-        "type": "github"
-      },
-      "original": {
-        "owner": "hercules-ci",
-        "repo": "flake-parts",
-        "type": "github"
-      }
-    },
-    "flake-root": {
-      "locked": {
-        "lastModified": 1680964220,
-        "narHash": "sha256-dIdTYcf+KW9a4pKHsEbddvLVSfR1yiAJynzg2x0nfWg=",
-        "owner": "srid",
-        "repo": "flake-root",
-        "rev": "f1c0b93d05bdbea6c011136ba1a135c80c5b326c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "srid",
-        "repo": "flake-root",
-        "type": "github"
-      }
-    },
     "flake-utils": {
       "inputs": {
         "systems": "systems_2"
@@ -667,24 +634,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-lib_3": {
-      "locked": {
-        "dir": "lib",
-        "lastModified": 1690881714,
-        "narHash": "sha256-h/nXluEqdiQHs1oSgkOOWF+j8gcJMWhwnZ9PFabN6q0=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "9e1960bc196baf6881340d53dccb203a951745a2",
-        "type": "github"
-      },
-      "original": {
-        "dir": "lib",
-        "owner": "NixOS",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1734875076,
@@ -781,18 +730,6 @@
         "type": "github"
       }
     },
-    "nixpkgs_8": {
-      "locked": {
-        "lastModified": 0,
-        "narHash": "sha256-ECni+IkwXjusHsm9Sexdtq8weAq/yUyt1TWIemXt3Ko=",
-        "path": "/nix/store/bi5zxc0v5g6ylygdwyqzh280sccg3ykb-source",
-        "type": "path"
-      },
-      "original": {
-        "id": "nixpkgs",
-        "type": "indirect"
-      }
-    },
     "nixvim": {
       "inputs": {
         "flake-parts": "flake-parts_4",
@@ -874,9 +811,7 @@
         "nixvim": "nixvim",
         "runtime-modules": "runtime-modules",
         "sops-nix": "sops-nix",
-        "sounds": "sounds",
-        "treefmt-nix": "treefmt-nix_3",
-        "wirenix": "wirenix"
+        "treefmt-nix": "treefmt-nix_3"
       }
     },
     "runtime-modules": {
@@ -917,30 +852,6 @@
       "original": {
         "owner": "Mic92",
         "repo": "sops-nix",
-        "type": "github"
-      }
-    },
-    "sounds": {
-      "inputs": {
-        "flake-parts": "flake-parts_7",
-        "flake-root": "flake-root",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "dir": "packages/sounds",
-        "lastModified": 1746295042,
-        "narHash": "sha256-5a0RcFPwIbNN665ydo/JStjr9ooWTaIt12KDko6T+YI=",
-        "owner": "jhvst",
-        "repo": "nix-config",
-        "rev": "a0d9c62c218cd31568339ec3f8cd4b870553c9e8",
-        "type": "github"
-      },
-      "original": {
-        "dir": "packages/sounds",
-        "owner": "jhvst",
-        "repo": "nix-config",
         "type": "github"
       }
     },
@@ -1049,24 +960,6 @@
         "owner": "numtide",
         "repo": "treefmt-nix",
         "type": "github"
-      }
-    },
-    "wirenix": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_8"
-      },
-      "locked": {
-        "lastModified": 1721448132,
-        "narHash": "sha256-z+uRqGQgQah40a6wRUKm1QdUlcbMvN3V9IP/OQIZcHA=",
-        "owner": "~msalerno",
-        "repo": "wirenix",
-        "rev": "e6a936d6a9c3e832a133ef72eb1acad1dfbddddd",
-        "type": "sourcehut"
-      },
-      "original": {
-        "owner": "~msalerno",
-        "repo": "wirenix",
-        "type": "sourcehut"
       }
     }
   },
