@@ -1,4 +1,4 @@
-{ pkgs, config, lib, ... }:
+{ pkgs, config, ... }:
 {
 
   boot = {
@@ -310,17 +310,6 @@
         PASSWORD_STORE_CLIP_TIME = "60";
       };
     };
-
-    programs.ssh = {
-      enable = true;
-      hashKnownHosts = true;
-      matchBlocks = {
-        "*" = {
-          identityFile = "~/.ssh/id_ed25519_sk_rk_starlabs";
-        };
-      };
-    };
-
   };
 
   system.etc.overlay.mutable = false;

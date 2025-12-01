@@ -73,7 +73,7 @@
         tag.sort = "version:refname";
         user.email = "juuso@ponkila.com";
         user.name = "Juuso Haavisto";
-        user.signingkey = "/home/juuso/.ssh/id_ed25519_sk_rk_starlabs";
+        user.signingkey = "/home/juuso/.ssh/id_ed25519_sk_rk";
       };
     };
     services = {
