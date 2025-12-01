@@ -295,7 +295,7 @@
       enable = true;
       homedir = "${home.homeDirectory}/.gnupg/trezor";
       settings = {
-        agent-program = "${pkgs.trezor_agent}/bin/trezor-gpg-agent";
+        agent-program = "${pkgs.trezor-agent}/bin/trezor-gpg-agent";
         default-key = "Juuso Haavisto <juuso@ponkila.com>";
       };
     };
@@ -802,6 +802,6 @@
     HibernateOnACPower=no
   '';
 
-  system.stateVersion = "25.11";
+  system.stateVersion = "26.05";
 
 }
