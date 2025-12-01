@@ -8,8 +8,6 @@
     agenix.inputs.darwin.follows = ""; # optionally choose not to download darwin deps (saves some resources on Linux)
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     agenix.url = "github:ryantm/agenix";
-    darwin.inputs.nixpkgs.follows = "nixpkgs";
-    darwin.url = "github:lnl7/nix-darwin";
     flake-parts.url = "github:hercules-ci/flake-parts";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
@@ -31,7 +29,7 @@
 
     inputs.flake-parts.lib.mkFlake { inherit inputs; } rec {
 
-      systems = inputs.nixpkgs.lib.systems.flakeExposed;
+      systems = [ "x86_64-linux" ];
       imports = [
         inputs.agenix-rekey.flakeModule
         inputs.flake-parts.flakeModules.easyOverlay
@@ -222,35 +220,12 @@
             ];
           };
 
-          sandbox = {
-            specialArgs = { inherit inputs outputs; };
-            system = "aarch64-darwin";
-            modules = [
-              ./home-manager/juuso.nix
-              ./home-manager/programs/neovim
-              ./darwinConfigurations/sandbox
-              ./nix-settings.nix
-              inputs.home-manager.darwinModules.home-manager
-              {
-                home-manager.sharedModules = [
-                  inputs.nixvim.homeManagerModules.nixvim
-                  inputs.sops-nix.homeManagerModules.sops
-                ];
-                home-manager.useGlobalPkgs = true;
-              }
-            ];
-          };
-
         in
         {
 
           nixosConfigurations = {
             "muro" = inputs.nixpkgs.lib.nixosSystem muro;
             "starlabs" = inputs.nixpkgs.lib.nixosSystem starlabs;
-          };
-
-          darwinConfigurations = with inputs.darwin.lib; {
-            "sandbox" = darwinSystem sandbox;
           };
 
           nixosModules = {
