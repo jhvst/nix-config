@@ -112,6 +112,14 @@
           ".devenv"
         ];
       };
+      gpg = {
+        enable = true;
+        homedir = "${home.homeDirectory}/.gnupg/trezor";
+        settings = {
+          agent-program = "${pkgs.trezor-agent}/bin/trezor-gpg-agent";
+          default-key = "Juuso Haavisto <juuso@ponkila.com>";
+        };
+      };
       qcal = {
         enable = true;
         timezone = config.time.timeZone;

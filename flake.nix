@@ -41,13 +41,73 @@
       perSystem = { pkgs, config, system, inputs', ... }:
 
         let
+          # nixpkgs-patched is an advanced tactic to solve a very
+          # particular problem:
+          # suppose there is a patch upstream that depends on a
+          # specific version of Python, here, `3.13.8`, but the patch
+          # trails the current tip such that the Python version on our
+          # inputs.nixpkgs is `3.13.9`.
+          #
+          # in this case, we have two options:
+          # - 1. meticilously override each dependency of the patched
+          # package, and every app that depends on it, to use `3.18.8`
+          # (in this case, `trezor` and `trezor-agent`)
+          # - 2. lock our whole nixpkgs to `3.13.8` and cause a huge
+          # recompile due to cache misses
+          #
+          # what we can do instead is to apply a patch on the upstream
+          # inputs.nixpkgs to change the source code such that we
+          # automatically gain steps we would do in 1.
+          #
+          # finally, we can apply configuration parameters that affect
+          # only the patched package closure, as done here with the
+          # `permittedInsecurePackages`. unfortunately, this closure
+          # must be duplicated on both our patched nixpkgs, as well
+          # as our upstream nixpkgs (see `nix-settings.nix`).
+          # yet, this keeps our configuration tidy and clear regarding
+          # what fixes are related to the affected patchset.
+          # to cherry-pick patches, we override the package we need
+          # (in this case, the whole `python313` package set) with the
+          # patched version:
+          #
+          # ```nix
+          # "python313" = pkgs.python313.override {
+          #   packageOverrides = _: _: {
+          #     inherit (nixpkgs-patched.python313Packages) trezor;
+          #   };
+          # };
+          # ```
+          #
+          # to apply this override, we add it to our overlays:
+          #
+          # ```nixnix run .#render-workflows
+          # overlayAttrs = {
+          #   inherit (config.packages) python313;
+          # };
+          # ```
+          #
+          # this overlay gets applied to our nixpkgs with:
+          #
+          # ```nix
+          # _module.args.pkgs = import inputs.nixpkgs {
+          #   inherit system;
+          #   overlays = [ self.overlays.default ];
+          # };
+          # ```
+          #
+          # for more, see:
+          # https://ertt.ca/nix/patch-nixpkgs/
+          # https://juuso.dev/blogPosts/modular-neovim/modular-neovim-with-nix.html
           nixpkgs-patched = import
             ((import inputs.nixpkgs { inherit system; }).applyPatches {
               name = "nixpkgs-pr-455630";
               src = inputs.nixpkgs;
               patches = [ ./packages/trezor/455630.patch ];
             })
-            { inherit system; };
+            {
+              inherit system;
+              config.permittedInsecurePackages = [ "python3.13-ecdsa-0.19.1" ];
+            };
         in
         {
 
@@ -114,8 +174,8 @@
               };
             });
             "python313" = pkgs.python313.override {
-              packageOverrides = final: prev: {
-                trezor = nixpkgs-patched.python313Packages.trezor;
+              packageOverrides = _: _: {
+                inherit (nixpkgs-patched.python313Packages) trezor;
               };
             };
 

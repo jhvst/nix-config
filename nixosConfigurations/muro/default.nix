@@ -331,6 +331,16 @@
 
       wantedBy = [ "multi-user.target" ];
     }
+    {
+      enable = false;
+
+      what = "/dev/disk/by-label/bakhal";
+      where = "/home/juuso/.gnupg/trezor";
+      type = "btrfs";
+      options = "subvol=trezor-gpg";
+
+      wantedBy = [ "multi-user.target" ];
+    }
   ];
 
   services.plex = {
@@ -515,6 +525,9 @@
     "Z /var/lib/garage 0640 garage garage -"
     "d /var/log/smartd 0755 netdata netdata -"
     "z /var/lib/syncthing/data/f6812609-c33a-467e-abee-a350701977d8 0775 syncthing syncthing -"
+  ];
+  systemd.user.tmpfiles.users.juuso.rules = [
+    "z %h/.gnupg 0700 - - -"
   ];
   services.smartd = {
     enable = true;

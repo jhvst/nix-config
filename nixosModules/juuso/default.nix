@@ -29,8 +29,8 @@
         pinentry-curses
         sioyek
         sops
-        #trezor-agent
-        #trezorctl
+        trezor-agent
+        trezorctl
         wireguard-tools
         wl-clipboard
         wlsunset
@@ -77,6 +77,7 @@
       };
     };
     services = {
+      trezord.enable = true;
       yubikey-agent.enable = true;
     };
   };
