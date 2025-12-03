@@ -50,12 +50,10 @@ in
           };
         };
       };
-      "mail.com" = mkMailAccount "juuso@mail.com" {
+      "mail" = mkMailAccount "juuso@mail.com" {
         mbsync = {
           enable = true;
           create = "both";
-          expunge = "both";
-          remove = "both";
         };
         userName = "juuso@mail.com";
         passwordCommand = [
@@ -80,8 +78,6 @@ in
         mbsync = {
           enable = true;
           create = "both";
-          expunge = "both";
-          remove = "both";
         };
         userName = "haavijuu@gmail.com";
         passwordCommand = [
@@ -97,6 +93,7 @@ in
             CertificateFile = "/var/mnt/bakhal/davmail/davmail.crt";
           };
         };
+        aliases = [ "juuso.haavisto@cs.ox.ac.uk" ];
         userName = "reub0117@OX.AC.UK";
         passwordCommand = [
           ''${pkgs.coreutils}/bin/cat ${config.sops.secrets."mbsync/oxford".path}''

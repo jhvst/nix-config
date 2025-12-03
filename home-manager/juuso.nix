@@ -28,7 +28,7 @@
           };
           qcal.enable = true;
         };
-        "mail.com" = {
+        "mail" = {
           primary = false;
           primaryCollection = "My Calendar";
           local = {
