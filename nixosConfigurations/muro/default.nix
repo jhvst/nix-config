@@ -497,6 +497,14 @@
       owner = "netdata";
       group = "netdata";
     };
+    secrets."passage/trezor.age" = {
+      owner = juuso.name;
+      inherit (juuso) group;
+    };
+    secrets."passage/muro.age" = {
+      owner = juuso.name;
+      inherit (juuso) group;
+    };
   };
   age = {
     identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
@@ -524,6 +532,7 @@
   systemd.tmpfiles.rules = [
     "Z /var/lib/garage 0640 garage garage -"
     "d /var/log/smartd 0755 netdata netdata -"
+    "z /run/secrets/passage - juuso juuso -"
     "z /var/lib/syncthing/data/f6812609-c33a-467e-abee-a350701977d8 0775 syncthing syncthing -"
   ];
   systemd.user.tmpfiles.users.juuso.rules = [

@@ -299,17 +299,6 @@
         default-key = "Juuso Haavisto <juuso@ponkila.com>";
       };
     };
-
-    programs.password-store = {
-      enable = true;
-      package = pkgs.passage;
-      settings = {
-        PASSAGE_DIR = "/run/media/juuso/passage";
-        PASSAGE_IDENTITIES_FILE = "/run/secrets/passage";
-        PASSAGE_RECIPIENTS = "age1ef70t0zmlcvpe4ppwfdza7qpv2uakq9c9ldrv0y9zfnvdka7acnsxkkmzl age12lz3jyd2weej5c4mgmwlwsl0zmk2tdgvtflctgryx6gjcaf3yfsqgt7rnz";
-        PASSWORD_STORE_CLIP_TIME = "60";
-      };
-    };
   };
 
   system.etc.overlay.mutable = false;
