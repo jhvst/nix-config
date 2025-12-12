@@ -31,6 +31,7 @@
         sops
         trezor-agent
         trezorctl
+        waypipe
         wireguard-tools
         wl-clipboard
         wlsunset
