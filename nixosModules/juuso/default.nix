@@ -1,5 +1,6 @@
 { config
 , pkgs
+, lib
 , ...
 }:
 {
@@ -78,6 +79,7 @@
       };
     };
     services = {
+      speechd.enable = lib.mkForce false; # https://github.com/NixOS/nixpkgs/pull/330440#issuecomment-2369082964
       trezord.enable = true;
       yubikey-agent.enable = true;
     };
