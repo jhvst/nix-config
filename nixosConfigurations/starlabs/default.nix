@@ -585,6 +585,24 @@
 
       wantedBy = [ "multi-user.target" ];
     }
+    {
+      enable = true;
+      what = "/dev/sda2";
+      where = "/var/lib/syncthing";
+      options = "subvol=syncthing";
+      type = "btrfs";
+
+      wantedBy = [ "multi-user.target" ];
+    }
+    {
+      enable = true;
+      what = "/dev/sda2";
+      where = "/home/juuso/syncthing";
+      options = "subvol=syncthing/data/f6812609-c33a-467e-abee-a350701977d8";
+      type = "btrfs";
+
+      wantedBy = [ "multi-user.target" ];
+    }
   ];
 
   hardware = {
@@ -732,6 +750,8 @@
     "z /home/juuso/.config - juuso juuso -" # z for chown: subvolume mount to subdirectory causes parent to be owned by root
     "z /home/juuso/.gnupg - juuso juuso -"
     "z /home/juuso/.local - juuso juuso -"
+    "Z /var/lib/syncthing - juuso juuso -"
+    "z /var/lib/syncthing/data/f6812609-c33a-467e-abee-a350701977d8 0700 juuso juuso -"
   ];
   services.smartd = {
     enable = true;
@@ -744,6 +764,44 @@
   systemd.sleep.extraConfig = ''
     HibernateOnACPower=no
   '';
+
+  services.syncthing = {
+    enable = true;
+    configDir = "/var/lib/syncthing/config";
+    dataDir = "/var/lib/syncthing/data";
+    databaseDir = "/var/lib/syncthing/db";
+    openDefaultPorts = true;
+    relay.enable = false;
+    user = "juuso";
+    group = "juuso";
+    settings = {
+      devices = {
+        "muro" = { id = "XKUXK5T-FRPGFIJ-2DC7NQI-NEGTOS6-O4P6EQG-LPK6BQZ-LNM7UVI-WQPH6Q2"; };
+      };
+      folders = {
+        "syncthing-persistent-alpha" = rec {
+          devices = [ "muro" ];
+          id = "f6812609-c33a-467e-abee-a350701977d8";
+          path = "/var/lib/syncthing/data/${id}";
+          syncOwnership = true;
+          type = "sendreceive";
+        };
+      };
+      options = {
+        globalAnnounceEnabled = false;
+        relaysEnabled = false;
+        urAccepted = -1;
+      };
+      defaults = {
+        ignores.line = [ ".direnv" ];
+      };
+    };
+  };
+  systemd.services.syncthing.serviceConfig = {
+    ProtectSystem = "strict";
+    ProtectHome = true;
+    ReadWritePaths = "/var/lib/syncthing";
+  };
 
   system.stateVersion = "26.05";
 
