@@ -491,32 +491,6 @@
     polkit.enable = true;
   };
 
-  environment = {
-    shells = [ pkgs.fish ];
-    systemPackages = with pkgs; [
-      age-plugin-fido2-hmac
-      beeper
-      btrfs-progs
-      cryptsetup
-      file
-      gnupg
-      iamb # matrix client
-      pinentry-curses
-      sioyek
-      sops
-      trezor-agent
-      trezorctl
-      waypipe
-      wireguard-tools
-      wl-clipboard
-      wlsunset
-      xdg-utils # open command
-      xorg.xkbcomp
-      yazi
-      yubikey-manager
-    ];
-  };
-
   systemd.mounts = [
     {
       enable = true;
