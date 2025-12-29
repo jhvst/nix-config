@@ -290,15 +290,6 @@
         };
       };
     };
-
-    programs.gpg = with config.home-manager.users.juuso; {
-      enable = true;
-      homedir = "${home.homeDirectory}/.gnupg/trezor";
-      settings = {
-        agent-program = "${pkgs.trezor-agent}/bin/trezor-gpg-agent";
-        default-key = "Juuso Haavisto <juuso@ponkila.com>";
-      };
-    };
   };
 
   system.etc.overlay.mutable = false;
