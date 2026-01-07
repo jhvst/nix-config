@@ -77,7 +77,7 @@
           #
           # to apply this override, we add it to our overlays:
           #
-          # ```nixnix run .#render-workflows
+          # ```nix
           # overlayAttrs = {
           #   inherit (config.packages) python313;
           # };
@@ -121,7 +121,8 @@
               fstar-vscode-assistant
               libedgetpu
               passage
-              python313
+              trezor-agent
+              trezorctl
               ;
           };
 
@@ -169,11 +170,16 @@
                 hash = "sha256-1jQCEMeovDjjKukVHaK4xZiBPgZpNQwjvVbrbdeAXrE=";
               };
             });
-            "python313" = pkgs.python313.override {
-              packageOverrides = _: _: {
-                inherit (nixpkgs-patched.python313Packages) trezor;
+            "trezorctl" = nixpkgs-patched.trezorctl;
+            "trezor-agent" =
+              let
+                trezor-old-relaxed = pkgs.python3Packages.trezor.overridePythonAttrs (_old: {
+                  pythonRelaxDeps = [ "click" ];
+                });
+              in
+              pkgs.python3Packages.trezor-agent.override {
+                trezor = trezor-old-relaxed;
               };
-            };
 
             "muro" = flake.nixosConfigurations.muro.config.system.build.kexecTree;
             "starlabs" = flake.nixosConfigurations.starlabs.config.system.build.kexecTree;
@@ -281,6 +287,7 @@
         in
         {
 
+          # nix run .#render-workflows
           actions-nix = {
             defaultValues = {
               jobs = {
