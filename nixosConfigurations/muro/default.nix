@@ -529,7 +529,7 @@
   };
 
   systemd.tmpfiles.rules = [
-    "Z /var/lib/garage 0640 garage garage -"
+    "Z /var/lib/garage 0760 garage garage -"
     "d /var/log/smartd 0755 netdata netdata -"
     "z /run/secrets/passage - juuso juuso -"
     "Z /var/lib/syncthing - juuso juuso -"
