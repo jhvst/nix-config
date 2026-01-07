@@ -81,7 +81,6 @@
           "acme"
           "aria2"
           "input"
-          "syncthing"
           "video"
           "wheel"
         ];
@@ -533,7 +532,8 @@
     "Z /var/lib/garage 0640 garage garage -"
     "d /var/log/smartd 0755 netdata netdata -"
     "z /run/secrets/passage - juuso juuso -"
-    "z /var/lib/syncthing/data/f6812609-c33a-467e-abee-a350701977d8 0775 syncthing syncthing -"
+    "Z /var/lib/syncthing - juuso juuso -"
+    "z /var/lib/syncthing/data/f6812609-c33a-467e-abee-a350701977d8 0700 juuso juuso -"
   ];
   systemd.user.tmpfiles.users.juuso.rules = [
     "z %h/.gnupg 0700 - - -"
@@ -575,6 +575,8 @@
     configDir = "/var/lib/syncthing/config";
     databaseDir = "/var/lib/syncthing/db";
     dataDir = "/var/lib/syncthing/data";
+    user = "juuso";
+    group = "juuso";
     settings = {
       devices = {
         "starlabs" = { id = "EPDI4WN-2RMZCCY-SINRNKM-IMLPWU7-IBKLEWP-6GI22AU-K6THM3P-AMUQTA2"; };
@@ -591,21 +593,9 @@
     };
   };
   systemd.services.syncthing.serviceConfig = {
-    MemoryDenyWriteExecute = true;
-    NoNewPrivileges = true;
-    PrivateDevices = lib.mkForce false;
-    PrivateMounts = lib.mkForce false;
-    PrivateTmp = true;
-    PrivateUsers = lib.mkForce false;
-    ProtectControlGroups = lib.mkForce false;
-    ProtectHostname = lib.mkForce false;
-    ProtectKernelModules = lib.mkForce false;
-    ProtectKernelTunables = lib.mkForce false;
-    RestrictNamespaces = lib.mkForce false;
-    RestrictRealtime = lib.mkForce false;
-    AmbientCapabilities = "CAP_CHOWN CAP_FOWNER";
-    CapabilityBoundingSet = lib.mkForce [ ];
-    RestrictSUIDSGID = lib.mkForce false;
+    ProtectSystem = "strict";
+    ProtectHome = true;
+    ReadWritePaths = "/var/lib/syncthing";
   };
 
   services.garage = {
