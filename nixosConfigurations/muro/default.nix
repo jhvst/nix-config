@@ -81,6 +81,7 @@
           "acme"
           "aria2"
           "input"
+          "ipfs"
           "video"
           "wheel"
         ];
@@ -534,6 +535,7 @@
     "z /run/secrets/passage - juuso juuso -"
     "Z /var/lib/syncthing - juuso juuso -"
     "z /var/lib/syncthing/data/f6812609-c33a-467e-abee-a350701977d8 0700 juuso juuso -"
+    "z /var/lib/ipfs/config 0640 ipfs ipfs -"
   ];
   systemd.user.tmpfiles.users.juuso.rules = [
     "z %h/.gnupg 0700 - - -"
@@ -549,6 +551,7 @@
   services.kubo = {
     enable = true;
     localDiscovery = true;
+    autoMount = true;
     settings = {
       Addresses.API = [
         "/ip4/127.0.0.1/tcp/5001"
