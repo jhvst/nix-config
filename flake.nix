@@ -9,6 +9,8 @@
     agenix.inputs.darwin.follows = ""; # optionally choose not to download darwin deps (saves some resources on Linux)
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     agenix.url = "github:ryantm/agenix";
+    alot.inputs.nixpkgs.follows = "nixpkgs";
+    alot.url = "github:pazz/alot/v0.12";
     flake-parts.url = "github:hercules-ci/flake-parts";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
@@ -120,6 +122,7 @@
 
           overlayAttrs = {
             inherit (config.packages)
+              alot
               fstar-vscode-assistant
               libedgetpu
               passage
@@ -182,6 +185,7 @@
               pkgs.python3Packages.trezor-agent.override {
                 trezor = trezor-old-relaxed;
               };
+            "alot" = inputs'.alot.packages.alot;
 
             "muro" = flake.nixosConfigurations.muro.config.system.build.kexecTree;
             "starlabs" = flake.nixosConfigurations.starlabs.config.system.build.kexecTree;

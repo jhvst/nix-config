@@ -115,6 +115,7 @@ in
       };
     };
     programs = {
+      alot.enable = true;
       astroid = {
         enable = true;
         extraConfig = {
