@@ -38,7 +38,7 @@
         wlsunset
         xdg-utils # open command
         xfsprogs
-        xorg.xkbcomp
+        xkbcomp
         xwayland-satellite
         yazi
         yubikey-manager

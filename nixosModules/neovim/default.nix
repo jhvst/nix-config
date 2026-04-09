@@ -165,7 +165,7 @@
       };
       treesitter = {
         enable = true;
-        folding = true;
+        folding.enable = true;
         grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
           bash
           c # c is implicit dependency, not specifying it will lead to healtcheck errors
