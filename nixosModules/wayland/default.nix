@@ -129,7 +129,6 @@
         enable = true;
         extraPackages = with pkgs; [
           foot
-          light
           swaylock
           wl-clipboard
           wlsunset
