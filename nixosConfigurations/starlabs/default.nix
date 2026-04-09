@@ -434,7 +434,7 @@
     useDHCP = false;
     wireless.iwd.enable = true;
   };
-  services.resolved.dnsovertls = "opportunistic";
+  services.resolved.settings.Resolve.DNSOverTLS = "opportunistic";
   services.coredns = {
     enable = true;
     config = ''
@@ -666,7 +666,6 @@
     fish.enable = true;
     git.enable = true;
     gnupg.agent.pinentryPackage = pkgs.pinentry-curses;
-    light.enable = true;
     sway.enable = true;
     vim = {
       enable = true;
@@ -761,9 +760,9 @@
     ];
   };
 
-  systemd.sleep.extraConfig = ''
-    HibernateOnACPower=no
-  '';
+  systemd.sleep.settings.Sleep = {
+    HibernateOnACPower = "no";
+  };
 
   services.syncthing = {
     enable = true;
