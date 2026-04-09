@@ -1,6 +1,5 @@
 { config
 , pkgs
-, outputs
 , lib
 , ...
 }:
@@ -8,12 +7,6 @@ let
   mkMailAccount = name: extra: lib.recursiveUpdate
     {
       address = name;
-      astroid = {
-        enable = true;
-        extraConfig = {
-          additional_sent_tags = "sent";
-        };
-      };
       msmtp.enable = true;
       notmuch.enable = true;
       realName = "Juuso Haavisto";
@@ -116,32 +109,9 @@ in
     };
     programs = {
       alot.enable = true;
-      astroid = {
-        enable = true;
-        extraConfig = {
-          editor = {
-            cmd = "${pkgs.foot}/bin/foot ${outputs.packages.x86_64-linux.neovim}/bin/nvim -c 'set ft=mail' '+set fileencoding=utf-8' '+set enc=utf-8' '+set ff=unix' '+set fo+=w' %1";
-            external_editor = true;
-          };
-          startup = {
-            queries = {
-              TODO = "tag:flagged";
-              Drafts = "tag:draft";
-            };
-          };
-        };
-        pollScript = "notmuch new";
-      };
       mbsync.enable = true;
       msmtp.enable = true;
       notmuch.enable = true;
-    };
-    gtk = {
-      enable = true;
-      iconTheme = {
-        package = pkgs.adwaita-icon-theme;
-        name = "Adwaita";
-      };
     };
     services.mbsync = {
       enable = true;
