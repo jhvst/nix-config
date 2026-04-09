@@ -51,25 +51,28 @@
     '';
   };
 
-  boot.kernelParams = [
-    "boot.shell_on_fail"
-    "ip=dhcp"
+  boot = {
+    kernelModules = [ "ntsync" ];
+    kernelParams = [
+      "boot.shell_on_fail"
+      "ip=dhcp"
 
-    "amdgpu.ppfeaturemask=0xffffffff"
+      "amdgpu.ppfeaturemask=0xffffffff"
 
-    "mitigations=off"
-    "l1tf=off"
-    "mds=off"
-    "no_stf_barrier"
-    "noibpb"
-    "noibrs"
-    "nopti"
-    "nospec_store_bypass_disable"
-    "nospectre_v1"
-    "nospectre_v2"
-    "tsx=on"
-    "tsx_async_abort=off"
-  ];
+      "mitigations=off"
+      "l1tf=off"
+      "mds=off"
+      "no_stf_barrier"
+      "noibpb"
+      "noibrs"
+      "nopti"
+      "nospec_store_bypass_disable"
+      "nospectre_v1"
+      "nospectre_v2"
+      "tsx=on"
+      "tsx_async_abort=off"
+    ];
+  };
 
   users = {
     users = {
