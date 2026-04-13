@@ -248,6 +248,7 @@
           nixosModules = {
             juuso = { imports = [ ./nixosModules/juuso ]; };
             neovim = { imports = [ ./nixosModules/neovim ]; };
+            uxplay = { imports = [ ./nixosModules/uxplay ]; };
             wayland = { imports = [ ./nixosModules/wayland ]; };
           };
 
