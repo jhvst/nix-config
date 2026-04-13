@@ -496,10 +496,6 @@
       owner = juuso.name;
       inherit (juuso) group;
     };
-    secrets."netdata/health_alarm_notify.conf" = {
-      owner = "netdata";
-      group = "netdata";
-    };
     secrets."passage/trezor.age" = {
       owner = juuso.name;
       inherit (juuso) group;
@@ -525,16 +521,9 @@
     };
   };
 
-  services.netdata = {
-    enable = true;
-    configDir = {
-      "health_alarm_notify.conf" = config.sops.secrets."netdata/health_alarm_notify.conf".path;
-    };
-  };
-
   systemd.tmpfiles.rules = [
     "Z /var/lib/garage 0760 garage garage -"
-    "d /var/log/smartd 0755 netdata netdata -"
+    "d /var/log/smartd 0655 juuso juuso -"
     "z /run/secrets/passage - juuso juuso -"
     "Z /var/lib/syncthing - juuso juuso -"
     "z /var/lib/syncthing/data/f6812609-c33a-467e-abee-a350701977d8 0700 juuso juuso -"
