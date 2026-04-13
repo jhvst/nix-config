@@ -19,8 +19,12 @@
         linkConfig.RequiredForOnline = "routable";
         matchConfig.Name = "enp5s0";
         networkConfig = {
-          DHCP = "ipv4";
+          DHCP = "yes";
           IPv6AcceptRA = true;
+          IPv6PrivacyExtensions = "prefer-public";
+        };
+        dhcpV6Config = {
+          DUIDType = "link-layer";
         };
         dns = [ "127.0.0.1:1053" ];
         address = [ "192.168.1.10/24" ]; # static IP
