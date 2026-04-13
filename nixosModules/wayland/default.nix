@@ -9,8 +9,7 @@
     fonts = {
       fontDir.enable = true;
       packages = with pkgs; [
-        nerd-fonts.blex-mono
-        departure-mono
+        nerd-fonts.iosevka-term
       ];
     };
 
@@ -20,7 +19,7 @@
         settings = {
           main = {
             term = "xterm-256color";
-            font = "BlexMono Nerd Font Mono:size=11";
+            font = "IosevkaTerm Nerd Font Mono:size=12";
           };
           mouse = {
             hide-when-typing = "yes";
@@ -33,7 +32,7 @@
       programs.yambar = {
         enable = true;
         settings.bar = {
-          font = "Departure Mono:style=Regular";
+          font = "IosevkaTerm Nerd Font:style=Regular";
           location = "top";
           height = 26;
           background = "00000066";
