@@ -571,13 +571,9 @@
 
   hardware = {
     enableRedistributableFirmware = true; # enables WiFi and GPU drivers
-    graphics = {
-      enable = true; # radv: an open-source Vulkan driver from freedesktop
-      enable32Bit = true;
-    };
     # https://gitlab.freedesktop.org/pipewire/pipewire/-/wikis/LE-Audio-+-LC3-support
     bluetooth.enable = true;
-    xpadneo.enable = true;
+    graphics.enable = true; # radv: an open-source Vulkan driver from freedesktop
   };
 
   services.fprintd.enable = true;
