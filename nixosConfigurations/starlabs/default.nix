@@ -263,32 +263,6 @@
         };
     };
     programs.swaylock.enable = true;
-
-    wayland.windowManager.sway = {
-      enable = true;
-      config = {
-        terminal = "foot";
-        bars = [{
-          command = "${pkgs.yambar}/bin/yambar";
-          fonts = {
-            names = [ "Departure Mono" ];
-            size = 11.0;
-          };
-        }];
-        input = {
-          "type:keyboard" = {
-            xkb_layout = "us,fi";
-          };
-          "type:touchpad" = {
-            tap = "disabled";
-            natural_scroll = "enabled";
-          };
-          "type:mouse" = {
-            natural_scroll = "enabled";
-          };
-        };
-      };
-    };
   };
 
   system.etc.overlay.mutable = false;
@@ -665,7 +639,7 @@
     fish.enable = true;
     git.enable = true;
     gnupg.agent.pinentryPackage = pkgs.pinentry-curses;
-    sway.enable = true;
+    niri.enable = true;
     vim = {
       enable = true;
       defaultEditor = true;
