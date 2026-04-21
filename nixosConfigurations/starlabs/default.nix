@@ -22,12 +22,19 @@
     wlr.enable = true;
   };
 
-  # sops keys
-  fileSystems."/home/juuso/.ssh" = {
-    device = "/dev/sda2";
-    fsType = "btrfs";
-    options = [ "subvolid=260" ];
-    neededForBoot = true;
+  fileSystems = {
+    "/boot" = {
+      device = "/dev/sda1";
+      fsType = "vfat";
+      neededForBoot = true; # for firmware upgrades
+    };
+    # sops keys
+    "/home/juuso/.ssh" = {
+      device = "/dev/sda2";
+      fsType = "btrfs";
+      options = [ "subvolid=260" ];
+      neededForBoot = true;
+    };
   };
 
   fonts = {
@@ -703,6 +710,7 @@
     };
   };
 
+  services.fwupd.enable = true;
 
   systemd.tmpfiles.rules = [
     "d /var/log/smartd 0755 netdata netdata -"
