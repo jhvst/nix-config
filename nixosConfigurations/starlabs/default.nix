@@ -697,11 +697,13 @@
       agePlugins = [ pkgs.age-plugin-fido2-hmac ];
       hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJdbU8l66hVUAqk900GmEme5uhWcs05JMUQv2eD0j7MI juuso@starlabs";
     };
-    secrets.hosts = {
-      rekeyFile = ./secrets/agenix/hosts.age;
-      owner = acme.name;
-      inherit (acme) group;
-      mode = "0440";
+    secrets = {
+      hosts = {
+        rekeyFile = ./secrets/agenix/hosts.age;
+        owner = acme.name;
+        inherit (acme) group;
+        mode = "0440";
+      };
     };
   };
 
