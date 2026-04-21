@@ -574,6 +574,14 @@
 
       wantedBy = [ "multi-user.target" ];
     }
+    {
+      enable = true;
+      what = "/dev/sda2";
+      where = "/var/lib/papis";
+      options = "subvol=papis";
+      type = "btrfs";
+      wantedBy = [ "multi-user.target" ];
+    }
   ];
 
   hardware = {

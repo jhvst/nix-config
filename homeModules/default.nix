@@ -8,6 +8,18 @@
       home.stateVersion = config.system.stateVersion;
       programs = {
         mergiraf.enable = true;
+        papis = {
+          enable = true;
+          libraries."papers" = {
+            isDefault = true;
+            settings = {
+              dir = "/var/lib/papis";
+            };
+          };
+          settings = {
+            add-edit = true;
+          };
+        };
         ssh = {
           enable = true;
           enableDefaultConfig = false;
