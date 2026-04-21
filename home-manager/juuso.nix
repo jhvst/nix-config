@@ -66,6 +66,19 @@
       basePath = ".calendar";
     };
 
+    editorconfig = {
+      enable = true;
+      settings."*" = {
+        charset = "utf-8";
+        end_of_line = "lf";
+        indent_size = 2;
+        indent_style = "space";
+        insert_final_newline = true;
+        max_line_width = 78;
+        trim_trailing_whitespace = true;
+      };
+    };
+
     programs = {
       awscli = {
         enable = true;
@@ -120,6 +133,25 @@
           default-key = "Juuso Haavisto <juuso@ponkila.com>";
         };
       };
+      nixvim =
+        let
+          neovim = (import ../nixosModules/neovim) {
+            inherit config pkgs;
+          };
+        in
+        with neovim.config; {
+          inherit
+            colorschemes
+            extraConfigLua
+            extraConfigVim
+            extraPackages
+            extraPlugins
+            plugins;
+          enable = true;
+          defaultEditor = true;
+          viAlias = true;
+          vimAlias = true;
+        };
       password-store = {
         enable = true;
         package = pkgs.passage;

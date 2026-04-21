@@ -120,7 +120,6 @@
             modules = [
               ./home-manager/email.nix
               ./home-manager/juuso.nix
-              ./home-manager/programs/neovim
               ./nixosConfigurations/muro
               ./nix-settings.nix
               inputs.agenix-rekey.nixosModules.default
@@ -170,7 +169,6 @@
             specialArgs = { inherit inputs outputs; };
             modules = [
               ./home-manager/juuso.nix
-              ./home-manager/programs/neovim
               ./nixosConfigurations/starlabs
               ./nix-settings.nix
               inputs.agenix-rekey.nixosModules.default
