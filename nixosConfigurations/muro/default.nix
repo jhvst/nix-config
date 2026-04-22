@@ -348,6 +348,33 @@
 
       wantedBy = [ "multi-user.target" ];
     }
+    {
+      enable = true;
+      what = "/dev/disk/by-label/bakhal";
+      where = "/var/lib/papis";
+      options = "subvol=papis";
+      type = "btrfs";
+
+      wantedBy = [ "multi-user.target" ];
+    }
+    {
+      enable = true;
+      what = "/dev/disk/by-label/bakhal";
+      where = "/home/juuso/.local/share/sioyek";
+      options = "subvol=sioyek";
+      type = "btrfs";
+
+      wantedBy = [ "multi-user.target" ];
+    }
+    {
+      enable = true;
+      what = "/dev/disk/by-label/bakhal";
+      where = "/var/lib/passage";
+      options = "subvol=passage";
+      type = "btrfs";
+
+      wantedBy = [ "multi-user.target" ];
+    }
   ];
 
   services.plex = {
