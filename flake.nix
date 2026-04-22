@@ -119,7 +119,6 @@
             specialArgs = { inherit inputs outputs; };
             modules = [
               ./home-manager/email.nix
-              ./home-manager/juuso.nix
               ./nixosConfigurations/muro
               ./nix-settings.nix
               inputs.agenix-rekey.nixosModules.default
@@ -146,10 +145,6 @@
                   ];
                   storageMode = "local";
                 };
-                home-manager.sharedModules = [
-                  inputs.nixvim.homeManagerModules.nixvim
-                ];
-                home-manager.useGlobalPkgs = true;
                 services.runtimeModules = {
                   enable = true;
                   flakeUrl = "path:${self.outPath}";
@@ -168,7 +163,6 @@
             system = "x86_64-linux";
             specialArgs = { inherit inputs outputs; };
             modules = [
-              ./home-manager/juuso.nix
               ./nixosConfigurations/starlabs
               ./nix-settings.nix
               inputs.agenix-rekey.nixosModules.default
@@ -188,10 +182,6 @@
                   }];
                   storageMode = "local";
                 };
-                home-manager.sharedModules = [
-                  inputs.nixvim.homeManagerModules.nixvim
-                ];
-                home-manager.useGlobalPkgs = true;
                 services.runtimeModules = {
                   enable = true;
                   flakeUrl = "path:${self.outPath}";

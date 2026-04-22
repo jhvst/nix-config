@@ -1,35 +1,222 @@
 { config
+, inputs
+, lib
 , ...
 }:
 {
   options = { };
   config = {
-    home-manager.users.juuso = _: {
-      home.stateVersion = config.system.stateVersion;
-      programs = {
-        mergiraf.enable = true;
-        papis = {
-          enable = true;
-          libraries."papers" = {
-            isDefault = true;
-            settings = {
-              dir = "/var/lib/papis";
+    home-manager = {
+      backupFileExtension = "backup";
+      sharedModules = [ inputs.nixvim.homeManagerModules.nixvim ];
+      useGlobalPkgs = true;
+      users.juuso = { pkgs, ... }: with config.home-manager.users.juuso; {
+        accounts.calendar = {
+          accounts = {
+            "ponkila" = {
+              primary = true;
+              primaryCollection = "Personal Calendar";
+              local = {
+                type = "filesystem";
+                fileExt = ".ics";
+              };
+              remote = {
+                passwordCommand = [
+                  ''cat ${config.sops.secrets."mbsync/ponkila".path}''
+                ];
+                type = "caldav";
+                url = "https://webmail.gandi.net/SOGo/dav/juuso@ponkila.com/Calendar/personal/";
+                userName = "juuso@ponkila.com";
+              };
+              qcal.enable = true;
+            };
+            "mail" = {
+              primary = false;
+              primaryCollection = "My Calendar";
+              local = {
+                type = "filesystem";
+                fileExt = ".ics";
+              };
+              remote = {
+                passwordCommand = [
+                  ''cat ${config.sops.secrets."mbsync/mail.com".path}''
+                ];
+                type = "caldav";
+                url = "https://caldav.mail.com/begenda/dav/juuso@mail.com/calendar/";
+                userName = "juuso@mail.com";
+              };
+              qcal.enable = true;
+            };
+            "oxford" = {
+              primary = false;
+              primaryCollection = "Calendar";
+              local = {
+                type = "filesystem";
+                fileExt = ".ics";
+              };
+              remote = {
+                passwordCommand = [
+                  ''cat ${config.sops.secrets."mbsync/oxford".path}''
+                ];
+                type = "caldav";
+                url = "http://192.168.76.40:1080/users/reub0117@OX.AC.UK/calendar";
+                userName = "reub0117@OX.AC.UK";
+              };
+              qcal.enable = true;
             };
           };
-          settings = {
-            add-edit = true;
-          };
+          basePath = ".calendar";
         };
-        ssh = {
+        editorconfig = {
           enable = true;
-          enableDefaultConfig = false;
-          matchBlocks."*" = {
-            hashKnownHosts = true;
-            identityFile = "~/.ssh/id_ed25519_sk_rk";
+          settings."*" = {
+            charset = "utf-8";
+            end_of_line = "lf";
+            indent_size = 2;
+            indent_style = "space";
+            insert_final_newline = true;
+            max_line_width = 78;
+            trim_trailing_whitespace = true;
           };
         };
+        home.stateVersion = config.system.stateVersion;
+        programs = {
+          awscli = {
+            enable = true;
+            # https://l-lin.github.io/devops/cloud/aws/AWS-CLI-with-Unix-password-manager
+            credentials = {
+              "default" = {
+                "credential_process" = "${pkgs.passage}/bin/passage show garage/nix";
+              };
+            };
+            settings = {
+              "default" = {
+                region = "garage";
+                endpoint_url = "http://nix-cache.s3.muro.ponkila.nix:3900";
+              };
+            };
+          };
+          direnv = {
+            enable = true;
+            nix-direnv.enable = true;
+          };
+          fish = {
+            enable = true;
+            loginShellInit = ''
+              set -U fish_greeting
+              set -x IPFS_PATH ${config.services.kubo.dataDir}
+              set -x PATH '${lib.concatStringsSep ":" [
+                "${home.homeDirectory}/.nix-profile/bin"
+                "/run/wrappers/bin"
+                "/etc/profiles/per-user/${home.username}/bin"
+                "/run/current-system/sw/bin"
+                "/nix/var/nix/profiles/default/bin"
+              ]}'
+              test $TERM = "xterm-256color"; and exec tmux
+            '';
+          };
+          fzf.enable = true; # https://andrew-quinn.me/fzf/
+          git = {
+            enable = true;
+            ignores = [
+              ".DS_Store"
+              ".direnv"
+              "node_modules"
+              "result"
+              ".devenv"
+            ];
+          };
+          gpg = {
+            enable = true;
+            homedir = "${home.homeDirectory}/.gnupg/trezor";
+            settings = {
+              agent-program = "${pkgs.trezor-agent}/bin/trezor-gpg-agent";
+              default-key = "Juuso Haavisto <juuso@ponkila.com>";
+            };
+          };
+          mergiraf.enable = true;
+          nixvim =
+            let
+              neovim = (import ../nixosModules/neovim) {
+                inherit config pkgs;
+              };
+            in
+            with neovim.config; {
+              inherit
+                colorschemes
+                extraConfigLua
+                extraConfigVim
+                extraPackages
+                extraPlugins
+                plugins;
+              enable = true;
+              defaultEditor = true;
+              viAlias = true;
+              vimAlias = true;
+            };
+          papis = {
+            enable = true;
+            libraries."papers" = {
+              isDefault = true;
+              settings = {
+                dir = "/var/lib/papis";
+              };
+            };
+            settings = {
+              add-edit = true;
+            };
+          };
+          password-store = {
+            enable = true;
+            package = pkgs.passage;
+            settings = {
+              PASSAGE_DIR = "/var/lib/passage";
+              PASSAGE_IDENTITIES_FILE = "/run/secrets/passage";
+              PASSAGE_RECIPIENTS = "age1ef70t0zmlcvpe4ppwfdza7qpv2uakq9c9ldrv0y9zfnvdka7acnsxkkmzl age12lz3jyd2weej5c4mgmwlwsl0zmk2tdgvtflctgryx6gjcaf3yfsqgt7rnz age1mlhf96qy5ftr52jvf6lh2mwzm6gpxk95dnra2djkyfy2ug4yyamqdnnfl2";
+              PASSWORD_STORE_CLIP_TIME = "60";
+            };
+          };
+          qcal = {
+            enable = true;
+            timezone = config.time.timeZone;
+          };
+          ssh = {
+            enable = true;
+            enableDefaultConfig = false;
+            matchBlocks."*" = {
+              hashKnownHosts = true;
+              identityFile = "~/.ssh/id_ed25519_sk_rk";
+            };
+          };
+          tmux = {
+            enable = true;
+            baseIndex = 1;
+            plugins = with pkgs.tmuxPlugins; [
+              extrakto # Ctrl+Space+Tab
+              tilish # Option+Enter
+              tmux-fzf # Ctrl+Space+f
+            ];
+            extraConfig = ''
+              set -g @tilish-dmenu 'on'
+              set -g mouse on
+
+              bind | split-window -h
+              unbind %
+
+              set -g focus-events on
+              set-option -g default-shell "${pkgs.fish}/bin/fish"
+
+              set-option -sg escape-time 10
+              set-option -g default-terminal "tmux-256color"
+              set-option -sa terminal-features ",*:RGB"
+
+              TMUX_FZF_LAUNCH_KEY="f"
+            '';
+            shortcut = "Space";
+          };
+        };
+        services.mako.enable = true;
       };
-      services.mako.enable = true;
     };
   };
 }
