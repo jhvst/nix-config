@@ -118,7 +118,6 @@
             system = "x86_64-linux";
             specialArgs = { inherit inputs outputs; };
             modules = [
-              ./home-manager/email.nix
               ./nixosConfigurations/muro
               ./nix-settings.nix
               inputs.agenix-rekey.nixosModules.default

@@ -3,69 +3,176 @@
 , lib
 , ...
 }:
+let
+  cfg = config.homeModule;
+  mkMailAccount = name: extra: lib.recursiveUpdate
+    {
+      address = name;
+      msmtp.enable = true;
+      notmuch.enable = true;
+      realName = "Juuso Haavisto";
+    }
+    extra;
+in
 {
-  options = { };
+  options = {
+    homeModule.email = lib.mkEnableOption "email sync";
+  };
   config = {
     home-manager = {
       backupFileExtension = "backup";
       sharedModules = [ inputs.nixvim.homeManagerModules.nixvim ];
       useGlobalPkgs = true;
       users.juuso = { pkgs, ... }: with config.home-manager.users.juuso; {
-        accounts.calendar = {
-          accounts = {
-            "ponkila" = {
+        accounts = {
+          calendar = {
+            accounts = {
+              "ponkila" = {
+                primary = true;
+                primaryCollection = "Personal Calendar";
+                local = {
+                  type = "filesystem";
+                  fileExt = ".ics";
+                };
+                remote = {
+                  passwordCommand = [
+                    ''cat ${config.sops.secrets."mbsync/ponkila".path}''
+                  ];
+                  type = "caldav";
+                  url = "https://webmail.gandi.net/SOGo/dav/juuso@ponkila.com/Calendar/personal/";
+                  userName = "juuso@ponkila.com";
+                };
+                qcal.enable = true;
+              };
+              "mail" = {
+                primary = false;
+                primaryCollection = "My Calendar";
+                local = {
+                  type = "filesystem";
+                  fileExt = ".ics";
+                };
+                remote = {
+                  passwordCommand = [
+                    ''cat ${config.sops.secrets."mbsync/mail.com".path}''
+                  ];
+                  type = "caldav";
+                  url = "https://caldav.mail.com/begenda/dav/juuso@mail.com/calendar/";
+                  userName = "juuso@mail.com";
+                };
+                qcal.enable = true;
+              };
+              "oxford" = {
+                primary = false;
+                primaryCollection = "Calendar";
+                local = {
+                  type = "filesystem";
+                  fileExt = ".ics";
+                };
+                remote = {
+                  passwordCommand = [
+                    ''cat ${config.sops.secrets."mbsync/oxford".path}''
+                  ];
+                  type = "caldav";
+                  url = "http://192.168.76.40:1080/users/reub0117@OX.AC.UK/calendar";
+                  userName = "reub0117@OX.AC.UK";
+                };
+                qcal.enable = true;
+              };
+            };
+            basePath = ".calendar";
+          };
+          email.accounts = lib.mkIf cfg.email {
+            "ponkila" = mkMailAccount "juuso@ponkila.com" {
               primary = true;
-              primaryCollection = "Personal Calendar";
-              local = {
-                type = "filesystem";
-                fileExt = ".ics";
+              mbsync = {
+                enable = true;
+                create = "maildir";
               };
-              remote = {
-                passwordCommand = [
-                  ''cat ${config.sops.secrets."mbsync/ponkila".path}''
-                ];
-                type = "caldav";
-                url = "https://webmail.gandi.net/SOGo/dav/juuso@ponkila.com/Calendar/personal/";
-                userName = "juuso@ponkila.com";
+              userName = "juuso@ponkila.com";
+              passwordCommand = [
+                ''${pkgs.coreutils}/bin/cat ${config.sops.secrets."mbsync/ponkila".path}''
+              ];
+              imap = {
+                host = "mail.your-server.de";
+                port = 143;
+                tls = {
+                  enable = true;
+                  useStartTls = true;
+                };
               };
-              qcal.enable = true;
+              smtp = {
+                host = "mail.your-server.de";
+                port = 587;
+                tls = {
+                  enable = true;
+                  useStartTls = true;
+                };
+              };
             };
-            "mail" = {
-              primary = false;
-              primaryCollection = "My Calendar";
-              local = {
-                type = "filesystem";
-                fileExt = ".ics";
+            "mail" = mkMailAccount "juuso@mail.com" {
+              mbsync = {
+                enable = true;
+                create = "both";
               };
-              remote = {
-                passwordCommand = [
-                  ''cat ${config.sops.secrets."mbsync/mail.com".path}''
-                ];
-                type = "caldav";
-                url = "https://caldav.mail.com/begenda/dav/juuso@mail.com/calendar/";
-                userName = "juuso@mail.com";
+              userName = "juuso@mail.com";
+              passwordCommand = [
+                ''${pkgs.coreutils}/bin/cat ${config.sops.secrets."mbsync/mail.com".path}''
+              ];
+              imap = {
+                host = "imap.mail.com";
+                port = 993;
+                tls = {
+                  enable = true;
+                };
               };
-              qcal.enable = true;
+              smtp = {
+                host = "smtp.mail.com";
+                port = 587;
+                tls = {
+                  useStartTls = true;
+                };
+              };
             };
-            "oxford" = {
-              primary = false;
-              primaryCollection = "Calendar";
-              local = {
-                type = "filesystem";
-                fileExt = ".ics";
+            "gmail" = mkMailAccount "haavijuu@gmail.com" {
+              mbsync = {
+                enable = true;
+                create = "both";
               };
-              remote = {
-                passwordCommand = [
-                  ''cat ${config.sops.secrets."mbsync/oxford".path}''
-                ];
-                type = "caldav";
-                url = "http://192.168.76.40:1080/users/reub0117@OX.AC.UK/calendar";
-                userName = "reub0117@OX.AC.UK";
+              userName = "haavijuu@gmail.com";
+              passwordCommand = [
+                ''${pkgs.coreutils}/bin/cat ${config.sops.secrets."mbsync/gmail".path}''
+              ];
+              flavor = "gmail.com";
+            };
+            "oxford" = mkMailAccount "juuso.haavisto@reuben.ox.ac.uk" {
+              mbsync = {
+                enable = true;
+                create = "maildir";
+                extraConfig.account = {
+                  CertificateFile = "/var/mnt/bakhal/davmail/davmail.crt";
+                };
               };
-              qcal.enable = true;
+              aliases = [ "juuso.haavisto@cs.ox.ac.uk" ];
+              userName = "reub0117@OX.AC.UK";
+              passwordCommand = [
+                ''${pkgs.coreutils}/bin/cat ${config.sops.secrets."mbsync/oxford".path}''
+              ];
+              imap = {
+                host = "192.168.76.40";
+                port = 1143;
+                tls = {
+                  enable = true;
+                };
+              };
+              smtp = {
+                host = "192.168.76.40";
+                port = 1025;
+                tls = {
+                  enable = true;
+                };
+              };
             };
           };
-          basePath = ".calendar";
         };
         editorconfig = {
           enable = true;
@@ -81,6 +188,7 @@
         };
         home.stateVersion = config.system.stateVersion;
         programs = {
+          alot.enable = cfg.email;
           awscli = {
             enable = true;
             # https://l-lin.github.io/devops/cloud/aws/AWS-CLI-with-Unix-password-manager
@@ -134,7 +242,9 @@
               default-key = "Juuso Haavisto <juuso@ponkila.com>";
             };
           };
+          mbsync.enable = cfg.email;
           mergiraf.enable = true;
+          msmtp.enable = cfg.email;
           nixvim =
             let
               neovim = (import ../nixosModules/neovim) {
@@ -154,6 +264,7 @@
               viAlias = true;
               vimAlias = true;
             };
+          notmuch.enable = cfg.email;
           papis = {
             enable = true;
             libraries."papers" = {
@@ -215,7 +326,13 @@
             shortcut = "Space";
           };
         };
-        services.mako.enable = true;
+        services = {
+          mako.enable = true;
+          mbsync = {
+            enable = cfg.email;
+            frequency = "*:0/15";
+          };
+        };
       };
     };
   };

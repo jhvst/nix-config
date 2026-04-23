@@ -12,6 +12,10 @@
   };
   nix.settings.secret-key-files = [ "/var/mnt/bakhal/garage/cache-priv-key" ];
 
+  homeModule = {
+    email = true;
+  };
+
   systemd.network = {
     enable = true;
     networks = {
