@@ -127,7 +127,7 @@
               inputs.runtime-modules.nixosModules.runtimeModules
               inputs.sops-nix.nixosModules.sops
               self.homeModules.default
-              self.nixosModules.juuso
+              self.nixosModules.default
               self.nixosModules.wayland
               {
                 age.rekey = {
@@ -170,8 +170,8 @@
               inputs.homestakeros-base.nixosModules.kexecTree
               inputs.runtime-modules.nixosModules.runtimeModules
               inputs.sops-nix.nixosModules.sops
-              self.nixosModules.juuso
               self.homeModules.default
+              self.nixosModules.default
               {
                 age.rekey = {
                   localStorageDir = ./nixosConfigurations/starlabs/secrets/agenix-rekey;
@@ -233,7 +233,7 @@
           };
 
           nixosModules = {
-            juuso = { imports = [ ./nixosModules/juuso ]; };
+            default = { imports = [ ./nixosModules ]; };
             neovim = { imports = [ ./nixosModules/neovim ]; };
             uxplay = { imports = [ ./nixosModules/uxplay ]; };
             wayland = { imports = [ ./nixosModules/wayland ]; };

@@ -594,15 +594,7 @@
     }
   ];
 
-  hardware = {
-    enableRedistributableFirmware = true; # enables WiFi and GPU drivers
-    # https://gitlab.freedesktop.org/pipewire/pipewire/-/wikis/LE-Audio-+-LC3-support
-    bluetooth.enable = true;
-    graphics.enable = true; # radv: an open-source Vulkan driver from freedesktop
-  };
-
   services.fprintd.enable = true;
-
   services.dictd.enable = true;
 
   services.kubo = {
@@ -634,13 +626,6 @@
     };
   };
 
-  services.yubikey-agent.enable = true;
-  services.trezord.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    pulse.enable = true;
-  };
   services.dbus.enable = true;
   services.timesyncd.enable = true;
   services.timesyncd.servers = [ "time.cloudflare.com" ];
