@@ -306,6 +306,7 @@ in
             enable = true;
             timezone = config.time.timeZone;
           };
+          sioyek.enable = true;
           ssh = {
             enable = true;
             enableDefaultConfig = false;

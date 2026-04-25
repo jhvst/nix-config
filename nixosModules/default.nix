@@ -30,7 +30,6 @@
         gnupg
         isd
         pinentry-curses
-        sioyek
         sops
         trezor-agent
         trezorctl
