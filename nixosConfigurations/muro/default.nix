@@ -16,6 +16,13 @@
     email = true;
   };
 
+  fonts = {
+    fontDir.enable = true;
+    packages = with pkgs; [
+      nerd-fonts.iosevka-term
+    ];
+  };
+
   systemd.network = {
     enable = true;
     networks = {

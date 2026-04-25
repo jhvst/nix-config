@@ -128,7 +128,6 @@
               inputs.sops-nix.nixosModules.sops
               self.homeModules.default
               self.nixosModules.default
-              self.nixosModules.wayland
               {
                 age.rekey = {
                   localStorageDir = ./nixosConfigurations/muro/secrets/agenix-rekey;
@@ -236,7 +235,6 @@
             default = { imports = [ ./nixosModules ]; };
             neovim = { imports = [ ./nixosModules/neovim ]; };
             uxplay = { imports = [ ./nixosModules/uxplay ]; };
-            wayland = { imports = [ ./nixosModules/wayland ]; };
           };
 
           homeModules = {
