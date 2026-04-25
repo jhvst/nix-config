@@ -223,6 +223,21 @@ in
               test $TERM = "xterm-256color"; and exec tmux
             '';
           };
+          foot = {
+            enable = true;
+            settings = {
+              main = {
+                term = "xterm-256color";
+                font = "IosevkaTerm Nerd Font Mono:size=12";
+              };
+              mouse = {
+                hide-when-typing = "yes";
+              };
+              url = {
+                launch = "${pkgs.nix} run nixpkgs#firefox -- ";
+              };
+            };
+          };
           fzf.enable = true; # https://andrew-quinn.me/fzf/
           git = {
             enable = true;
@@ -324,6 +339,44 @@ in
               TMUX_FZF_LAUNCH_KEY="f"
             '';
             shortcut = "Space";
+          };
+          yambar = {
+            enable = true;
+            settings.bar = {
+              font = "IosevkaTerm Nerd Font:style=Regular";
+              location = "top";
+              height = 26;
+              background = "00000066";
+              center = [{
+                label.content = [{
+                  string.text = config.networking.hostName;
+                }];
+              }];
+              right = [
+                {
+                  mem = {
+                    poll-interval = 2500;
+                    content = [{
+                      string.text = " {free:mb}MB";
+                    }];
+                  };
+                }
+                {
+                  clock = {
+                    time-format = "%H:%M:%S";
+                    date-format = "%A %-d of %b %Y %z";
+                    content = [
+                      {
+                        string.text = " {date}";
+                      }
+                      {
+                        string.text = "{time}";
+                      }
+                    ];
+                  };
+                }
+              ];
+            };
           };
         };
         services = {

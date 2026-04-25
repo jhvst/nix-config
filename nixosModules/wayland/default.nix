@@ -1,5 +1,4 @@
-{ config
-, pkgs
+{ pkgs
 , ...
 }:
 {
@@ -13,71 +12,6 @@
     };
 
     home-manager.users.juuso = {
-      programs.foot = {
-        enable = true;
-        settings = {
-          main = {
-            term = "xterm-256color";
-            font = "IosevkaTerm Nerd Font Mono:size=12";
-          };
-          mouse = {
-            hide-when-typing = "yes";
-          };
-          url = {
-            launch = "${pkgs.nix} run nixpkgs#firefox -- ";
-          };
-        };
-      };
-      programs.yambar = {
-        enable = true;
-        settings.bar = {
-          font = "IosevkaTerm Nerd Font:style=Regular";
-          location = "top";
-          height = 26;
-          background = "00000066";
-        };
-        settings.bar.left = [{
-          i3 = rec {
-            right-spacing = 6;
-            persistent = [ "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" ];
-            content =
-              let
-                workspace = n: {
-                  name = n;
-                  value = let s = { text = if n == "10" then "0" else n; margin = 8; }; in {
-                    map = {
-                      default.string = s;
-                      conditions = {
-                        empty.string = s // {
-                          foreground = "ffffff77";
-                        };
-                        focused.string = s // {
-                          deco.underline = {
-                            size = 2;
-                            color = "ffffffff";
-                          };
-                        };
-                        urgent.string = s // {
-                          deco.background.color = "dd5555ff";
-                        };
-                      };
-                    };
-                  };
-                };
-              in
-              builtins.listToAttrs (map workspace persistent);
-          };
-        }];
-        settings.bar.center = [
-          {
-            label = {
-              content = [{
-                string.text = config.networking.hostName;
-              }];
-            };
-          }
-        ];
-      };
       programs.swaylock.enable = true;
 
       wayland.windowManager.sway = {
