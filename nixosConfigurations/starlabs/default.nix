@@ -603,11 +603,13 @@
   services.fwupd.enable = true;
 
   systemd.tmpfiles.rules = [
-    "d /var/log/smartd 0755 netdata netdata -"
-    "z /run/secrets/passage - juuso juuso -"
+    "Z /var/lib/ipfs - ipfs ipfs -"
+    "d /var/log/smartd 0655 juuso juuso -"
     "z /home/juuso/.config - juuso juuso -" # z for chown: subvolume mount to subdirectory causes parent to be owned by root
     "z /home/juuso/.gnupg - juuso juuso -"
     "z /home/juuso/.local - juuso juuso -"
+    "z /run/secrets/passage - juuso juuso -"
+    "z /var/lib/ipfs/config 0640 ipfs ipfs -"
   ];
   services.smartd = {
     enable = true;
