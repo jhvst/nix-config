@@ -159,6 +159,7 @@
         sources.formatting.nixpkgs_fmt.enable = true;
       };
       notify.enable = true;
+      origami.enable = true;
       telescope = {
         enable = true;
         extensions.fzf-native.enable = true;
