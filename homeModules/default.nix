@@ -256,7 +256,7 @@ in
                 '';
               };
           };
-          stateVersion = config.system.stateVersion;
+          inherit (config.system) stateVersion;
         };
         programs = {
           alot.enable = cfg.email;
