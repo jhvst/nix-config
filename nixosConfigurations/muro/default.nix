@@ -72,6 +72,7 @@
       "boot.shell_on_fail"
       "ip=dhcp"
 
+      "amdgpu.runpm=0" # dGPU sometimes fails to exit sleep
       "amdgpu.ppfeaturemask=0xffffffff"
 
       "mitigations=off"
