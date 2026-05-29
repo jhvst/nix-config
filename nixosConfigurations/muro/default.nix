@@ -344,6 +344,20 @@
     }
   ];
 
+  home-manager.users.juuso = {
+    xdg.configFile =
+      let
+        wireplumber = "wireplumber/wireplumber.conf.d";
+      in
+      {
+        "${wireplumber}/50-default-nodes.conf".text = ''
+          default_nodes = {
+            Audio/Sink = alsa_output.usb-Schiit_Audio_USB_Modi_Device-00.analog-stereo
+          }
+        '';
+      };
+  };
+
   services.plex = {
     enable = true;
     group = "juuso";
