@@ -186,7 +186,38 @@ in
             trim_trailing_whitespace = true;
           };
         };
-        home.stateVersion = config.system.stateVersion;
+        home = {
+          file = {
+            ".mailcap" =
+              let
+                stripTables = pkgs.writeText "strip-tables.lua" ''
+                  function Table(el)
+                    local blocks = {}
+                    for _, body in ipairs(el.bodies) do
+                      for _, row in ipairs(body.body) do
+                        for _, cell in ipairs(row.cells) do
+                          for _, block in ipairs(cell.contents) do
+                            table.insert(blocks, block)
+                          end
+                        end
+                      end
+                    end
+                    return blocks
+                  end
+                '';
+              in
+              {
+                enable = cfg.email;
+                text = ''
+                  text/html; \
+                    ${lib.getExe pkgs.pandoc} -f html -t markdown --wrap=none --lua-filter=${stripTables} '%s'; \
+                    nametemplate=%s.html; \
+                    copiousoutput
+                '';
+              };
+          };
+          stateVersion = config.system.stateVersion;
+        };
         programs = {
           alot.enable = cfg.email;
           awscli = {
