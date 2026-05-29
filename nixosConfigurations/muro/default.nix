@@ -530,6 +530,18 @@
         group = "garage";
         mode = "0440";
       };
+      "mbsync/kapsi" = {
+        rekeyFile = ./secrets/agenix/mbsync/kapsi.age;
+        owner = "juuso";
+        group = "juuso";
+        mode = "0440";
+      };
+      "mbsync/iki" = {
+        rekeyFile = ./secrets/agenix/mbsync/iki.age;
+        owner = "juuso";
+        group = "juuso";
+        mode = "0440";
+      };
     };
   };
 

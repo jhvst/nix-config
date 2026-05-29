@@ -82,8 +82,48 @@ in
             basePath = ".calendar";
           };
           email.accounts = lib.mkIf cfg.email {
-            "ponkila" = mkMailAccount "juuso@ponkila.com" {
+            "iki" = mkMailAccount "jhaavist@iki.fi" {
+              userName = "jhaavist@iki.fi";
+              passwordCommand = [
+                ''${pkgs.coreutils}/bin/cat ${config.age.secrets."mbsync/iki".path}''
+              ];
+              smtp = {
+                host = "smtp.iki.fi";
+                port = 587;
+                tls = {
+                  enable = true;
+                  useStartTls = true;
+                };
+              };
+              notmuch.enable = lib.mkForce false;
+            };
+            "kapsi" = mkMailAccount "jhaavist@kapsi.fi" {
               primary = true;
+              mbsync = {
+                enable = true;
+                create = "maildir";
+              };
+              userName = "jhaavist@kapsi.fi";
+              passwordCommand = [
+                ''${pkgs.coreutils}/bin/cat ${config.age.secrets."mbsync/kapsi".path}''
+              ];
+              imap = {
+                host = "mail.kapsi.fi";
+                port = 993;
+                tls = {
+                  enable = true;
+                };
+              };
+              smtp = {
+                host = "mail.kapsi.fi";
+                port = 587;
+                tls = {
+                  enable = true;
+                  useStartTls = true;
+                };
+              };
+            };
+            "ponkila" = mkMailAccount "juuso@ponkila.com" {
               mbsync = {
                 enable = true;
                 create = "maildir";
