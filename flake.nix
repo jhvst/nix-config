@@ -18,6 +18,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
     nixvim.url = "github:nix-community/nixvim";
+    runtime-modules.inputs.nixpkgs.follows = "nixpkgs";
     runtime-modules.url = "github:tupakkatapa/nixos-runtime-modules";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
     sops-nix.url = "github:Mic92/sops-nix";
