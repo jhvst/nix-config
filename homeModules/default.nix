@@ -393,6 +393,15 @@ in
             frequency = "*:0/15";
           };
         };
+        systemd.user.services = {
+          uxplay = lib.mkIf config.services.uxplay.enable {
+            Unit.Description = "Airplay mirroring server";
+            Service.ExecStart = "${lib.getExe' config.services.uxplay.package "uxplay"} ${
+             lib.escapeShellArgs config.services.uxplay.extraArgs
+            }";
+            Install.WantedBy = [ "default.target" ];
+          };
+        };
       };
     };
   };

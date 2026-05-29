@@ -128,6 +128,7 @@
               inputs.sops-nix.nixosModules.sops
               self.homeModules.default
               self.nixosModules.default
+              self.nixosModules.uxplay
               {
                 age.rekey = {
                   localStorageDir = ./nixosConfigurations/muro/secrets/agenix-rekey;

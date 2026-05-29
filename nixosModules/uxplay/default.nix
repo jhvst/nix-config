@@ -31,49 +31,6 @@ in {
     services.avahi.nssmdns4 = lib.mkDefault true;
     services.avahi.nssmdns6 = lib.mkDefault true;
 
-    systemd.services.uxplay = {
-      description = "Airplay mirroring server";
-      after = [ "network.target" ];
-      documentation = [ "man:uxplay(1)" ];
-      wantedBy = [ "multi-user.target" ];
-      script = "${lib.getExe' cfg.package "uxplay"} ${
-          lib.escapeShellArgs cfg.extraArgs
-        }";
-      serviceConfig = {
-        DynamicUser = true;
-        User = "uxplay";
-        Group = "uxplay";
-        RuntimeDirectory = "uxplay";
-
-        Restart = "on-failure";
-        LockPersonality = true;
-        NoNewPrivileges = true;
-        MemoryDenyWriteExecute = true;
-
-        CapabilityBoundSet = lib.mkForce [ ];
-        PrivateTmp = true;
-        PrivateUsers = true;
-        PrivateDevices = true;
-        ProtectControlGroups = true;
-        ProtectClock = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-
-        RestrictRealtime = true;
-        RestrictAddressFamilies = [ "AF_LOCAL" "AF_INET" "AF_INET6" ];
-        RestrictNamespaces = true;
-
-        SystemCallFilter = [ "@system-service" "~@privileged" ];
-        SystemCallArchitectures = "native";
-        SystemCallErrorNumber = "EPERM";
-      };
-      unitConfig = {
-        StartLimitBurst = 5;
-        StartLimitIntervalSec = 10;
-      };
-    };
+    security.rtkit.enable = true;
   };
 }
