@@ -466,11 +466,18 @@ in
         };
         systemd.user.services = {
           uxplay = lib.mkIf config.services.uxplay.enable {
-            Unit.Description = "Airplay mirroring server";
+            Unit = {
+              # uxplay binds to the GPU and allowing it
+              # to start before graphical-session
+              # makes it impossible to start a desktop environment
+              Description = "Airplay mirroring server";
+              After = [ "graphical-session.target" ];
+              BindsTo = [ "graphical-session.target" ];
+            };
             Service.ExecStart = "${lib.getExe' config.services.uxplay.package "uxplay"} ${
              lib.escapeShellArgs config.services.uxplay.extraArgs
             }";
-            Install.WantedBy = [ "default.target" ];
+            Install.WantedBy = [ "graphical-session.target" ];
           };
         };
       };
