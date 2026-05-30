@@ -16,9 +16,10 @@
     home-manager.url = "github:nix-community/home-manager/release-26.05";
     homestakeros-base.inputs.nixpkgs.follows = "nixpkgs";
     homestakeros-base.url = "github:ponkila/homestakeros?dir=nixosModules/base";
-    nixvim.inputs.nixpkgs.follows = "nixpkgs";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+    nixvim.inputs.nixpkgs.follows = "nixpkgs";
     nixvim.url = "github:nix-community/nixvim/nixos-26.05";
+    papis.url = "github:papis/papis";
     runtime-modules.inputs.nixpkgs.follows = "nixpkgs";
     runtime-modules.url = "github:tupakkatapa/nixos-runtime-modules";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
@@ -57,6 +58,7 @@
               alot
               fstar-vscode-assistant
               libedgetpu
+              papis
               passage
               ;
           };
@@ -106,6 +108,7 @@
               };
             });
             "alot" = inputs'.alot.packages.alot;
+            "papis" = inputs'.papis.packages.papis;
 
             "muro" = flake.nixosConfigurations.muro.config.system.build.kexecTree;
             "starlabs" = flake.nixosConfigurations.starlabs.config.system.build.kexecTree;
