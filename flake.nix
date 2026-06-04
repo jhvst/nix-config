@@ -60,6 +60,7 @@
               libedgetpu
               papis
               passage
+              ndi-6
               ;
           };
 
@@ -109,6 +110,11 @@
             });
             "alot" = inputs'.alot.packages.alot;
             "papis" = inputs'.papis.packages.papis;
+            "ndi-6" = pkgs.ndi-6.overrideAttrs (oldAttrs: {
+              src = oldAttrs.src.overrideAttrs (_: {
+                outputHash = "sha256-8DFPJFRG3vxIi2POtGiazxqWWu79ray3BXG7IWqMwYM=";
+              });
+            });
 
             "muro" = flake.nixosConfigurations.muro.config.system.build.kexecTree;
             "starlabs" = flake.nixosConfigurations.starlabs.config.system.build.kexecTree;
