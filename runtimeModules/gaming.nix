@@ -1,4 +1,13 @@
-{ pkgs, ... }: {
+{ pkgs, lib, ... }: {
+
+  # https://github.com/nixos/nixpkgs/issues/523200
+  security.wrappers.bwrap = lib.mkForce {
+    source = "${pkgs.bubblewrap}/bin/bwrap";
+    owner = "root";
+    group = "root";
+    setuid = false;
+    setgid = false;
+  };
 
   boot.kernel.sysctl."net.ipv4.tcp_mtu_probing" = 1; # Ubisoft Connect fix: https://www.protondb.com/app/2225070#5tJ0kpnj43
 
