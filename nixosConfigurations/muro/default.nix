@@ -650,7 +650,7 @@
     package = pkgs.garage_2;
     settings = {
       data_dir = "/var/lib/garage/data";
-      db_engine = "lmdb";
+      db_engine = "sqlite";
       metadata_dir = "/var/lib/garage/metadata";
       replication_factor = 1;
       rpc_bind_addr = "[::]:3901";
