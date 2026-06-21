@@ -383,6 +383,10 @@
     };
   };
 
+  environment.systemPackages = with pkgs; [
+    brightnessctl
+  ];
+
   security = {
     acme = {
       acceptTerms = true;
