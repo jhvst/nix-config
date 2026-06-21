@@ -44,6 +44,24 @@
     ];
   };
 
+  home-manager.users.juuso.programs.radicle = {
+    enable = true;
+    settings = {
+      node = {
+        alias = "starlabs";
+        listen = [ "192.168.76.4:58776" ];
+        connect = [ "z6Mkg2nQwCCsRr5HPT9oMECdiuBzQP4gmDPfnHkrUsLtPAek@192.168.76.40:58776" ];
+        peers = {
+          type = "static";
+        };
+        relay = "never";
+      };
+      visibility = {
+        type = "private";
+      };
+    };
+  };
+
   home-manager.users.juuso.programs.yambar.settings.bar =
     let
       green = "2ecc71ff";
@@ -466,6 +484,15 @@
       what = "/dev/sda2";
       where = "/var/lib/papis";
       options = "subvol=papis";
+      type = "btrfs";
+
+      wantedBy = [ "multi-user.target" ];
+    }
+    {
+      enable = true;
+      what = "/dev/sda2";
+      where = "/home/juuso/.radicle";
+      options = "subvol=radicle";
       type = "btrfs";
 
       wantedBy = [ "multi-user.target" ];
