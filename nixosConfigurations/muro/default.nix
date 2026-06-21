@@ -279,26 +279,6 @@
       enable = true;
 
       what = "/dev/disk/by-label/bakhal";
-      where = "/var/lib/syncthing";
-      type = "btrfs";
-      options = "subvol=syncthing";
-
-      wantedBy = [ "multi-user.target" ];
-    }
-    {
-      enable = true;
-
-      what = "/dev/disk/by-label/bakhal";
-      where = "/home/juuso/syncthing";
-      type = "btrfs";
-      options = "subvol=syncthing/data/f6812609-c33a-467e-abee-a350701977d8";
-
-      wantedBy = [ "multi-user.target" ];
-    }
-    {
-      enable = true;
-
-      what = "/dev/disk/by-label/bakhal";
       where = "/var/lib/garage";
       type = "btrfs";
       options = "subvol=garage";
@@ -576,8 +556,6 @@
     "Z /var/lib/garage 0760 garage garage -"
     "d /var/log/smartd 0655 juuso juuso -"
     "z /run/secrets/passage - juuso juuso -"
-    "Z /var/lib/syncthing - juuso juuso -"
-    "z /var/lib/syncthing/data/f6812609-c33a-467e-abee-a350701977d8 0700 juuso juuso -"
     "z /var/lib/ipfs/config 0640 ipfs ipfs -"
   ];
   systemd.user.tmpfiles.users.juuso.rules = [
@@ -613,35 +591,6 @@
         }];
       };
     };
-  };
-
-  services.syncthing = {
-    enable = true;
-    openDefaultPorts = true;
-    configDir = "/var/lib/syncthing/config";
-    databaseDir = "/var/lib/syncthing/db";
-    dataDir = "/var/lib/syncthing/data";
-    user = "juuso";
-    group = "juuso";
-    settings = {
-      devices = {
-        "starlabs" = { id = "EPDI4WN-2RMZCCY-SINRNKM-IMLPWU7-IBKLEWP-6GI22AU-K6THM3P-AMUQTA2"; };
-      };
-      folders = {
-        "syncthing-persistent-alpha" = rec {
-          type = "sendreceive";
-          id = "f6812609-c33a-467e-abee-a350701977d8";
-          path = "/var/lib/syncthing/data/${id}";
-          devices = [ "starlabs" ];
-          syncOwnership = true;
-        };
-      };
-    };
-  };
-  systemd.services.syncthing.serviceConfig = {
-    ProtectSystem = "strict";
-    ProtectHome = true;
-    ReadWritePaths = "/var/lib/syncthing";
   };
 
   services.garage = {
