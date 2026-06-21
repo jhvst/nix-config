@@ -1,0 +1,34 @@
+From a053f0a80a3d911369fe8475502b2d5aa539af18 Mon Sep 17 00:00:00 2001
+From: Michael Rodler <contact@f0rki.at>
+Date: Fri, 6 Mar 2026 10:53:45 +0100
+Subject: [PATCH] python3Packages.habanero: adding missing dependency
+
+current version of habanero has two additional dependencies, that are
+not listed in the nix derivation:
+https://github.com/sckott/habanero/blob/v2.3.0/pyproject.toml#L20-L21
+However, only the packaging dependency is actually used during runtime,
+so we add this dependency to the nix derivation too.
+---
+ pkgs/development/python-modules/habanero/default.nix | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/pkgs/development/python-modules/habanero/default.nix b/pkgs/development/python-modules/habanero/default.nix
+index 5c922a00ce63e..7bb3c32f70598 100644
+--- a/pkgs/development/python-modules/habanero/default.nix
++++ b/pkgs/development/python-modules/habanero/default.nix
+@@ -6,6 +6,7 @@
+   httpx,
+   tqdm,
+   urllib3,
++  packaging,
+   vcrpy,
+   pytestCheckHook,
+ }:
+@@ -30,6 +31,7 @@ buildPythonPackage rec {
+     httpx
+     tqdm
+     urllib3
++    packaging
+   ];
+ 
+   nativeCheckInputs = [

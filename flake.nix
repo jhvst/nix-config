@@ -19,7 +19,6 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
     nixvim.url = "github:nix-community/nixvim/nixos-26.05";
-    papis.url = "github:papis/papis";
     runtime-modules.inputs.nixpkgs.follows = "nixpkgs";
     runtime-modules.url = "github:tupakkatapa/nixos-runtime-modules";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
@@ -41,6 +40,22 @@
       ];
 
       perSystem = { pkgs, config, system, inputs', ... }:
+        let
+          nixpkgs-patched = import
+            ((import inputs.nixpkgs { inherit system; }).applyPatches {
+              name = "nixpkgs-pr-patches";
+              src = inputs.nixpkgs;
+              patches = [
+                ./patches/497160.patch
+                ./patches/499028.patch
+              ];
+            })
+            {
+              inherit system;
+              config.permittedInsecurePackages = [ "python3.13-ecdsa-0.19.2" ];
+            };
+        in
+
         {
 
           _module.args.pkgs = import inputs.nixpkgs {
@@ -61,6 +76,8 @@
               papis
               passage
               ndi-6
+              trezor-agent
+              python313
               ;
           };
 
@@ -109,12 +126,19 @@
               };
             });
             "alot" = inputs'.alot.packages.alot;
-            "papis" = inputs'.papis.packages.papis;
+            "papis" = nixpkgs-patched.papis;
             "ndi-6" = pkgs.ndi-6.overrideAttrs (oldAttrs: {
               src = oldAttrs.src.overrideAttrs (_: {
                 outputHash = "sha256-8DFPJFRG3vxIi2POtGiazxqWWu79ray3BXG7IWqMwYM=";
               });
             });
+            "trezor-agent" = nixpkgs-patched.trezor-agent;
+            "python313" = pkgs.python313.override {
+              packageOverrides = _: _: {
+                inherit (nixpkgs-patched.python313Packages) trezor-agent;
+                inherit (nixpkgs-patched.python313Packages) papis;
+              };
+            };
 
             "muro" = flake.nixosConfigurations.muro.config.system.build.kexecTree;
             "starlabs" = flake.nixosConfigurations.starlabs.config.system.build.kexecTree;

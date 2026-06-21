@@ -1,0 +1,87 @@
+From e265fb4caf044f525f0399b900f083a08342b700 Mon Sep 17 00:00:00 2001
+From: Wroclaw <wroclaw223@outlook.com>
+Date: Wed, 11 Mar 2026 19:21:52 +0100
+Subject: [PATCH] python3Packages.trezor-agent: 0.12.0 -> 0.13.0
+
+---
+ .../python-modules/trezor-agent/default.nix   | 42 +++++++------------
+ 1 file changed, 16 insertions(+), 26 deletions(-)
+
+diff --git a/pkgs/development/python-modules/trezor-agent/default.nix b/pkgs/development/python-modules/trezor-agent/default.nix
+index 0bbbab1ac6e64..e1083f7f61f0f 100644
+--- a/pkgs/development/python-modules/trezor-agent/default.nix
++++ b/pkgs/development/python-modules/trezor-agent/default.nix
+@@ -1,52 +1,42 @@
+ {
+   lib,
+   buildPythonPackage,
+-  fetchPypi,
++  fetchFromGitHub,
+   trezor,
+   libagent,
+-  ecdsa,
+-  ed25519,
+-  mnemonic,
+-  keepkey,
+-  semver,
+   setuptools,
+-  wheel,
+   pinentry,
++  nix-update-script,
+ }:
+ 
+-buildPythonPackage rec {
++buildPythonPackage (finalAttrs: {
+   pname = "trezor-agent";
+-  version = "0.12.0";
++  version = "0.13.0";
+   format = "setuptools";
+ 
+-  src = fetchPypi {
+-    pname = "trezor_agent";
+-    inherit version;
+-    hash = "sha256-4IylpUvXZYAXFkyFGNbN9iPTsHff3M/RL2Eq9f7wWFU=";
++  src = fetchFromGitHub {
++    owner = "romanz";
++    repo = "trezor-agent";
++    tag = "trezor/${finalAttrs.version}";
++    hash = "sha256-hoaMsdD0LRLF5F33ECYnBRxzmtydHxT1UOkVna1hLYA=";
+   };
+ 
++  sourceRoot = "${finalAttrs.src.name}/agents/trezor";
++
+   propagatedBuildInputs = [
+     setuptools
+     trezor
+     libagent
+-    ecdsa
+-    ed25519
+-    mnemonic
+-    keepkey
+-    semver
+-    wheel
+     pinentry
+   ];
+ 
+-  # relax dependency constraint
+-  postPatch = ''
+-    substituteInPlace setup.py \
+-      --replace "trezor[hidapi]>=0.12.0,<0.13" "trezor[hidapi]>=0.12.0,<0.14"
+-  '';
+-
+   doCheck = false;
+   pythonImportsCheck = [ "libagent" ];
+ 
++  passthru.updateScript = nix-update-script {
++    extraArgs = [ "--version-regex=trezor/(.*)" ];
++  };
++
+   meta = {
+     description = "Using Trezor as hardware SSH agent";
+     homepage = "https://github.com/romanz/trezor-agent";
+@@ -57,4 +47,4 @@ buildPythonPackage rec {
+       mmahut
+     ];
+   };
+-}
++})
