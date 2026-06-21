@@ -256,11 +256,15 @@
     networks = {
       "10-wan" = {
         matchConfig.Name = "wlan0";
-        dhcpV4Config.Anonymize = true;
         networkConfig = {
-          DHCP = "ipv4";
+          DHCP = "yes";
           DNSOverTLS = true;
           IPv6AcceptRA = true;
+          IPv6PrivacyExtensions = "prefer-public";
+        };
+        dhcpV4Config.Anonymize = true;
+        dhcpV6Config = {
+          DUIDType = "link-layer";
         };
         dns = [ "127.0.0.1:1053" ];
         linkConfig.RequiredForOnline = "routable";
