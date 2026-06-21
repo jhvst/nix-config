@@ -387,9 +387,11 @@ in
           ssh = {
             enable = true;
             enableDefaultConfig = false;
-            matchBlocks."*" = {
-              hashKnownHosts = true;
-              identityFile = "~/.ssh/id_ed25519_sk_rk";
+            settings = {
+              "Host *" = {
+                HashKnownHosts = true;
+                IdentityFile = "~/.ssh/id_ed25519_sk_rk";
+              };
             };
           };
           tmux = {
