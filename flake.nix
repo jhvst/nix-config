@@ -16,7 +16,7 @@
     home-manager.url = "github:nix-community/home-manager/release-26.05";
     homestakeros-base.inputs.nixpkgs.follows = "nixpkgs";
     homestakeros-base.url = "github:ponkila/homestakeros?dir=nixosModules/base";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
     nixvim.url = "github:nix-community/nixvim/nixos-26.05";
     runtime-modules.inputs.nixpkgs.follows = "nixpkgs";
