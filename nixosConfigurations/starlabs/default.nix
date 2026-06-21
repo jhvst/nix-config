@@ -560,7 +560,10 @@
     fish.enable = true;
     git.enable = true;
     gnupg.agent.pinentryPackage = pkgs.pinentry-curses;
-    niri.enable = true;
+    niri = {
+      enable = true;
+      useNautilus = true;
+    };
     vim = {
       enable = true;
       defaultEditor = true;
