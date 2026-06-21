@@ -301,6 +301,9 @@
             Metric = 2048; # makes this a "fallback" ipv6 global route
           }
         ];
+        networkConfig = {
+          DNSDefaultRoute = false;
+        };
       };
       "99-dinar" = {
         matchConfig.Name = "dinar";
