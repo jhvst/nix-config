@@ -16,6 +16,7 @@
       discord
       mangohud
     ];
+    # required for 4:3 gaming
     wayland.windowManager.sway = {
       enable = true;
       config = {
@@ -37,13 +38,6 @@
   };
 
   programs = {
-    obs-studio = {
-      enable = true;
-      plugins = with pkgs.obs-studio-plugins; [
-        distroav
-        wlrobs
-      ];
-    };
     steam = {
       enable = true;
       gamescopeSession = {
@@ -66,13 +60,6 @@
       capSysNice = true;
     };
     gamemode.enable = true;
-  };
-
-  # avahi is required by distroav
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-    openFirewall = true;
   };
 
 }

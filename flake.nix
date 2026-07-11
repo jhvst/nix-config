@@ -186,6 +186,10 @@
                       name = "gaming";
                       path = ./runtimeModules/gaming.nix;
                     }
+                    {
+                      name = "teleconference";
+                      path = ./runtimeModules/telco.nix;
+                    }
                   ];
                 };
               }
