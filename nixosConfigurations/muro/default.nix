@@ -424,7 +424,7 @@
 
     script = ''${pkgs.yarr}/bin/yarr \
       -db /var/mnt/bakhal/yarr/yarr.db \
-      -addr 192.168.76.40:7070
+      -addr [::]:7070
     '';
 
     wantedBy = [ "default.target" ];
