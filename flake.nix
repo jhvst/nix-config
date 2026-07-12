@@ -16,6 +16,8 @@
     home-manager.url = "github:nix-community/home-manager";
     homestakeros-base.inputs.nixpkgs.follows = "nixpkgs";
     homestakeros-base.url = "github:ponkila/homestakeros?dir=nixosModules/base";
+    homestaking-infra.inputs.nixpkgs.follows = "nixpkgs";
+    homestaking-infra.url = "github:ponkila/homestaking-infra";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixvim.url = "github:nix-community/nixvim";
     runtime-modules.inputs.nixpkgs.follows = "nixpkgs";
@@ -208,6 +210,7 @@
               inputs.homestakeros-base.nixosModules.kexecTree
               inputs.runtime-modules.nixosModules.runtimeModules
               inputs.sops-nix.nixosModules.sops
+              inputs.homestaking-infra.nixosModules.monitoring
               self.homeModules.default
               self.nixosModules.default
               self.nixosModules.uxplay

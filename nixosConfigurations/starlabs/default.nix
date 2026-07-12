@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, config, lib, inputs, ... }:
 {
 
   boot = {
@@ -364,6 +364,58 @@
   };
   systemd.services."coredns".serviceConfig.Group = "acme";
 
+  monitoring = {
+    enable = true;
+    grafana = {
+      enable = true;
+      address = "127.0.0.1";
+    };
+    logs = true;
+  };
+  services.grafana.settings.security.secret_key = "SW2YcwTIb9zpOOhoPsMm";
+  services.prometheus = let fp = config.services.prometheus.exporters; in rec {
+    exporters = {
+      node = {
+        enable = true;
+        enabledCollectors = [
+          "diskstats"
+          "filesystem"
+          "cpu"
+          "meminfo"
+          "systemd"
+          "cgroups"
+        ];
+      };
+      smartctl = {
+        enable = true;
+        user = "root";
+        devices = [ "/dev/sda" ];
+      };
+    };
+    scrapeConfigs =
+      let
+        defaultConfig = job_name: {
+          inherit job_name;
+          static_configs = [{ targets = [ "localhost:${port job_name}" ]; }];
+        };
+        overrides = { };
+        port = n: toString fp.${n}.port;
+        srapeConfigs' = lib.mapAttrsToList
+          (job_name: _: overrides.${job_name} or (defaultConfig job_name))
+          exporters; # <- exporters defined above
+      in
+      srapeConfigs' ++ [
+
+      ];
+  };
+  services.grafana.provision.dashboards.settings.providers = [{
+    name = "default";
+    options.path = pkgs.linkFarm "grafana-dashboards" [
+      { name = "node-exporter.json"; path = inputs.homestaking-infra.packages.x86_64-linux.grafana-dashboard-node-exporter; }
+      { name = "smartctl.json"; path = inputs.homestaking-infra.packages.x86_64-linux.grafana-dashboard-smartctl; }
+    ];
+  }];
+
   time.timeZone = "Europe/Helsinki";
 
   users = {
@@ -645,20 +697,12 @@
 
   systemd.tmpfiles.rules = [
     "Z /var/lib/ipfs - ipfs ipfs -"
-    "d /var/log/smartd 0655 juuso juuso -"
     "z /home/juuso/.config - juuso juuso -" # z for chown: subvolume mount to subdirectory causes parent to be owned by root
     "z /home/juuso/.gnupg - juuso juuso -"
     "z /home/juuso/.local - juuso juuso -"
     "z /run/secrets/passage - juuso juuso -"
     "z /var/lib/ipfs/config 0640 ipfs ipfs -"
   ];
-  services.smartd = {
-    enable = true;
-    extraOptions = [
-      "-A /var/log/smartd/"
-      "--interval=600"
-    ];
-  };
 
   systemd.sleep.settings.Sleep = {
     HibernateOnACPower = "no";
