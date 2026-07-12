@@ -1705,6 +1705,10 @@
         "agenix-rekey": "agenix-rekey",
         "alot": "alot",
         "flake-parts": "flake-parts_3",
+        "git-hooks": [
+          "actions-nix",
+          "git-hooks"
+        ],
         "home-manager": "home-manager_2",
         "homestakeros-base": "homestakeros-base",
         "homestaking-infra": "homestaking-infra",

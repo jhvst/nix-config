@@ -26,6 +26,7 @@
     sops-nix.url = "github:Mic92/sops-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
     treefmt-nix.url = "github:numtide/treefmt-nix";
+    git-hooks.follows = "actions-nix/git-hooks";
   };
 
   outputs = { self, ... }@inputs:
@@ -37,6 +38,7 @@
         inputs.actions-nix.flakeModules.default
         inputs.agenix-rekey.flakeModule
         inputs.flake-parts.flakeModules.easyOverlay
+        inputs.git-hooks.flakeModule
         inputs.treefmt-nix.flakeModule
       ];
 
@@ -94,6 +96,14 @@
             settings.global.excludes = [ "*/flake.nix" ];
           };
 
+          pre-commit = {
+            check.enable = false;
+            settings.hooks.treefmt = {
+              enable = true;
+              package = config.treefmt.build.wrapper;
+            };
+          };
+
           devShells = {
             default = pkgs.mkShell {
               nativeBuildInputs = with pkgs; [
@@ -105,6 +115,9 @@
                 tomb
                 yubioath-flutter
               ];
+              shellHook = ''
+                ${config.pre-commit.installationScript}
+              '';
             };
           };
 

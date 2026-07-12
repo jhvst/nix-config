@@ -404,9 +404,7 @@
           (job_name: _: overrides.${job_name} or (defaultConfig job_name))
           exporters; # <- exporters defined above
       in
-      srapeConfigs' ++ [
-
-      ];
+      srapeConfigs';
   };
   services.grafana.provision.dashboards.settings.providers = [{
     name = "default";
