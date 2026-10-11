@@ -199,11 +199,12 @@
                   modules = [
                     {
                       name = "gaming";
-                      path = ./runtimeModules/gaming.nix;
+                      imports = [ ./runtimeModules/gaming.nix ];
+                      skipValidation = true;
                     }
                     {
                       name = "teleconference";
-                      path = ./runtimeModules/telco.nix;
+                      imports = [ ./runtimeModules/telco.nix ];
                     }
                   ];
                 };
@@ -242,7 +243,8 @@
                   modules = [
                     {
                       name = "gaming";
-                      path = ./runtimeModules/gaming.nix;
+                      imports = [ ./runtimeModules/gaming.nix ];
+                      skipValidation = true;
                     }
                   ];
                 };
