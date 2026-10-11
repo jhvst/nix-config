@@ -701,6 +701,7 @@
     "z /var/lib/ipfs/config 0640 ipfs ipfs -"
   ];
 
+  services.upower.enable = true;
   systemd.sleep.settings.Sleep = {
     HibernateOnACPower = "no";
   };
