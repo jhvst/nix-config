@@ -291,7 +291,7 @@ in
                 "/run/current-system/sw/bin"
                 "/nix/var/nix/profiles/default/bin"
               ]}'
-              test $TERM = "xterm-256color"; and exec tmux
+              test $TERM = "xterm-256color"; and tmux
             '';
           };
           foot = {
