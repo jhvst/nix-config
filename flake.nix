@@ -6,7 +6,6 @@
     actions-nix.url = "github:nialov/actions.nix";
     agenix-rekey.inputs.nixpkgs.follows = "nixpkgs";
     agenix-rekey.url = "github:oddlama/agenix-rekey";
-    agenix.inputs.darwin.follows = ""; # optionally choose not to download darwin deps (saves some resources on Linux)
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     agenix.url = "github:ryantm/agenix";
     flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
