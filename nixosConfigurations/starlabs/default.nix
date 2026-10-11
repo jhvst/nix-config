@@ -570,7 +570,6 @@
   ];
 
   services.fprintd.enable = true;
-  services.dictd.enable = true;
 
   services.kubo = {
     enable = true;
