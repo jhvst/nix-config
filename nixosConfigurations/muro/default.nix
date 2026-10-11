@@ -569,7 +569,7 @@
   };
 
   services.kubo = {
-    enable = true;
+    enable = false;
     localDiscovery = true;
     autoMount = true;
     settings = {
