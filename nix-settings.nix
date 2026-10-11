@@ -11,7 +11,7 @@
 
     settings = {
       # Enable flakes and new 'nix' command
-      experimental-features = "nix-command flakes";
+      experimental-features = [ "nix-command" "flakes" ];
       # Deduplicate and optimize nix store
       auto-optimise-store = true;
 
@@ -58,6 +58,7 @@
     allowUnfree = true;
     permittedInsecurePackages = [
       "python3.13-ecdsa-0.19.2"
+      "radicle-node-1.10.3"
     ];
   };
 

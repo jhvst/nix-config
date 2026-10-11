@@ -572,7 +572,7 @@
   services.fprintd.enable = true;
 
   services.kubo = {
-    enable = true;
+    enable = false;
     localDiscovery = true;
     settings = {
       Addresses.API = "/ip4/127.0.0.1/tcp/5001";

@@ -12,6 +12,7 @@
     alot.inputs.nixpkgs.follows = "nixpkgs";
     alot.url = "github:pazz/alot/v0.12";
     flake-parts.url = "github:hercules-ci/flake-parts";
+    git-hooks.follows = "actions-nix/git-hooks";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     homestakeros-base.inputs.nixpkgs.follows = "nixpkgs";
@@ -26,7 +27,6 @@
     sops-nix.url = "github:Mic92/sops-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
     treefmt-nix.url = "github:numtide/treefmt-nix";
-    git-hooks.follows = "actions-nix/git-hooks";
   };
 
   outputs = { self, ... }@inputs:
@@ -49,13 +49,15 @@
               name = "nixpkgs-pr-patches";
               src = inputs.nixpkgs;
               patches = [
-                ./patches/497160.patch
                 ./patches/499028.patch
               ];
             })
             {
               inherit system;
-              config.permittedInsecurePackages = [ "python3.13-ecdsa-0.19.2" ];
+              config.permittedInsecurePackages = [
+                "python3.14-ecdsa-0.19.2"
+                "radicle-node-1.10.3"
+              ];
             };
         in
 
@@ -67,7 +69,10 @@
               self.overlays.default
             ];
             config = {
-              permittedInsecurePackages = [ "python3.13-ecdsa-0.19.2" ];
+              permittedInsecurePackages = [
+                "python3.13-ecdsa-0.19.2"
+                "radicle-node-1.10.3"
+              ];
             };
           };
 
@@ -167,8 +172,8 @@
             system = "x86_64-linux";
             specialArgs = { inherit inputs outputs; };
             modules = [
-              ./nixosConfigurations/muro
               ./nix-settings.nix
+              ./nixosConfigurations/muro
               inputs.agenix-rekey.nixosModules.default
               inputs.agenix.nixosModules.default
               inputs.home-manager.nixosModules.home-manager
@@ -215,15 +220,15 @@
             system = "x86_64-linux";
             specialArgs = { inherit inputs outputs; };
             modules = [
-              ./nixosConfigurations/starlabs
               ./nix-settings.nix
+              ./nixosConfigurations/starlabs
               inputs.agenix-rekey.nixosModules.default
               inputs.agenix.nixosModules.default
               inputs.home-manager.nixosModules.home-manager
               inputs.homestakeros-base.nixosModules.kexecTree
+              inputs.homestaking-infra.nixosModules.monitoring
               inputs.runtime-modules.nixosModules.runtimeModules
               inputs.sops-nix.nixosModules.sops
-              inputs.homestaking-infra.nixosModules.monitoring
               self.homeModules.default
               self.nixosModules.default
               self.nixosModules.uxplay
