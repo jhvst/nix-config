@@ -175,7 +175,6 @@
 
   environment.systemPackages = with pkgs; [
     garage_2
-    w3m
   ];
 
   hardware.xpadneo.enable = true;
