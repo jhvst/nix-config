@@ -9,10 +9,8 @@
     agenix.inputs.darwin.follows = ""; # optionally choose not to download darwin deps (saves some resources on Linux)
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     agenix.url = "github:ryantm/agenix";
-    alot.inputs.nixpkgs.follows = "nixpkgs";
-    alot.url = "github:pazz/alot/v0.12";
+    flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
     flake-parts.url = "github:hercules-ci/flake-parts";
-    git-hooks.follows = "actions-nix/git-hooks";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     homestakeros-base.inputs.nixpkgs.follows = "nixpkgs";
@@ -38,7 +36,6 @@
         inputs.actions-nix.flakeModules.default
         inputs.agenix-rekey.flakeModule
         inputs.flake-parts.flakeModules.easyOverlay
-        inputs.git-hooks.flakeModule
         inputs.treefmt-nix.flakeModule
       ];
 
@@ -78,7 +75,6 @@
 
           overlayAttrs = {
             inherit (config.packages)
-              alot
               fstar-vscode-assistant
               libedgetpu
               papis
@@ -102,7 +98,7 @@
           };
 
           pre-commit = {
-            check.enable = false;
+            check.enable = true;
             settings.hooks.treefmt = {
               enable = true;
               package = config.treefmt.build.wrapper;
@@ -144,7 +140,6 @@
                 hash = "sha256-1jQCEMeovDjjKukVHaK4xZiBPgZpNQwjvVbrbdeAXrE=";
               };
             });
-            "alot" = inputs'.alot.packages.alot;
             "papis" = nixpkgs-patched.papis;
             "ndi-6" = pkgs.ndi-6.overrideAttrs (oldAttrs: {
               src = oldAttrs.src.overrideAttrs (_: {
