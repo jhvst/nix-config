@@ -3,13 +3,13 @@
 # https://sourcegraph.com/github.com/shaunsingh/nix-darwin-dotfiles@8ce14d457f912f59645e167707c4d950ae1c3a6e/-/blob/flake.nix
 {
   inputs = {
-    actions-nix.url = "github:nialov/actions.nix";
     agenix-rekey.inputs.nixpkgs.follows = "nixpkgs";
     agenix-rekey.url = "github:oddlama/agenix-rekey";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     agenix.url = "github:ryantm/agenix";
     flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
     flake-parts.url = "github:hercules-ci/flake-parts";
+    git-hooks-nix.url = "github:cachix/git-hooks.nix";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     homestakeros-base.inputs.nixpkgs.follows = "nixpkgs";
@@ -32,9 +32,9 @@
 
       systems = [ "x86_64-linux" ];
       imports = [
-        inputs.actions-nix.flakeModules.default
         inputs.agenix-rekey.flakeModule
         inputs.flake-parts.flakeModules.easyOverlay
+        inputs.git-hooks-nix.flakeModule
         inputs.treefmt-nix.flakeModule
       ];
 
@@ -256,35 +256,6 @@
 
         in
         {
-
-          # nix run .#render-workflows
-          actions-nix = {
-            defaultValues = {
-              jobs = {
-                timeout-minutes = 30;
-                runs-on = "ubuntu-latest";
-              };
-            };
-            pre-commit.enable = true;
-            workflows = {
-              ".github/workflows/main.yaml" = {
-                on = {
-                  push.branches = [ "main" ];
-                  workflow_dispatch = { };
-                  pull_request = { };
-                };
-                jobs = {
-                  nix-flake-check = {
-                    steps = with inputs.actions-nix.lib.steps; [
-                      actionsCheckout
-                      DeterminateSystemsNixInstallerAction
-                      runNixFlakeCheck
-                    ];
-                  };
-                };
-              };
-            };
-          };
 
           nixosConfigurations = {
             "muro" = inputs.nixpkgs.lib.nixosSystem muro;
