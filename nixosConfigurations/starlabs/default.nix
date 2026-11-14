@@ -2,10 +2,7 @@
 {
 
   boot = {
-    initrd = {
-      kernelModules = [ "amdgpu" "btrfs" ];
-      luks.fido2Support = true;
-    };
+    initrd.kernelModules = [ "amdgpu" "btrfs" ];
     kernelModules = [ "v4l2loopback" ];
     extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
     extraModprobeConfig = ''
