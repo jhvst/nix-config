@@ -28,7 +28,6 @@
         cryptsetup
         file
         gnupg
-        isd
         pinentry-curses
         sops
         trezor-agent
@@ -37,7 +36,6 @@
         wireguard-tools
         wl-clipboard
         xdg-utils # open command
-        xfsprogs
         xkbcomp
         xkcdpass
         xwayland-satellite
