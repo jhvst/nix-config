@@ -83,7 +83,7 @@
       };
     };
     services = {
-      dictd.enable = true;
+      dictd.enable = false;
       pipewire = {
         enable = true;
         alsa.enable = true;
