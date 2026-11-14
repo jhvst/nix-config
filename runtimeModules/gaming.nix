@@ -14,6 +14,7 @@
   home-manager.users.juuso = {
     home.packages = with pkgs; [
       discord
+      faugus-launcher
       mangohud
     ];
     # required for 4:3 gaming
