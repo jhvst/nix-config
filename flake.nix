@@ -98,9 +98,12 @@
 
           pre-commit = {
             check.enable = true;
-            settings.hooks.treefmt = {
-              enable = true;
-              package = config.treefmt.build.wrapper;
+            settings.hooks = {
+              flake-checker.enable = true;
+              treefmt = {
+                enable = true;
+                package = config.treefmt.build.wrapper;
+              };
             };
           };
 
