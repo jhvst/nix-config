@@ -446,7 +446,7 @@
   };
 
   services.samba = {
-    enable = true;
+    enable = false;
     settings = {
       global = {
         "workgroup" = "WORKGROUP";
