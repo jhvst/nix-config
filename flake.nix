@@ -16,12 +16,16 @@
     homestakeros-base.url = "github:ponkila/homestakeros?dir=nixosModules/base";
     homestaking-infra.inputs.nixpkgs.follows = "nixpkgs";
     homestaking-infra.url = "github:ponkila/homestaking-infra";
+    nixie.inputs.nixpkgs.follows = "nixpkgs";
+    nixie.url = "git+ssh://git@github.com/majbacka-labs/nixie?ref=jesse/dev050";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixvim.url = "github:nix-community/nixvim";
     runtime-modules.inputs.nixpkgs.follows = "nixpkgs";
     runtime-modules.url = "github:tupakkatapa/nixos-runtime-modules";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
     sops-nix.url = "github:Mic92/sops-nix";
+    store-remount.inputs.nixpkgs.follows = "nixpkgs";
+    store-remount.url = "github:ponkila/nixos-store-remount";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
     treefmt-nix.url = "github:numtide/treefmt-nix";
   };
@@ -154,6 +158,7 @@
               };
             };
 
+            "juustonaksu" = flake.nixosConfigurations.juustonaksu.config.system.build.kexecTree;
             "muro" = flake.nixosConfigurations.muro.config.system.build.kexecTree;
             "starlabs" = flake.nixosConfigurations.starlabs.config.system.build.kexecTree;
           };
@@ -162,6 +167,30 @@
       flake =
         let
           inherit (self) outputs;
+
+          juustonaksu = {
+            system = "x86_64-linux";
+            specialArgs = { inherit inputs outputs; };
+            modules = [
+              ./nix-settings.nix
+              ./nixosConfigurations/juustonaksu
+              inputs.home-manager.nixosModules.home-manager
+              inputs.homestakeros-base.nixosModules.kexecTree
+              inputs.homestaking-infra.nixosModules.monitoring
+              inputs.nixie.nixosModules.nixie
+              inputs.nixie.nixosModules.refindGenerate
+              inputs.runtime-modules.nixosModules.runtimeModules
+              inputs.store-remount.nixosModules.storeRemount
+              {
+                services.runtimeModules = {
+                  enable = true;
+                  flakeUrl = "path:${self.outPath}";
+                  modules = [
+                  ];
+                };
+              }
+            ];
+          };
 
           muro = {
             system = "x86_64-linux";
@@ -266,6 +295,7 @@
         {
 
           nixosConfigurations = {
+            "juustonaksu" = inputs.nixpkgs.lib.nixosSystem juustonaksu;
             "muro" = inputs.nixpkgs.lib.nixosSystem muro;
             "starlabs" = inputs.nixpkgs.lib.nixosSystem starlabs;
           };
