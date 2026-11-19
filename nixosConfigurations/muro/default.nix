@@ -364,14 +364,27 @@
   services.aria2 = {
     enable = true;
     rpcSecretFile = config.sops.secrets."aria2/rpc".path;
-    settings = {
+    settings = rec {
+      bt-detach-seed-only = true;
+      bt-save-metadata = true;
+      bt-seed-unverified = true;
+      check-integrity = true;
       console-log-level = "warn";
+      dht-file-path = "/var/lib/aria2/dht.dat";
+      dht-file-path6 = "/var/lib/aria2/dht6.dat";
+      file-allocation = "falloc";
+      input-file = save-session;
       listen-port = [{ from = 6881; to = 6999; }];
+      log-level = "warn";
       max-concurrent-downloads = 100;
-      openPorts = true;
-      remote-time = true;
+      parameterized-uri = true;
       rpc-listen-port = 6800;
+      rpc-save-upload-metadata = true;
+      save-not-found = false;
+      save-session = "/var/lib/aria2/aria2.session";
+      save-session-interval = 60;
       seed-ratio = 3.0;
+      summary-interval = 60 * 10;
     };
   };
 
