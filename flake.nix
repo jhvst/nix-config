@@ -209,6 +209,11 @@
                       name = "teleconference";
                       imports = [ ./runtimeModules/telco.nix ];
                     }
+                    {
+                      name = "research";
+                      imports = [ ./runtimeModules/research.nix ];
+                      skipValidation = true;
+                    }
                   ];
                 };
               }
@@ -247,6 +252,11 @@
                     {
                       name = "gaming";
                       imports = [ ./runtimeModules/gaming.nix ];
+                      skipValidation = true;
+                    }
+                    {
+                      name = "research";
+                      imports = [ ./runtimeModules/research.nix ];
                       skipValidation = true;
                     }
                   ];
