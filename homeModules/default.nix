@@ -21,7 +21,7 @@ in
   config = {
     home-manager = {
       backupFileExtension = "backup";
-      sharedModules = [ inputs.nixvim.homeManagerModules.nixvim ];
+      sharedModules = [ inputs.nixvim.homeModules.nixvim ];
       useGlobalPkgs = true;
       users.juuso = { pkgs, ... }: with config.home-manager.users.juuso; {
         accounts = {
@@ -375,7 +375,7 @@ in
           };
           qcal = {
             enable = true;
-            timezone = config.time.timeZone;
+            settings.Timezone = config.time.timeZone;
           };
           ssh = {
             enable = true;

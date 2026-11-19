@@ -24,8 +24,9 @@ in {
   config = lib.mkIf cfg.enable {
     # UXPlay requires a DNS-SD server so we'll enable Avahi.
     services.avahi.enable = lib.mkDefault true;
-    services.avahi.publish.enable = lib.mkDefault true;
-    services.avahi.publish.userServices = lib.mkDefault true;
+    services.avahi.settings.publish."disable-publishing" = lib.mkDefault false;
+    services.avahi.settings.publish.disable-user-service-publishing = lib.mkDefault false;
+    services.avahi.settings.publish.publish-addresses = lib.mkDefault true;
 
     # We also have enabled mDNS since we're already using Avahi anyways.
     services.avahi.nssmdns4 = lib.mkDefault true;
