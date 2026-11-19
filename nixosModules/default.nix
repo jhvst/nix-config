@@ -37,7 +37,6 @@
         wl-clipboard
         xdg-utils # open command
         xkbcomp
-        xkcdpass
         xwayland-satellite
         yazi
         yubikey-manager

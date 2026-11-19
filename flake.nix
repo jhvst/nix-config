@@ -116,6 +116,7 @@
                 sops
                 ssh-to-age
                 tomb
+                xkcdpass
                 yubioath-flutter
               ];
               shellHook = ''
