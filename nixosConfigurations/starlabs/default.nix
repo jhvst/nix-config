@@ -356,10 +356,16 @@
           health_check 5s
         }
         cache 30
+        prometheus
+        log
+        errors
       }
     '';
   };
-  systemd.services."coredns".serviceConfig.Group = "acme";
+  systemd.services."coredns" = {
+    before = [ "network-online.target" ];
+    serviceConfig.Group = "acme";
+  };
 
   monitoring = {
     enable = true;
@@ -401,11 +407,17 @@
           (job_name: _: overrides.${job_name} or (defaultConfig job_name))
           exporters; # <- exporters defined above
       in
-      srapeConfigs';
+      srapeConfigs' ++ [
+        {
+          job_name = "coredns";
+          static_configs = [{ targets = [ "127.0.0.1:9153" ]; }];
+        }
+      ];
   };
   services.grafana.provision.dashboards.settings.providers = [{
     name = "default";
     options.path = pkgs.linkFarm "grafana-dashboards" [
+      { name = "coredns.json"; path = inputs.homestaking-infra.packages.x86_64-linux.grafana-dashboard-coredns; }
       { name = "node-exporter.json"; path = inputs.homestaking-infra.packages.x86_64-linux.grafana-dashboard-node-exporter; }
       { name = "smartctl.json"; path = inputs.homestaking-infra.packages.x86_64-linux.grafana-dashboard-smartctl; }
     ];
