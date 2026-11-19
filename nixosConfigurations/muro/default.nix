@@ -311,6 +311,8 @@
       type = "btrfs";
 
       wantedBy = [ "multi-user.target" ];
+      after = [ "systemd-tmpfiles-setup.service" ];
+      requires = [ "systemd-tmpfiles-setup.service" ];
     }
     {
       enable = true;
@@ -553,6 +555,8 @@
 
   systemd.tmpfiles.rules = [
     "Z /var/lib/garage 0760 garage garage -"
+    "d /home/juuso/.local 0755 juuso juuso -"
+    "d /home/juuso/.local/share 0755 juuso juuso -"
     "d /var/log/smartd 0655 juuso juuso -"
     "z /run/secrets/passage - juuso juuso -"
     "z /var/lib/ipfs/config 0640 ipfs ipfs -"
