@@ -78,7 +78,7 @@
               libedgetpu
               papis
               passage
-              ndi-6
+              ndi
               trezor-agent
               python313
               ;
@@ -144,9 +144,9 @@
               };
             });
             "papis" = nixpkgs-patched.papis;
-            "ndi-6" = pkgs.ndi-6.overrideAttrs (oldAttrs: {
+            "ndi" = pkgs.ndi.overrideAttrs (oldAttrs: {
               src = oldAttrs.src.overrideAttrs (_: {
-                outputHash = "sha256-8DFPJFRG3vxIi2POtGiazxqWWu79ray3BXG7IWqMwYM=";
+                outputHash = "sha256-GwZsygdtPotJpfHcf793BllnJWgH48teo4fFdBdurOY=";
               });
             });
             "trezor-agent" = nixpkgs-patched.trezor-agent;
