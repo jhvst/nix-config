@@ -23,9 +23,42 @@
     ];
   };
 
+  services.hostapd = {
+    enable = true;
+    radios.wlp6s0 = {
+      band = "2g";
+      channel = 6; # 1, 6 or 11 (12-13 are disabled on your card per iw list)
+      countryCode = "FI";
+      wifi4 = {
+        enable = true;
+        capabilities = [ "RX-STBC1" "TX-STBC" ]; # HT20, see below
+      };
+      wifi5.enable = false;
+      wifi6.enable = false;
+      networks.wlp6s0 = {
+        ssid = "ath1";
+        authentication = {
+          mode = "wpa3-sae";
+          saePasswords = [{ passwordFile = config.age.secrets."hostapd/ath1".path; }];
+        };
+        settings.bridge = "br0";
+      };
+    };
+  };
+
   systemd.network = {
     enable = true;
+    netdevs = {
+      "20-br0".netdevConfig = {
+        Kind = "bridge";
+        Name = "br0";
+      };
+    };
     networks = {
+      "00-br0" = {
+        matchConfig.Name = "br0";
+        networkConfig.DHCP = "yes";
+      };
       "10-wan" = {
         linkConfig.RequiredForOnline = "routable";
         matchConfig.Name = "enp5s0";
@@ -33,12 +66,17 @@
           DHCP = "yes";
           IPv6AcceptRA = true;
           IPv6PrivacyExtensions = "prefer-public";
+          Bridge = "br0";
         };
         dhcpV6Config = {
           DUIDType = "link-layer";
         };
         dns = [ "127.0.0.1:1053" ];
         address = [ "192.168.1.10/24" ]; # static IP
+      };
+      "30-wlp6s0" = {
+        matchConfig.Name = "wlp6s0";
+        linkConfig.Unmanaged = "yes";
       };
     };
   };
@@ -533,6 +571,9 @@
       hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINcjTjYiwE4wU2LzIu8xM+roOnmR4RDWZkAIFJcP4Nld root@muro";
     };
     secrets = {
+      "hostapd/ath1" = {
+        rekeyFile = ./secrets/agenix/hostpad/ath1.age;
+      };
       "garage/environment" = {
         rekeyFile = ./secrets/agenix/garage/environment.age;
         owner = "garage";
