@@ -3,7 +3,12 @@
 , pkgs
 , inputs
 , ...
-}: {
+}:
+
+let
+  bridgeNames = lib.unique (map (s: "br-${s.name}") config.services.nixie.dhcp.subnets);
+in
+{
 
   boot = {
     kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
@@ -14,6 +19,12 @@
       device = "/dev/nvme0n1p1";
       fsType = "vfat";
       neededForBoot = true;
+    };
+    "/etc/ssh" = lib.mkImageMediaOverride {
+      device = "/dev/nvme0n1p3";
+      fsType = "btrfs";
+      neededForBoot = true;
+      options = [ "subvol=@openssh" ];
     };
     "/nix/.rw-store" = lib.mkForce (lib.mkImageMediaOverride {
       device = "/dev/nvme0n1p3";
@@ -58,7 +69,59 @@
     logs = true;
   };
   networking = {
+    resolvconf.useLocalResolver = true;
+    firewall = {
+      allowPing = false;
+      allowedTCPPorts = lib.mkForce [ ];
+      allowedUDPPorts = lib.mkForce [ ];
+      filterForward = true;
+      interfaces = lib.genAttrs bridgeNames (_: {
+        allowedTCPPorts = [
+          22 # SSH
+          53 # DNS
+          config.services.nixie.fileServer.port
+        ];
+        allowedUDPPorts = [
+          53 # DNS
+          67 # DHCP
+          69 # TFTP
+          547 # DHCPv6
+        ];
+      });
+    };
     hostName = "juustonaksu";
+    nat = {
+      enable = true;
+      enableIPv6 = true;
+      externalInterface = config.services.nixie.wan.interface;
+      forwardPorts = [
+        {
+          sourcePort = 32400;
+          proto = "tcp";
+          destination = "192.168.25.10:32400";
+        }
+      ];
+      internalInterfaces = bridgeNames;
+    };
+    nftables = {
+      enable = true;
+      tables.mac-blocklist = {
+        family = "inet";
+        content = ''
+          set blocked_macs {
+            type ether_addr
+            elements = {
+              B8:3A:5A:C1:03:22, # Aruba AP (avoid old customer's HPE remote admin)
+            }
+          }
+
+          chain forward {
+            type filter hook forward priority filter - 1; policy accept;
+            oifname "wan" ether saddr @blocked_macs counter drop
+          }
+        '';
+      };
+    };
     stevenblack.enable = true;
   };
   security.sudo = {
@@ -66,6 +129,24 @@
     wheelNeedsPassword = lib.mkForce false;
   };
   services = {
+    coredns = {
+      enable = true;
+      config = ''
+        . {
+          hosts {
+            fallthrough
+          }
+          forward . tls://1.1.1.2 tls://2606:4700:4700::1112 {
+            tls_servername security.cloudflare-dns.com
+            health_check 5s
+          }
+          cache 30
+          prometheus
+          log
+          errors
+        }
+      '';
+    };
     fwupd.enable = true;
     getty.autologinUser = "juuso";
     grafana = {
@@ -90,8 +171,11 @@
       ];
       wan = {
         enable = true;
-        interface = "enp2s0";
-        ipv6.enable = false;
+        interface = "wan";
+        ipv6 = {
+          enable = true;
+          prefixDelegation = false;
+        };
       };
       dhcp = {
         enable = true;
@@ -99,21 +183,26 @@
           {
             name = "lan";
             serve = true;
-            interfaces = [ "enp1s0" ];
+            interfaces = [ "lan0" "lan1" ];
             ipv4 = {
               address = "192.168.25.1";
-              poolStart = "192.168.25.20";
+              dns = "192.168.25.1";
               poolEnd = "192.168.25.254";
+              poolStart = "192.168.25.20";
             };
             ipv6 = {
               address = "fd00:1::1";
               managed = true;
+              dns = "fd00:1::1";
+              poolEnd = "fd00:1::ffff";
+              poolStart = "fd00:1::1000";
             };
             clients = [
               {
                 menu = "default";
                 mac = "4c:ed:fb:73:c6:f0";
                 ipv4.address = "192.168.25.10";
+                ipv6.address = "fd00:1::10";
               }
             ];
           }
@@ -122,6 +211,11 @@
     };
     openssh = {
       enable = true;
+      hostKeys = [{
+        path = "/etc/ssh/ssh_host_ed25519_key";
+        type = "ed25519";
+      }];
+      openFirewall = false;
       settings = {
         KbdInteractiveAuthentication = false;
         PasswordAuthentication = false;
@@ -161,7 +255,7 @@
         srapeConfigs';
     };
     refindGenerate = {
-      enable = true;
+      enable = false;
       dataDir = "/var/lib/refind";
       prune = true;
       rollbacks = {
@@ -174,9 +268,53 @@
       default = "juustonaksu";
       timeout = 1;
     };
+    resolved.enable = false;
   };
   system.stateVersion = "26.11";
   systemd = {
+    network = {
+      netdevs."05-dummy-lan".netdevConfig = {
+        Kind = "dummy";
+        Name = "dummy-lan";
+      };
+      links = {
+        "10-wan" = {
+          matchConfig.PermanentMACAddress = "84:47:09:64:83:e6";
+          linkConfig.Name = "wan";
+        };
+        "10-lan0" = {
+          matchConfig.PermanentMACAddress = "84:47:09:64:83:e7";
+          linkConfig.Name = "lan0";
+        };
+        "10-lan1" = {
+          matchConfig.PermanentMACAddress = "00:e0:4c:b5:b0:85";
+          linkConfig.Name = "lan1";
+        };
+      };
+      networks = {
+        "05-dummy-lan" = {
+          matchConfig.Name = "dummy-lan";
+          networkConfig.Bridge = "br-lan";
+          linkConfig.RequiredForOnline = "no";
+        };
+        "10-lan0" = {
+          matchConfig.Name = "lan0";
+          networkConfig.Bridge = "br-lan";
+          linkConfig = {
+            ActivationPolicy = "always-up";
+            RequiredForOnline = "no";
+          };
+        };
+        "10-lan1" = {
+          matchConfig.Name = "lan1";
+          networkConfig.Bridge = "br-lan";
+          linkConfig = {
+            ActivationPolicy = "always-up";
+            RequiredForOnline = "no";
+          };
+        };
+      };
+    };
     mounts = [
       {
         enable = true;
@@ -196,10 +334,27 @@
         wantedBy = [ "multi-user.target" ];
       }
     ];
+    services = {
+      nginx = {
+        after = [ "wait-br-lan.service" ];
+        wants = [ "wait-br-lan.service" ];
+      };
+      wait-br-lan = {
+        description = "Wait for br-lan to be configured";
+        after = [ "systemd-networkd.service" ];
+        wants = [ "systemd-networkd.service" ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online --interface=br-lan:routable --timeout=30";
+        };
+      };
+    };
   };
   time.timeZone = "Europe/Helsinki";
   users = {
     groups.juuso.gid = 1000;
+    mutableUsers = false;
     users.juuso = {
       isNormalUser = true;
       uid = 1000;
