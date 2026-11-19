@@ -612,22 +612,6 @@
   services.dbus.enable = true;
   services.timesyncd.enable = true;
   services.timesyncd.servers = [ "time.cloudflare.com" ];
-
-  # programs to enable also for root
-  programs = {
-    fish.enable = true;
-    git.enable = true;
-    gnupg.agent.pinentryPackage = pkgs.pinentry-curses;
-    niri = {
-      enable = true;
-      useNautilus = true;
-    };
-    vim = {
-      enable = true;
-      defaultEditor = true;
-    };
-  };
-
   services.getty.autologinUser = "juuso";
 
   sops = with config.users.users; {

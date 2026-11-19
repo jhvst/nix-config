@@ -133,7 +133,6 @@
     };
   };
   environment.shells = [ pkgs.fish ];
-  programs.fish.enable = true;
 
   security = {
     acme = {
