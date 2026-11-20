@@ -105,6 +105,7 @@
   };
 
   boot = {
+    initrd.kernelModules = [ "amdgpu" ];
     kernelModules = [ "ntsync" ];
     kernelParams = [
       "boot.shell_on_fail"
