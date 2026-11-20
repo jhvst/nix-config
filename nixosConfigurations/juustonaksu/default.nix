@@ -67,16 +67,18 @@ in
       allowPing = false;
       allowedTCPPorts = lib.mkForce [ ];
       allowedUDPPorts = lib.mkForce [ ];
+      filterForward = true;
       interfaces = lib.genAttrs bridgeNames (_: {
-        allowedUDPPorts = [
-          53 # DNS
-          67 # DHCP
-          69 # TFTP
-        ];
         allowedTCPPorts = [
           22 # SSH
           53 # DNS
           config.services.nixie.fileServer.port
+        ];
+        allowedUDPPorts = [
+          53 # DNS
+          67 # DHCP
+          69 # TFTP
+          547 # DHCPv6
         ];
       });
     };
@@ -144,7 +146,10 @@ in
       wan = {
         enable = true;
         interface = "wan";
-        ipv6.enable = false;
+        ipv6 = {
+          enable = true;
+          prefixDelegation = false;
+        };
       };
       dhcp = {
         enable = true;
@@ -162,12 +167,15 @@ in
             ipv6 = {
               address = "fd00:1::1";
               managed = true;
+              poolEnd = "fd00:1::ffff";
+              poolStart = "fd00:1::1000";
             };
             clients = [
               {
                 menu = "default";
                 mac = "4c:ed:fb:73:c6:f0";
                 ipv4.address = "192.168.25.10";
+                ipv6.address = "fd00:1::10";
               }
             ];
           }
