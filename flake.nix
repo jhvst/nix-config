@@ -76,7 +76,6 @@
             inherit (config.packages)
               fstar-vscode-assistant
               libedgetpu
-              papis
               passage
               ndi
               trezor-agent
@@ -143,7 +142,6 @@
                 hash = "sha256-1jQCEMeovDjjKukVHaK4xZiBPgZpNQwjvVbrbdeAXrE=";
               };
             });
-            "papis" = nixpkgs-patched.papis;
             "ndi" = pkgs.ndi.overrideAttrs (oldAttrs: {
               src = oldAttrs.src.overrideAttrs (_: {
                 outputHash = "sha256-GwZsygdtPotJpfHcf793BllnJWgH48teo4fFdBdurOY=";
@@ -153,7 +151,6 @@
             "python313" = pkgs.python313.override {
               packageOverrides = _: _: {
                 inherit (nixpkgs-patched.python313Packages) trezor-agent;
-                inherit (nixpkgs-patched.python313Packages) papis;
               };
             };
 
