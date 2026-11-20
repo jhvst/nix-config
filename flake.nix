@@ -24,8 +24,6 @@
     runtime-modules.url = "github:tupakkatapa/nixos-runtime-modules";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
     sops-nix.url = "github:Mic92/sops-nix";
-    store-remount.inputs.nixpkgs.follows = "nixpkgs";
-    store-remount.url = "github:ponkila/nixos-store-remount";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
     treefmt-nix.url = "github:numtide/treefmt-nix";
   };
@@ -180,7 +178,6 @@
               inputs.nixie.nixosModules.nixie
               inputs.nixie.nixosModules.refindGenerate
               inputs.runtime-modules.nixosModules.runtimeModules
-              inputs.store-remount.nixosModules.storeRemount
               {
                 services.runtimeModules = {
                   enable = true;
