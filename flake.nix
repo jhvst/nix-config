@@ -177,15 +177,6 @@
               inputs.homestaking-infra.nixosModules.monitoring
               inputs.nixie.nixosModules.nixie
               inputs.nixie.nixosModules.refindGenerate
-              inputs.runtime-modules.nixosModules.runtimeModules
-              {
-                services.runtimeModules = {
-                  enable = true;
-                  flakeUrl = "path:${self.outPath}";
-                  modules = [
-                  ];
-                };
-              }
             ];
           };
 
