@@ -27,11 +27,11 @@
     enable = true;
     radios.wlp6s0 = {
       band = "2g";
-      channel = 6; # 1, 6 or 11 (12-13 are disabled on your card per iw list)
+      channel = 6;
       countryCode = "FI";
       wifi4 = {
         enable = true;
-        capabilities = [ "RX-STBC1" "TX-STBC" ]; # HT20, see below
+        capabilities = [ "RX-STBC1" "TX-STBC" ];
       };
       wifi5.enable = false;
       wifi6.enable = false;
