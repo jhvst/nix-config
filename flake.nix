@@ -114,6 +114,7 @@
                 nix-tree
                 sops
                 ssh-to-age
+                systemdUkify
                 tomb
                 xkcdpass
                 yubioath-flutter
