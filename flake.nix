@@ -103,6 +103,26 @@
                 enable = true;
                 package = config.treefmt.build.wrapper;
               };
+              update-nixpkgs = {
+                enable = true;
+                name = "update-nixpkgs";
+                entry = toString (pkgs.writeShellScript "update-nixpkgs" ''
+                  set -euo pipefail
+
+                  before=$(${pkgs.coreutils}/bin/sha256sum flake.lock)
+                  ${pkgs.nix}/bin/nix flake update nixpkgs
+                  after=$(${pkgs.coreutils}/bin/sha256sum flake.lock)
+
+                  if [ "$before" != "$after" ]; then
+                    echo "nixpkgs has been updated upstream" >&2
+                    exit 1
+                  fi
+                '');
+                language = "system";
+                pass_filenames = false;
+                always_run = true;
+                stages = [ "pre-push" ];
+              };
             };
           };
 
