@@ -323,7 +323,7 @@
     domain = "juuso.dev";
     firewall.interfaces."ath0".allowedTCPPorts = [ 4001 ];
     hostName = "starlabs";
-    nameservers = [ "localhost:1053#starlabs.juuso.dev" ];
+    nameservers = [ "127.0.0.1:1053" ];
     nftables.enable = true;
     stevenblack.enable = true;
     useDHCP = false;
@@ -333,10 +333,9 @@
   services.coredns = {
     enable = true;
     config = ''
-      tls://.:1053 {
-        tls /var/lib/acme/starlabs.juuso.dev/cert.pem /var/lib/acme/starlabs.juuso.dev/key.pem
-        import ../../run/secrets/coredns/rewrites
-        hosts ../../run/agenix/hosts ponkila.nix {
+      .:1053 {
+        import ../../run/credentials/coredns.service/rewrites
+        hosts ../../run/credentials/coredns.service/hosts ponkila.nix {
           fallthrough
         }
         forward . tls://1.1.1.2 tls://2606:4700:4700::1112 {
@@ -350,9 +349,12 @@
       }
     '';
   };
-  systemd.services."coredns" = {
+  systemd.services.coredns = {
     before = [ "network-online.target" ];
-    serviceConfig.Group = "acme";
+    serviceConfig.LoadCredential = [
+      "rewrites:${config.sops.secrets."coredns/rewrites".path}"
+      "hosts:${config.age.secrets.hosts.path}"
+    ];
   };
 
   monitoring = {
@@ -419,7 +421,7 @@
       isNormalUser = true;
       uid = 1000;
       group = "juuso";
-      extraGroups = [ "wheel" "video" "input" "ipfs" "acme" ];
+      extraGroups = [ "wheel" "video" "input" "ipfs" ];
       openssh.authorizedKeys.keys = [
         "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAILn/9IHTGC1sLxnPnLbtJpvF7HgXQ8xNkRwSLq8ay8eJAAAADHNzaDpzdGFybGFicw== ssh:starlabs"
       ];
@@ -435,14 +437,6 @@
   ];
 
   security = {
-    acme = {
-      acceptTerms = true;
-      defaults.email = "juuso@ponkila.com";
-      certs."starlabs.juuso.dev" = {
-        dnsProvider = "cloudflare";
-        environmentFile = config.sops.secrets."domain/cloudflare/juuso.dev".path;
-      };
-    };
     sudo.enable = true;
     pam.services = {
       login.u2fAuth = true;
@@ -514,15 +508,6 @@
       what = "/dev/sda2";
       where = "/var/lib/ipfs";
       options = "subvolid=281";
-      type = "btrfs";
-
-      wantedBy = [ "multi-user.target" ];
-    }
-    {
-      enable = true;
-      what = "/dev/sda2";
-      where = "/var/lib/acme";
-      options = "subvolid=282";
       type = "btrfs";
 
       wantedBy = [ "multi-user.target" ];
@@ -604,12 +589,7 @@
   sops = with config.users.users; {
     age.sshKeyPaths = [ "${juuso.home}/.ssh/id_ed25519" ];
     defaultSopsFile = ./secrets/default.yaml;
-    secrets."coredns/rewrites" = {
-      owner = acme.name;
-      inherit (acme) group;
-      mode = "0440";
-    };
-    secrets."domain/cloudflare/juuso.dev" = { };
+    secrets."coredns/rewrites" = { };
     secrets."ipfs/PrivKey" = { }; # cannot be used in derivation, but here for backup
     secrets."mbsync/ponkila" = {
       owner = juuso.name;
@@ -661,12 +641,7 @@
       hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJdbU8l66hVUAqk900GmEme5uhWcs05JMUQv2eD0j7MI juuso@starlabs";
     };
     secrets = {
-      hosts = {
-        rekeyFile = ./secrets/agenix/hosts.age;
-        owner = acme.name;
-        inherit (acme) group;
-        mode = "0440";
-      };
+      hosts.rekeyFile = ./secrets/agenix/hosts.age;
     };
   };
 
