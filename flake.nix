@@ -74,7 +74,6 @@
 
           overlayAttrs = {
             inherit (config.packages)
-              libedgetpu
               passage
               ndi
               trezor-agent
@@ -153,7 +152,6 @@
                 imports = [ self.nixosModules.neovim ];
               };
             };
-            "libedgetpu" = pkgs.callPackage ./packages/libedgetpu { };
             "passage" = pkgs.passage.overrideAttrs (_oldAttrs: {
               src = pkgs.fetchFromGitHub {
                 owner = "remko";

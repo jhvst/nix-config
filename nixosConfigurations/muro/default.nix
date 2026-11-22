@@ -441,13 +441,6 @@
       cameras = { };
     };
   };
-  # https://github.com/NixOS/nixpkgs/issues/188719#issuecomment-1774169734
-  #systemd.services.frigate.environment.LD_LIBRARY_PATH = "${pkgs.libedgetpu}/lib";
-  #systemd.services.frigate.serviceConfig = {
-  #  SupplementaryGroups = "plugdev";
-  #};
-  #services.udev.packages = [ pkgs.libedgetpu ];
-  #users.groups.plugdev = { };
 
   services.photoprism = {
     enable = false;
