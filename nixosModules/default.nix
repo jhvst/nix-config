@@ -43,6 +43,13 @@
         yubikey-manager
       ];
     };
+    fonts = {
+      fontDir.enable = true;
+      packages = with pkgs; [
+        (iosevka-bin.override { variant = "SGr-IosevkaTerm"; })
+        nerd-fonts.symbols-only
+      ];
+    };
     hardware = {
       enableRedistributableFirmware = true; # enables WiFi and GPU drivers
       bluetooth.enable = true; # https://gitlab.freedesktop.org/pipewire/pipewire/-/wikis/LE-Audio-+-LC3-support

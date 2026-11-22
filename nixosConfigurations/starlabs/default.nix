@@ -28,13 +28,6 @@
     };
   };
 
-  fonts = {
-    fontDir.enable = true;
-    packages = with pkgs; [
-      nerd-fonts.iosevka-term
-    ];
-  };
-
   home-manager.users.juuso.programs.radicle = {
     enable = true;
     settings = {

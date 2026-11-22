@@ -16,13 +16,6 @@
     email = true;
   };
 
-  fonts = {
-    fontDir.enable = true;
-    packages = with pkgs; [
-      nerd-fonts.iosevka-term
-    ];
-  };
-
   services.hostapd = {
     enable = true;
     radios.wlp6s0 = {

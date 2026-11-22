@@ -299,7 +299,7 @@ in
             settings = {
               main = {
                 term = "xterm-256color";
-                font = "IosevkaTerm Nerd Font Mono:size=12";
+                font = "IosevkaTerm:size=12";
               };
               mouse = {
                 hide-when-typing = "yes";
@@ -416,7 +416,7 @@ in
           yambar = {
             enable = true;
             settings.bar = {
-              font = "IosevkaTerm Nerd Font:style=Regular";
+              font = "IosevkaTerm:style=Regular";
               location = "top";
               height = 26;
               background = "00000066";
