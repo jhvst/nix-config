@@ -7,11 +7,6 @@
     kernelPackages = pkgs.linuxPackagesFor pkgs.linux_latest;
   };
 
-  xdg.portal = {
-    enable = true;
-    wlr.enable = true;
-  };
-
   fileSystems = {
     "/boot" = {
       device = "/dev/sda1";
@@ -454,7 +449,6 @@
       sudo.u2fAuth = true;
     };
     rtkit.enable = true;
-    polkit.enable = true;
   };
 
   systemd.mounts = [
