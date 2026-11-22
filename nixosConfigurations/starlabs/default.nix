@@ -20,6 +20,12 @@
       options = [ "subvolid=260" ];
       neededForBoot = true;
     };
+    "/var/log/journal" = {
+      fsType = "btrfs";
+      device = "/dev/sda2";
+      options = [ "subvol=journald" ];
+      neededForBoot = true;
+    };
   };
 
   fonts = {
