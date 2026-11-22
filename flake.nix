@@ -65,6 +65,7 @@
               self.overlays.default
             ];
             config = {
+              allowUnfree = true;
               permittedInsecurePackages = [
                 "python3.13-ecdsa-0.19.2"
                 "radicle-node-1.10.3"
@@ -120,6 +121,23 @@
                 pass_filenames = false;
                 always_run = true;
                 stages = [ "pre-push" ];
+              };
+              flake-check = {
+                enable = true;
+                name = "nix flake check";
+                entry = toString (pkgs.writeShellScript "flake-check" ''
+                  set -euo pipefail
+
+                  root=$(${pkgs.git}/bin/git rev-parse --show-toplevel)
+                  rev=$(${pkgs.git}/bin/git rev-parse "''${PRE_COMMIT_TO_REF:-HEAD}")
+
+                  ${pkgs.nix}/bin/nix flake check "git+file://$root?rev=$rev"
+                '');
+                language = "system";
+                pass_filenames = false;
+                always_run = true;
+                stages = [ "pre-push" ];
+                after = [ "update-nixpkgs" ];
               };
             };
           };
