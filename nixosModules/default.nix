@@ -28,6 +28,7 @@
         cryptsetup
         file
         gnupg
+        niri
         pinentry-curses
         sops
         trezor-agent
@@ -85,10 +86,6 @@
         };
       };
       gnupg.agent.pinentryPackage = pkgs.pinentry-curses;
-      niri = {
-        enable = true;
-        useNautilus = true;
-      };
       vim = {
         enable = true;
         defaultEditor = true;
