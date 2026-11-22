@@ -74,7 +74,6 @@
 
           overlayAttrs = {
             inherit (config.packages)
-              fstar-vscode-assistant
               libedgetpu
               passage
               ndi
@@ -147,7 +146,6 @@
           };
 
           packages = {
-            "fstar-vscode-assistant" = pkgs.callPackage ./packages/fstar-vscode-assistant { };
             "savilerow" = pkgs.callPackage ./packages/savilerow { };
             "neovim" = inputs'.nixvim.legacyPackages.makeNixvimWithModule {
               inherit pkgs;
