@@ -230,19 +230,6 @@
           PersistentKeepalive = 25;
         }];
       };
-      "99-qmi0" = {
-        netdevConfig = {
-          Kind = "wireguard";
-          Name = "qmi0";
-        };
-        wireguardConfig.PrivateKeyFile = config.sops.secrets."wireguard/qmi0".path;
-        wireguardPeers = [{
-          PublicKey = "EuwxoYfYJaHX37CdjJgGpYTBCwUee/vZLZdn38M1imc=";
-          AllowedIPs = [ "192.168.77.0/24" "192.168.18.0/24" ];
-          Endpoint = "qmi0.ponkila.intra:51820";
-          PersistentKeepalive = 25;
-        }];
-      };
     };
     networks = {
       "10-wan" = {
@@ -305,23 +292,6 @@
           GatewayOnLink = true;
           Destination = "192.168.100.0/24";
         }];
-      };
-      "99-qmi0" = {
-        matchConfig.Name = "qmi0";
-        address = [ "192.168.77.200/32" ];
-        linkConfig.ActivationPolicy = "manual";
-        routes = [
-          {
-            Gateway = "192.168.77.1";
-            GatewayOnLink = true;
-            Destination = "192.168.77.0/24";
-          }
-          {
-            Gateway = "192.168.77.1";
-            GatewayOnLink = true;
-            Destination = "192.168.18.0/24";
-          }
-        ];
       };
     };
   };
@@ -618,10 +588,6 @@
       inherit (juuso) group;
     };
     secrets."wireguard/ath0" = {
-      owner = systemd-network.name;
-      inherit (systemd-network) group;
-    };
-    secrets."wireguard/qmi0" = {
       owner = systemd-network.name;
       inherit (systemd-network) group;
     };
