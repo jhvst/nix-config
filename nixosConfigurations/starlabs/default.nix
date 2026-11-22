@@ -674,9 +674,10 @@
 
   systemd.tmpfiles.rules = [
     "Z /var/lib/ipfs - ipfs ipfs -"
-    "z /home/juuso/.config - juuso juuso -" # z for chown: subvolume mount to subdirectory causes parent to be owned by root
+    "d /home/juuso/.config - juuso juuso -"
     "z /home/juuso/.gnupg - juuso juuso -"
-    "z /home/juuso/.local - juuso juuso -"
+    "d /home/juuso/.local - juuso juuso -"
+    "d /home/juuso/.local/share - juuso juuso -"
     "z /run/secrets/passage - juuso juuso -"
     "z /var/lib/ipfs/config 0640 ipfs ipfs -"
   ];
