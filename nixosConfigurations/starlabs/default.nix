@@ -215,6 +215,7 @@
             "::/0"
           ];
           Endpoint = "ath0.ponkila.intra:51820";
+          PersistentKeepalive = 25;
         }];
       };
       "99-dinar" = {
@@ -259,7 +260,6 @@
         matchConfig.Name = "ath0";
         address = [ "192.168.76.4/32" "2001:470:28:6a9:8000::4/128" ];
         dns = [ "192.168.76.1" "2001:470:28:6a9:8000::1" ];
-        domains = [ "ponkila.periferia" "ponkila.intra" ];
         linkConfig.ActivationPolicy = "manual";
         routes = [
           {
