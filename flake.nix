@@ -112,6 +112,7 @@
                 cobang
                 config.agenix-rekey.package
                 nix-tree
+                ripgrep
                 sops
                 ssh-to-age
                 systemdUkify
@@ -157,6 +158,16 @@
 
             "muro" = flake.nixosConfigurations.muro.config.system.build.kexecTree;
             "starlabs" = flake.nixosConfigurations.starlabs.config.system.build.kexecTree;
+          };
+
+          apps.diff = {
+            type = "app";
+            program = toString (pkgs.writeShellScript "diff-nixos" ''
+              host="''${1:-$(${pkgs.hostname}/bin/hostname)}"
+              ${pkgs.nix}/bin/nix build "${self}#nixosConfigurations.$host.config.system.build.toplevel" --no-link --print-out-paths \
+                | ${pkgs.coreutils}/bin/tail -n1 \
+                | xargs ${pkgs.nvd}/bin/nvd diff /run/current-system
+            '');
           };
         };
 
