@@ -219,6 +219,7 @@
               inputs.agenix.nixosModules.default
               inputs.home-manager.nixosModules.home-manager
               inputs.homestakeros-base.nixosModules.kexecTree
+              inputs.homestaking-infra.nixosModules.monitoring
               inputs.runtime-modules.nixosModules.runtimeModules
               inputs.sops-nix.nixosModules.sops
               self.homeModules.default
