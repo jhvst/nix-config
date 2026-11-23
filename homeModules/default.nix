@@ -314,10 +314,11 @@ in
             enable = true;
             ignores = [
               ".DS_Store"
+              ".devenv"
               ".direnv"
+              ".pre-commit-config.yaml"
               "node_modules"
               "result"
-              ".devenv"
             ];
           };
           gpg = {
