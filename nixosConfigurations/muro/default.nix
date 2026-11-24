@@ -1,6 +1,7 @@
 { config
 , lib
 , pkgs
+, inputs
 , ...
 }: {
 
@@ -190,6 +191,52 @@
     logs = true;
   };
   services.grafana.settings.security.secret_key = "SW2YcwTIb9zpOOhoPsMm";
+  services.prometheus = let fp = config.services.prometheus.exporters; in rec {
+    exporters = {
+      node = {
+        enable = true;
+        enabledCollectors = [
+          "cgroups"
+          "cpu"
+          "diskstats"
+          "filesystem"
+          "meminfo"
+          "systemd"
+          "wifi"
+        ];
+      };
+      smartctl = {
+        enable = true;
+        user = "root";
+      };
+    };
+    scrapeConfigs =
+      let
+        defaultConfig = job_name: {
+          inherit job_name;
+          static_configs = [{ targets = [ "localhost:${port job_name}" ]; }];
+        };
+        overrides = { };
+        port = n: toString fp.${n}.port;
+        srapeConfigs' = lib.mapAttrsToList
+          (job_name: _: overrides.${job_name} or (defaultConfig job_name))
+          exporters; # <- exporters defined above
+      in
+      srapeConfigs' ++ [
+        {
+          job_name = "aria2";
+          static_configs = [{ targets = [ config.services.aria2_exporter.listenAddress ]; }];
+        }
+      ];
+  };
+  services.grafana.provision.dashboards.settings.providers = [{
+    name = "default";
+    options.path = pkgs.linkFarm "grafana-dashboards" [
+      { name = "node-exporter.json"; path = inputs.homestaking-infra.packages.x86_64-linux.grafana-dashboard-node-exporter; }
+      { name = "smartctl.json"; path = inputs.homestaking-infra.packages.x86_64-linux.grafana-dashboard-smartctl; }
+    ];
+  }];
+
   services.openssh = {
     enable = true;
     hostKeys = [{

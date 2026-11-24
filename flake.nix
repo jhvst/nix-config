@@ -219,10 +219,10 @@
               ./nixosConfigurations/muro
               inputs.agenix-rekey.nixosModules.default
               inputs.agenix.nixosModules.default
+              inputs.aria2_exporter.nixosModules.aria2_exporter
               inputs.home-manager.nixosModules.home-manager
               inputs.homestakeros-base.nixosModules.kexecTree
               inputs.homestaking-infra.nixosModules.monitoring
-              inputs.aria2_exporter.nixosModules.aria2_exporter
               inputs.runtime-modules.nixosModules.runtimeModules
               inputs.sops-nix.nixosModules.sops
               self.homeModules.default
