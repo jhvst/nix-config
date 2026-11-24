@@ -114,6 +114,27 @@
         "type": "github"
       }
     },
+    "aria2_exporter": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1795515493,
+        "narHash": "sha256-XArPzjq4DUGiZZGNsy8OWFYr1QK26t2usW13mR7CxTQ=",
+        "owner": "timhae",
+        "repo": "aria2_exporter",
+        "rev": "d5a691377a3bf9db7bbfd50f829ad3d89ed31140",
+        "type": "github"
+      },
+      "original": {
+        "owner": "timhae",
+        "ref": "pull/137/head",
+        "repo": "aria2_exporter",
+        "type": "github"
+      }
+    },
     "blueprint": {
       "inputs": {
         "nixpkgs": [
@@ -1389,6 +1410,7 @@
       "inputs": {
         "agenix": "agenix",
         "agenix-rekey": "agenix-rekey",
+        "aria2_exporter": "aria2_exporter",
         "flake-parts": "flake-parts_2",
         "git-hooks-nix": "git-hooks-nix",
         "home-manager": "home-manager",

@@ -7,6 +7,8 @@
     agenix-rekey.url = "github:oddlama/agenix-rekey";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     agenix.url = "github:ryantm/agenix";
+    aria2_exporter.inputs.nixpkgs.follows = "nixpkgs";
+    aria2_exporter.url = "github:timhae/aria2_exporter?ref=pull/137/head";
     flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
     flake-parts.url = "github:hercules-ci/flake-parts";
     git-hooks-nix.url = "github:cachix/git-hooks.nix";
@@ -220,6 +222,7 @@
               inputs.home-manager.nixosModules.home-manager
               inputs.homestakeros-base.nixosModules.kexecTree
               inputs.homestaking-infra.nixosModules.monitoring
+              inputs.aria2_exporter.nixosModules.aria2_exporter
               inputs.runtime-modules.nixosModules.runtimeModules
               inputs.sops-nix.nixosModules.sops
               self.homeModules.default

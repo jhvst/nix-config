@@ -428,6 +428,11 @@
       summary-interval = 60 * 10;
     };
   };
+  services.aria2_exporter = {
+    enable = true;
+    rpcSecretFile = config.services.aria2.rpcSecretFile;
+    listenAddress = "localhost:9578";
+  };
 
   services.frigate = {
     enable = false;
