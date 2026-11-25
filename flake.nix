@@ -75,10 +75,11 @@
 
           overlayAttrs = {
             inherit (config.packages)
-              passage
               ndi
-              trezor-agent
+              passage
               python313
+              trezor-agent
+              trezorctl
               ;
           };
 
@@ -184,6 +185,14 @@
               });
             });
             "trezor-agent" = nixpkgs-patched.trezor-agent;
+            "trezorctl" = pkgs.python3Packages.toPythonApplication (
+              pkgs.python3Packages.trezor.overridePythonAttrs (prev: {
+                dependencies = prev.dependencies
+                  ++ prev.optional-dependencies.ble
+                  ++ prev.optional-dependencies.extra
+                  ++ prev.optional-dependencies.ethereum;
+              })
+            );
             "python313" = pkgs.python313.override {
               packageOverrides = _: _: {
                 inherit (nixpkgs-patched.python313Packages) trezor-agent;
