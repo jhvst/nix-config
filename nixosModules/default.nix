@@ -46,7 +46,12 @@
     fonts = {
       fontDir.enable = true;
       packages = with pkgs; [
-        (iosevka-bin.override { variant = "SGr-IosevkaTerm"; })
+        ((pkgs.iosevka-bin.override { variant = "SGr-IosevkaTerm"; }).overrideAttrs (_: {
+          postFixup = ''
+            find $out/share/fonts/truetype -name '*.ttc' \
+              ! -name '*-Regular.ttc' ! -name '*-Bold.ttc' -delete
+          '';
+        }))
         nerd-fonts.symbols-only
       ];
     };
