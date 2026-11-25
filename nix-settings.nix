@@ -58,7 +58,6 @@
     allowUnfree = true;
     permittedInsecurePackages = [
       "python3.13-ecdsa-0.19.2"
-      "radicle-node-1.10.3"
     ];
   };
 

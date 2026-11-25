@@ -392,16 +392,6 @@
     }
     {
       enable = true;
-
-      what = "/dev/disk/by-label/bakhal";
-      where = "/home/juuso/.radicle";
-      type = "btrfs";
-      options = "subvol=radicle";
-
-      wantedBy = [ "multi-user.target" ];
-    }
-    {
-      enable = true;
       what = "/dev/disk/by-label/bakhal";
       where = "/var/lib/passage";
       options = "subvol=passage";
@@ -412,23 +402,6 @@
   ];
 
   home-manager.users.juuso = {
-    programs.radicle = {
-      enable = true;
-      settings = {
-        node = {
-          alias = "muro";
-          listen = [ "192.168.76.40:58776" ];
-          connect = [ "z6MkmWhp3W8noYR5CozAyDRDW7fEPYykGFpAokFjbRYbDEvW@192.168.76.4:58776" ];
-          peers = {
-            type = "static";
-          };
-          relay = "never";
-        };
-        visibility = {
-          type = "private";
-        };
-      };
-    };
     xdg.configFile =
       let
         wireplumber = "wireplumber/wireplumber.conf.d";
