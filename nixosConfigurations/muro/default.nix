@@ -32,8 +32,9 @@
       networks.wlp6s0 = {
         ssid = "ath1";
         authentication = {
-          mode = "wpa3-sae";
+          mode = "wpa3-sae-transition";
           saePasswords = [{ passwordFile = config.age.secrets."hostapd/ath1".path; }];
+          wpaPasswordFile = config.age.secrets."hostapd/ath1".path;
         };
         settings.bridge = "br0";
       };
@@ -52,6 +53,7 @@
       "00-br0" = {
         matchConfig.Name = "br0";
         networkConfig.DHCP = "yes";
+        address = [ "192.168.25.10/24" ]; # static IP
       };
       "10-wan" = {
         linkConfig.RequiredForOnline = "routable";
@@ -65,8 +67,6 @@
         dhcpV6Config = {
           DUIDType = "link-layer";
         };
-        dns = [ "127.0.0.1:1053" ];
-        address = [ "192.168.1.10/24" ]; # static IP
       };
       "30-wlp6s0" = {
         matchConfig.Name = "wlp6s0";
@@ -75,16 +75,15 @@
     };
   };
   networking = {
-    firewall.enable = false;
+    nftables.enable = true;
     hostName = "muro";
-    nameservers = [ "127.0.0.1:1053" ];
     stevenblack.enable = true;
     useDHCP = false;
     wg-quick.interfaces.ponkila.configFile = config.sops.secrets."wireguard/ponkila".path;
   };
   time.timeZone = "Europe/Helsinki";
   services.coredns = {
-    enable = true;
+    enable = false;
     config = ''
       .:1053 {
         forward . 1.1.1.1 {
@@ -420,6 +419,7 @@
     group = "juuso";
     user = "juuso";
     dataDir = "/var/mnt/bakhal/Plex/.config/Library/Application Support";
+    openFirewall = true;
   };
 
   services.aria2 = {
