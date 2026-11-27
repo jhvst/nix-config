@@ -410,47 +410,14 @@ in
               set-option -g default-terminal "tmux-256color"
               set-option -sa terminal-features ",*:RGB"
 
+              set -g status-interval 1
+              set -g status-position top
+              set -g status-right-length 90
+              set -g status-right "#H | RAM #(free -h | grep Mem | tr -s ' ' | cut -d' ' -f7) | %A %d of %b %Y #(date +%%:z) %H:%M:%S"
+
               TMUX_FZF_LAUNCH_KEY="f"
             '';
             shortcut = "Space";
-          };
-          yambar = {
-            enable = true;
-            settings.bar = {
-              font = "IosevkaTerm:style=Regular";
-              location = "top";
-              height = 26;
-              background = "00000066";
-              center = [{
-                label.content = [{
-                  string.text = config.networking.hostName;
-                }];
-              }];
-              right = [
-                {
-                  mem = {
-                    poll-interval = 2500;
-                    content = [{
-                      string.text = " {free:mb}MB";
-                    }];
-                  };
-                }
-                {
-                  clock = {
-                    time-format = "%H:%M:%S";
-                    date-format = "%A %-d of %b %Y %z";
-                    content = [
-                      {
-                        string.text = " {date}";
-                      }
-                      {
-                        string.text = "{time}";
-                      }
-                    ];
-                  };
-                }
-              ];
-            };
           };
         };
         services = {
